@@ -76,21 +76,21 @@ footer{display:none}
     <div class="tree-group">
       <div class="tree-group-name">数据资产长期安全</div>
       <ul class="tree-list">
-        <li class="tree-item"><a class="tree-link active" href="#" data-page="pqc-migration"><strong>后量子密码迁移</strong><span>密码算法升级、兼容迁移与安全评估。</span></a></li>
-        <li class="tree-item"><a class="tree-link" href="#" data-page="data-flow"><strong>数据资产可信流转</strong><span>加密存储、可信交换与可控访问。</span></a></li>
-        <li class="tree-item"><a class="tree-link" href="#" data-page="audit"><strong>全流程审计治理</strong><span>访问留痕、责任追踪与合规审计。</span></a></li>
+        <li class="tree-item"><a class="tree-link active" href="#pqc-migration" data-page="pqc-migration"><strong>后量子密码迁移</strong><span>密码算法升级、兼容迁移与安全评估。</span></a></li>
+        <li class="tree-item"><a class="tree-link" href="#data-flow" data-page="data-flow"><strong>数据资产可信流转</strong><span>加密存储、可信交换与可控访问。</span></a></li>
+        <li class="tree-item"><a class="tree-link" href="#audit" data-page="audit"><strong>全流程审计治理</strong><span>访问留痕、责任追踪与合规审计。</span></a></li>
       </ul>
     </div>
 
     <div class="tree-group">
       <div class="tree-group-name">区块链可信运行</div>
       <ul class="tree-list">
-        <li class="tree-item"><a class="tree-link" href="#" data-page="eth-liveness"><strong>以太坊PoS零成本活性攻击</strong><span>IEEE S&amp;P 2026</span></a></li>
-        <li class="tree-item"><a class="tree-link" href="#" data-page="eth-staircase"><strong>以太坊激励机制攻击</strong><span>USENIX Security 2024</span></a></li>
-        <li class="tree-item"><a class="tree-link" href="#" data-page="aa-reorg"><strong>以太坊链重组防御</strong><span>USENIX Security 2025</span></a></li>
-        <li class="tree-item"><a class="tree-link" href="#" data-page="bsc-finality"><strong>币安链共识活性攻击</strong><span>USENIX Security 2025</span></a></li>
-        <li class="tree-item"><a class="tree-link" href="#" data-page="polkadot-selfish"><strong>波卡链无风险自私挖矿攻击</strong><span>WWW 2026</span></a></li>
-        <li class="tree-item"><a class="tree-link" href="#" data-page="eth-bunnyfinder"><strong>以太坊自动化激励漏洞发掘</strong><span>NDSS 2026</span></a></li>
+        <li class="tree-item"><a class="tree-link" href="#eth-liveness" data-page="eth-liveness"><strong>以太坊PoS零成本活性攻击</strong><span>IEEE S&amp;P 2026</span></a></li>
+        <li class="tree-item"><a class="tree-link" href="#eth-staircase" data-page="eth-staircase"><strong>以太坊激励机制攻击</strong><span>USENIX Security 2024</span></a></li>
+        <li class="tree-item"><a class="tree-link" href="#aa-reorg" data-page="aa-reorg"><strong>以太坊链重组防御</strong><span>USENIX Security 2025</span></a></li>
+        <li class="tree-item"><a class="tree-link" href="#bsc-finality" data-page="bsc-finality"><strong>币安链共识活性攻击</strong><span>USENIX Security 2025</span></a></li>
+        <li class="tree-item"><a class="tree-link" href="#polkadot-selfish" data-page="polkadot-selfish"><strong>波卡链无风险自私挖矿攻击</strong><span>WWW 2026</span></a></li>
+        <li class="tree-item"><a class="tree-link" href="#eth-incentive" data-page="eth-incentive"><strong>以太坊自动化激励漏洞发掘</strong><span>NDSS 2026</span></a></li>
       </ul>
     </div>
   </aside>
@@ -111,25 +111,61 @@ const pages = {
   "aa-reorg": { file: "aa-reorg.html" },
   "bsc-finality": { file: "bsc-finality.html" },
   "polkadot-selfish": { file: "polkadot-selfish.html" },
-  "eth-bunnyfinder": { file: "eth-bunnyfinder.html" }
+  "eth-incentive": { file: "eth-incentive.html" }
 };
 
-function showPage(key){
-  const page = pages[key];
-  if(!page) return;
-  document.querySelectorAll('.tree-link').forEach(link => link.classList.toggle('active', link.dataset.page === key));
-  const href = './' + page.file;
-  const frame = document.getElementById('active-frame');
-  frame.src = href;
-  frame.title = page.file;
-}
+(function(){
+  const defaultKey = "pqc-migration";
 
-document.querySelectorAll('.tree-link[data-page]').forEach(link => {
-  link.addEventListener('click', e => {
-    e.preventDefault();
-    showPage(link.dataset.page);
-  });
-});
+  function getKeyFromHash(){
+    const key = decodeURIComponent((window.location.hash || "").replace(/^#/, ""));
+    return pages[key] ? key : defaultKey;
+  }
+
+  function showPage(key, updateHash){
+    const page = pages[key] || pages[defaultKey];
+    const activeKey = pages[key] ? key : defaultKey;
+    const frame = document.getElementById("active-frame");
+    if(!frame) return;
+
+    document.querySelectorAll(".tree-link[data-page]").forEach(link => {
+      link.classList.toggle("active", link.dataset.page === activeKey);
+    });
+
+    const href = "./" + page.file;
+    if(frame.getAttribute("src") !== href){
+      frame.setAttribute("src", href);
+    }
+    frame.setAttribute("title", page.file);
+
+    if(updateHash && window.location.hash !== "#" + activeKey){
+      history.replaceState(null, "", "#" + activeKey);
+    }
+  }
+
+  function bindNavigation(){
+    document.querySelectorAll(".tree-link[data-page]").forEach(link => {
+      link.addEventListener("click", function(e){
+        e.preventDefault();
+        showPage(this.dataset.page, true);
+      });
+    });
+  }
+
+  function init(){
+    bindNavigation();
+    showPage(getKeyFromHash(), false);
+    setTimeout(() => showPage(getKeyFromHash(), false), 0);
+  }
+
+  window.addEventListener("hashchange", () => showPage(getKeyFromHash(), false));
+
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", init);
+  }else{
+    init();
+  }
+})();
 </script>
 <footer>
   区块链及数字金融安全测评平台<br>
