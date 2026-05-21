@@ -57,11 +57,9 @@ body:before{
 .content{min-width:0}.page-head{margin-bottom:18px}.page-title{font-size:28px;font-weight:900;color:var(--text-primary);letter-spacing:-.01em}.page-desc{font-size:16px;color:var(--text-secondary);margin-top:4px}
 .module-card{background:linear-gradient(145deg,rgba(18,35,61,.94),rgba(13,30,55,.92));border:1px solid rgba(128,166,224,.24);border-radius:22px;box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 22px 55px rgba(0,0,0,.20);margin-bottom:20px;overflow:hidden;scroll-margin-top:92px;transition:.28s;position:relative}.module-card:before{content:"";position:absolute;left:0;right:0;top:0;height:7px;background:linear-gradient(90deg,#7fb0ff,#71dfab);opacity:.95}
 .module-card:hover{border-color:rgba(132,182,255,.42);box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 24px 60px rgba(0,0,0,.24),0 0 34px rgba(127,176,255,.08)}
-.module-head{min-height:82px;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 22px 14px;border-bottom:1px solid rgba(128,166,224,.18);background:rgba(9,22,42,.42)}
-.module-title{font-size:19px;font-weight:900;color:var(--text-primary);display:flex;align-items:center}.module-title:before{content:"";width:5px;height:28px;background:linear-gradient(180deg,#7fb0ff,#71dfab);border-radius:6px;margin-right:12px;box-shadow:0 0 16px rgba(127,176,255,.48)}
-.module-desc{font-size:14px;color:var(--text-secondary);margin-top:5px;max-width:780px;line-height:1.55}.module-note{font-size:13px;color:var(--text-muted);font-family:Arial,sans-serif;white-space:nowrap}.module-actions{display:flex;align-items:center;gap:10px;flex-shrink:0}.open-link{font-size:13px;color:var(--accent-bright);text-decoration:none;border:1px solid rgba(96,165,250,.22);background:rgba(96,165,250,.06);border-radius:6px;padding:4px 9px;transition:.2s;white-space:nowrap}.open-link:hover{background:rgba(96,165,250,.12);border-color:rgba(96,165,250,.34)}
+.module-head,.module-title,.module-desc,.impact-line,.module-note,.module-actions,.open-link{display:none}
 .html-frame-wrap{height:520px;background:linear-gradient(135deg,rgba(9,22,42,.88),rgba(18,51,58,.42));padding:18px}.html-frame{width:100%;height:100%;border:1px solid rgba(128,166,224,.24);border-radius:16px;background:#fff;display:block;box-shadow:0 0 28px rgba(127,176,255,.06)}
-.impact-line{font-size:14px;color:var(--accent-amber);margin-top:6px;font-weight:700}.venue{display:inline-flex;align-items:center;margin-right:8px;font-size:12px;font-weight:800;border-radius:4px;padding:2px 7px;background:rgba(248,113,113,.12);color:var(--accent-red);vertical-align:middle}.venue.good{background:rgba(52,211,153,.12);color:var(--accent-green)}
+.impact-line{display:none}.venue{display:inline-flex;align-items:center;margin-right:8px;font-size:12px;font-weight:800;border-radius:4px;padding:2px 7px;background:rgba(248,113,113,.12);color:var(--accent-red);vertical-align:middle}.venue.good{background:rgba(52,211,153,.12);color:var(--accent-green)}
 footer{position:relative;z-index:1;padding:2.5rem 3rem;border-top:1px solid rgba(128,166,224,.18);text-align:center;color:var(--text-muted);font-size:1.05rem;background:rgba(7,17,33,.42)}
 @media(max-width:900px){.topbar{padding:0 16px}.breadcrumb{display:none}.layout{grid-template-columns:1fr;padding:82px 14px 18px}.sidebar{position:relative;top:auto;height:auto}.page-title{font-size:24px}.module-head{align-items:flex-start;flex-direction:column}.module-actions{width:100%;justify-content:space-between}.html-frame-wrap{height:430px}}
 </style>
@@ -99,117 +97,39 @@ footer{position:relative;z-index:1;padding:2.5rem 3rem;border-top:1px solid rgba
 
   <section class="content">
     <div class="module-card" id="active-module">
-      <div class="module-head">
-        <div>
-          <div class="module-title" id="active-title">后量子密码迁移</div>
-          <div class="module-desc" id="active-desc">密码算法升级、兼容迁移与安全评估。</div>
-          <div class="impact-line" id="active-impact" style="display:none"></div>
-        </div>
-        <div class="module-actions">
-          <div class="module-note" id="active-file">独立页面：pqc-migration.html</div>
-          <a class="open-link" id="active-open" href="./pqc-migration.html" target="_blank">新窗口打开</a>
-        </div>
-      </div>
       <div class="html-frame-wrap"><iframe class="html-frame" id="active-frame" src="./pqc-migration.html" title="后量子密码迁移"></iframe></div>
     </div>
   </section>
 </main>
 <script>
 const pages = {
-  "pqc-migration": {
-    title: "后量子密码迁移",
-    desc: "密码算法升级、兼容迁移与安全评估。",
-    file: "pqc-migration.html",
-    action: "新窗口打开"
-  },
-  "data-flow": {
-    title: "数据资产可信流转",
-    desc: "加密存储、可信交换与可控访问。",
-    file: "data-flow.html",
-    action: "新窗口打开"
-  },
-  "audit": {
-    title: "全流程审计治理",
-    desc: "访问留痕、责任追踪与合规审计。",
-    file: "audit.html",
-    action: "新窗口打开"
-  },
-  "eth-liveness": {
-    title: '<span class="venue">IEEE S&amp;P 2026</span>以太坊PoS零成本活性攻击',
-    desc: "提出首个无需额外条件的以太坊PoS活性攻击：不需操控网络、不触发罚没，最低仅需23.8%验证者即可导致无区块确认或完全操控交易顺序。",
-    impact: "📌 影响以太坊 ~5000亿美元市值",
-    file: "eth-liveness.html",
-    action: "查看攻击演示 →"
-  },
-  "eth-staircase": {
-    title: '<span class="venue">USENIX Security 2024</span>以太坊激励机制攻击',
-    desc: "敌手仅需控制29.6%账户余额，即可让所有诚实节点丧失收益甚至负收益。以太坊官方评价该工作“对交易确认规则至关重要（essential）”。",
-    impact: "📌 以太坊官方确认 & 修复",
-    file: "eth-staircase.html",
-    action: "查看攻击演示 →"
-  },
-  "aa-reorg": {
-    title: '<span class="venue">USENIX Security 2025</span>以太坊链重组防御',
-    desc: "基于f+1投票提出“存在性投票”机制，在网络同步时彻底解决链重组问题。发表后迅速获以太坊基金会关注，获邀讨论落地并进入EIP阶段。",
-    impact: "📌 以太坊基金会邀请讨论 · 推进EIP落地",
-    file: "aa-reorg.html",
-    action: "查看攻击演示 →"
-  },
-  "bsc-finality": {
-    title: '<span class="venue">USENIX Security 2025</span>币安链共识活性攻击',
-    desc: "针对币安（~1000亿美元市值）的Fast Finality机制，提出三种攻击使区块确认速度降低一个量级甚至完全无法出块。",
-    impact: "📌 影响币安 ~1000亿美元市值",
-    file: "bsc-finality.html",
-    action: "查看攻击演示 →"
-  },
-  "polkadot-selfish": {
-    title: '<span class="venue good">WWW 2026</span>波卡链无风险自私挖矿攻击',
-    desc: "提出首个混合可预测性模型下的无风险自私挖矿攻击，在低于20%质押量时攻击收益即超过比特币经典自私挖矿。",
-    impact: "📌 影响波卡 ~70亿美元市值",
-    file: "polkadot-selfish.html",
-    action: "查看攻击演示 →"
-  },
-  "eth-incentive": {
-    title: '<span class="venue">NDSS 2026</span>以太坊自动化激励漏洞发掘',
-    desc: "借鉴软件错误注入思想，结合强化学习自动生成攻击策略，发现三种新型激励机制攻击：自私挖矿、阶梯攻击-II、皮洛士胜利攻击。",
-    impact: "📌 与蚂蚁区块链合作 · 自动化漏洞发现",
-    file: "eth-incentive.html",
-    action: "查看攻击演示 →"
-  }
+  "pqc-migration": { file: "pqc-migration.html" },
+  "data-flow": { file: "data-flow.html" },
+  "audit": { file: "audit.html" },
+  "eth-liveness": { file: "eth-liveness.html" },
+  "eth-staircase": { file: "eth-staircase.html" },
+  "aa-reorg": { file: "aa-reorg.html" },
+  "bsc-finality": { file: "bsc-finality.html" },
+  "polkadot-selfish": { file: "polkadot-selfish.html" },
+  "eth-incentive": { file: "eth-incentive.html" }
 };
 
 function showPage(key){
   const page = pages[key];
   if(!page) return;
   document.querySelectorAll('.tree-link').forEach(link => link.classList.toggle('active', link.dataset.page === key));
-  document.getElementById('active-title').innerHTML = page.title;
-  document.getElementById('active-desc').textContent = page.desc;
-  const impact = document.getElementById('active-impact');
-  if(page.impact){ impact.style.display = 'block'; impact.textContent = page.impact; }
-  else { impact.style.display = 'none'; impact.textContent = ''; }
-  document.getElementById('active-file').textContent = '独立页面：' + page.file;
-  document.getElementById('active-open').href = './' + page.file;
-  document.getElementById('active-open').textContent = page.action;
+  const href = './' + page.file;
   const frame = document.getElementById('active-frame');
-  frame.src = './' + page.file;
-  frame.title = page.title.replace(/<[^>]+>/g, '');
+  frame.src = href;
+  frame.title = page.file;
 }
 
 document.querySelectorAll('.tree-link[data-page]').forEach(link => {
   link.addEventListener('click', e => {
     e.preventDefault();
     showPage(link.dataset.page);
-    history.replaceState(null, '', '#' + link.dataset.page);
   });
 });
-
-// 支持通过 URL hash 直接打开指定子页面（如 main.html#pqc-migration）
-function applyHash(){
-  const key = location.hash.replace(/^#/, '');
-  if(key && pages[key]) showPage(key);
-}
-applyHash();
-window.addEventListener('hashchange', applyHash);
 </script>
 <footer>
   区块链及数字金融安全测评平台<br>
