@@ -58,7 +58,7 @@ body{font-family:'Noto Sans SC','Inter',sans-serif;background:var(--bg);color:va
 
 /* Hero */
 .demo-hero{
-  padding:5.4rem 2.5rem 1rem;
+  padding:1.2rem 2.5rem 1rem;
   border-bottom:1px solid var(--border);
   position:relative;overflow:hidden;
 }
@@ -300,16 +300,62 @@ body{font-family:'Noto Sans SC','Inter',sans-serif;background:var(--bg);color:va
   font-family:'JetBrains Mono',monospace;font-size:.8rem;
   color:var(--txt3);
 }
-.chain-badge{
-  font-family:'JetBrains Mono',monospace;font-size:.78rem;
-  padding:.2rem .5rem;border-radius:4px;
-  background:rgba(52,211,153,.08);color:var(--green);
-  border:1px solid rgba(52,211,153,.18);
-  transition:all .3s;
+.chain-status-panel{
+  min-width:210px;
+  padding:.72rem .95rem;
+  border-radius:10px;
+  background:rgba(96,165,250,.08);
+  border:1px solid rgba(96,165,250,.24);
+  color:var(--accent);
+  box-shadow:0 12px 32px rgba(15,23,42,.24);
+  transition:background .3s,border-color .3s,color .3s,box-shadow .3s;
 }
-.chain-badge.attacking{
-  background:rgba(248,113,113,.1);color:var(--red);
-  border-color:rgba(248,113,113,.25);
+.chain-status-main{
+  font-size:.78rem;
+  font-weight:600;
+  line-height:1.45;
+  color:var(--txt2);
+}
+.chain-status-height{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:.8rem;
+  margin-bottom:.36rem;
+}
+.chain-status-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.9rem;
+  font-weight:700;
+  color:var(--txt);
+}
+.chain-status-value{
+  font-family:'JetBrains Mono',monospace;
+  font-size:1.72rem;
+  font-weight:800;
+  line-height:1;
+  color:currentColor;
+}
+.chain-status-panel.normal .chain-status-main,
+.chain-status-panel.attacking .chain-status-main{
+  color:rgba(226,232,240,.86);
+}
+.chain-status-panel.normal .chain-status-label{
+  color:rgba(209,250,229,.95);
+}
+.chain-status-panel.attacking .chain-status-label{
+  color:rgba(254,202,202,.96);
+}
+.chain-status-panel.normal{
+  background:linear-gradient(135deg,rgba(52,211,153,.13),rgba(96,165,250,.1));
+  border-color:rgba(52,211,153,.3);
+  color:var(--green);
+}
+.chain-status-panel.attacking{
+  background:rgba(248,113,113,.12);
+  color:var(--red);
+  border-color:rgba(248,113,113,.38);
+  box-shadow:0 14px 36px rgba(248,113,113,.12);
   animation:pulse calc(1.8s * var(--anim-scale)) ease-in-out infinite;
 }
 @keyframes pulse{
@@ -585,13 +631,13 @@ body{font-family:'Noto Sans SC','Inter',sans-serif;background:var(--bg);color:va
 </head>
 <body>
 
-<div class="topbar">
+<!-- <div class="topbar">
 
   <span class="topbar-title">以太坊 PoS 零成本活性攻击</span>
   <span class="topbar-venue">IEEE S&P 2026</span>
   <span class="topbar-spacer"></span>
   <span class="topbar-paper">Paper #1665 · 33% stake</span>
-</div>
+</div> -->
 
 <div class="demo-hero">
   <div class="demo-hero-inner">
@@ -632,10 +678,16 @@ body{font-family:'Noto Sans SC','Inter',sans-serif;background:var(--bg);color:va
   <div class="chain-stage">
     <div class="chain-stage-header">
       <div>
-        <div class="chain-stage-title">公链 c_h vs 私链 c_a · 区块级可视化</div>
-        <div class="chain-stage-label">公链 / 私链对比 · 延迟检查点 · RANDAO 影响未来 proposer</div>
+        <div class="chain-stage-title">以太坊PoS活性演示</div>
+
       </div>
-      <span class="chain-badge" id="chain-badge">● 系统正常</span>
+      <div class="chain-status-panel idle" id="chain-status-panel">
+        <div class="chain-status-height">
+          <span class="chain-status-label">最终确认区块高度</span>
+          <strong class="chain-status-value" id="finalized-height">0</strong>
+        </div>
+        <div class="chain-status-main" id="chain-status-main">待命，等待演示开始</div>
+      </div>
     </div>
     <canvas id="mainCanvas" width="1200" height="360"></canvas>
     <div class="legend">
@@ -653,9 +705,9 @@ body{font-family:'Noto Sans SC','Inter',sans-serif;background:var(--bg);color:va
     <div class="insight-grid">
       <div class="insight-pane">
         <div class="insight-legend" aria-label="投票颜色图例">
-          <span class="insight-legend-item"><span class="insight-legend-dot a"></span>Vote A</span>
-          <span class="insight-legend-item"><span class="insight-legend-dot b"></span>Vote B</span>
-          <span class="insight-legend-item"><span class="insight-legend-dot byz"></span>Withheld</span>
+          <span class="insight-legend-item"><span class="insight-legend-dot a"></span>诚实节点（投票给A）</span>
+          <span class="insight-legend-item"><span class="insight-legend-dot b"></span>诚实节点（投票给B）</span>
+          <span class="insight-legend-item"><span class="insight-legend-dot byz"></span>拜占庭节点</span>
         </div>
         <div class="insight-canvas-wrap">
           <canvas id="nodeInsightCanvas" class="insight-canvas" width="520" height="320"></canvas>
@@ -665,9 +717,9 @@ body{font-family:'Noto Sans SC','Inter',sans-serif;background:var(--bg);color:va
 
       <div class="insight-pane">
         <div class="insight-legend" aria-label="结果图例">
-          <span class="insight-legend-item"><span class="insight-legend-line blue"></span>Quality</span>
-          <span class="insight-legend-item"><span class="insight-legend-line red"></span>LF epoch</span>
-          <span class="insight-legend-item"><span class="insight-legend-line dashed"></span>Attack</span>
+          <span class="insight-legend-item"><span class="insight-legend-line blue"></span>诚实区块占比</span>
+          <span class="insight-legend-item"><span class="insight-legend-line red"></span>最终确认区块高度</span>
+          <span class="insight-legend-item"><span class="insight-legend-line dashed"></span>攻击</span>
         </div>
         <div class="insight-canvas-wrap">
           <canvas id="resultInsightCanvas" class="insight-canvas" width="520" height="320"></canvas>
@@ -903,6 +955,10 @@ const STATE = {
   running: false,
 };
 
+let finalizedHeight = 0;
+let finalizedFrozen = false;
+let chainStatusMode = 'idle';
+
 // Cell schema:
 // { epoch, slot, type, label, checkpoint, delayed, justified, isEllipsis, isPlaceholder }
 // Types:
@@ -969,21 +1025,37 @@ function updatePhase(p){
   }
 }
 
-function updateBadge(){
-  const b = document.getElementById('chain-badge');
-  const currentEpoch = globalCellToEpoch(Math.max(0,STATE.currentCell-1)).epoch + STATE.baseEpoch;
-  if(STATE.mode === 'attack'){
-    b.className = 'chain-badge attacking';
-    b.textContent = STATE.attackPhase
-      ? `⚠ 攻击进行中 · Cycle ${STATE.cycleCount} · E${STATE.attackPhase}/3`
-      : `⚠ 攻击持续 · ${STATE.cycleCount} cycles`;
-  } else if(STATE.mode === 'normal'){
-    b.className = 'chain-badge';
-    b.textContent = '● 正常运行 · epoch ' + currentEpoch;
-  } else {
-    b.className = 'chain-badge';
-    b.textContent = '● 待命';
+function updateChainStatus(mode = chainStatusMode){
+  const panel = document.getElementById('chain-status-panel');
+  const main = document.getElementById('chain-status-main');
+  const height = document.getElementById('finalized-height');
+  if(!panel || !main || !height) return;
+
+  chainStatusMode = mode;
+  panel.classList.remove('idle', 'normal', 'attacking');
+
+  if(mode === 'idle'){
+    panel.classList.add('idle');
+    main.textContent = '待命，等待演示开始';
+  } else if(mode === 'normal'){
+    panel.classList.add('normal');
+    main.textContent = '正常运行中，确认的区块正常增加';
+  } else if(mode === 'attacking'){
+    panel.classList.add('attacking');
+    main.textContent = '攻击中，区块高度不再增长';
   }
+
+  height.textContent = finalizedHeight;
+}
+
+function syncFinalizedHeight(){
+  if(!finalizedFrozen){
+    const confirmedBlocks = STATE.publicCells
+      .slice(0, STATE.currentCell)
+      .filter(b => b && !b.isPlaceholder && !b.isEllipsis && b.type !== 'empty').length;
+    finalizedHeight = Math.max(finalizedHeight, confirmedBlocks);
+  }
+  updateChainStatus();
 }
 
 // ============= Cell factory =============
@@ -1601,7 +1673,7 @@ function runNormalStep(){
     STATE.privateCells[STATE.currentCell] = { type:'placeholder', epoch, slot:-1, label:'', isPlaceholder:true };
     STATE.currentCell++;
     ensureLatestCellVisible();
-    updateStatus(); updateBadge();
+    updateStatus(); syncFinalizedHeight();
     return;
   }
 
@@ -1639,7 +1711,7 @@ function runNormalStep(){
   const total = slice.filter(b => b.type === 'honest' || b.type === 'byz-public' || b.type === 'delayed' || b.type === 'promoted').length;
   STATE.chainQuality = total > 0 ? (honest / total) * 100 : BASELINE_CHAIN_QUALITY;
 
-  updateStatus(); updateBadge();
+  updateStatus(); syncFinalizedHeight();
 }
 
 // ============= Attack: deterministic cell producer =============
@@ -1755,7 +1827,7 @@ function heartbeatStep(){
     const total = slice.filter(b => ['honest','byz-public','delayed','pruned','promoted'].includes(b.type)).length;
     STATE.chainQuality = total > 0 ? (honest / total) * 100 : 0;
 
-    updateStatus(); updateBadge();
+    updateStatus(); updateChainStatus();
 
     // Fire pending randao at epoch end
     if(STATE.pendingRandao){
@@ -1886,7 +1958,7 @@ function finishSwitch(cycleStart){
   }
 
   STATE.switchAnim = null;
-  addLog('LIVENESS', `<span class="red">★ 活性失败</span>: LF 停滞在 epoch ${STATE.lf}`, 'attack');
+  addLog('LIVENESS', `<span class="red">★ 活性失败</span>: 最终确认区块高度停滞在 epoch ${STATE.lf}`, 'attack');
   addLog('CYCLE', `Cycle ${STATE.cycleCount} 完成 · 进入下一轮`, 'success');
 
   // Start next cycle if attack continues
@@ -1906,7 +1978,7 @@ function finishSwitch(cycleStart){
       addLog('RESULT', `<span class="red">★★★ 活性攻击成功</span> · ${STATE.cycleCount} cycles`, 'attack');
       addLog('MODE', '攻击演示结束 · 返回正常运行', 'success');
       updateStatus();
-      updateBadge();
+      updateChainStatus();
     }
   }, animMs(600));
 }
@@ -1937,10 +2009,11 @@ function setHeartbeat(){
 
 function startNormal(){
   STATE.mode = 'normal';
+  finalizedFrozen = false;
   if(typeof playInsightNormal === 'function') playInsightNormal();
   addLog('MODE', '切换到 <span class="green">正常运行</span> 模式', 'success');
   setHeartbeat();
-  updateBadge();
+  updateChainStatus('normal');
 }
 
 async function launchAttack(){
@@ -1955,6 +2028,8 @@ async function launchAttack(){
   // If started from idle, build 2 normal epochs of baseline first
   if(STATE.currentCell === 0){
     STATE.mode = 'normal';
+    finalizedFrozen = false;
+    updateChainStatus('normal');
     addLog('MODE', '<span class="amber">预热</span>: 先生成 2 个正常 epoch 作为基线', 'info');
     setHeartbeat();
     // wait for 2 epochs to fill (2 * CELLS_PER_EPOCH cells)
@@ -1968,7 +2043,11 @@ async function launchAttack(){
   if(pos.cellInEpoch !== 0){
     const currentEpoch = pos.epoch + STATE.baseEpoch;
     addLog('SYNC', `当前 Epoch <span class="hl">${currentEpoch}</span> 保持正常 · 攻击从下一个 Epoch 开始`, 'info');
-    if(STATE.mode === 'idle') STATE.mode = 'normal';
+    if(STATE.mode === 'idle'){
+      STATE.mode = 'normal';
+      finalizedFrozen = false;
+      updateChainStatus('normal');
+    }
     if(!STATE.heartbeat) setHeartbeat();
     while(globalCellToEpoch(STATE.currentCell).cellInEpoch !== 0){
       await sleep(50);
@@ -2027,13 +2106,18 @@ async function launchAttack(){
 
   // Enter attack mode and resume heartbeat
   STATE.mode = 'attack';
+  finalizedFrozen = true;
   STATE.switchQueued = false;
   setHeartbeat();
-  updateBadge();
+  updateChainStatus('attacking');
 }
 
 function stepForward(){
-  if(STATE.mode === 'idle') STATE.mode = 'normal';
+  if(STATE.mode === 'idle'){
+    STATE.mode = 'normal';
+    finalizedFrozen = false;
+    updateChainStatus('normal');
+  }
   heartbeatStep();
 }
 
@@ -2059,6 +2143,9 @@ function resetDemo(){
   if(STATE.heartbeat){ clearInterval(STATE.heartbeat); STATE.heartbeat = null; }
   STATE.mode = 'idle';
   STATE.paused = false;
+  finalizedHeight = 0;
+  finalizedFrozen = false;
+  chainStatusMode = 'idle';
   STATE.currentCell = 0;
   STATE.baseEpoch = 0;
   STATE.cycleCount = 0;
@@ -2094,7 +2181,7 @@ function resetDemo(){
   resetInsightPanels();
   updatePhase(0);
   updateStatus();
-  updateBadge();
+  updateChainStatus('idle');
 }
 
 function updateSpeed(v){
@@ -2552,18 +2639,15 @@ function drawResultInsight() {
   resultInsightContext.font = '11px "JetBrains Mono", monospace';
   resultInsightContext.fillStyle = txt3;
   resultInsightContext.fillText('Epoch', plot.x + plot.w - 30, h - 18);
-  resultInsightContext.fillText('0', plot.x - 3, h - 38);
-  resultInsightContext.fillText('450', plot.x + (RESULT_DATA.attackStart / RESULT_DATA.maxEpoch) * plot.w - 12, h - 38);
-  resultInsightContext.fillText('2250', plot.x + plot.w - 26, h - 38);
   resultInsightContext.fillStyle = accent;
-  resultInsightContext.fillText('Chain quality', plot.x - 44, plot.y - 12);
+  resultInsightContext.fillText('诚实区块占比', plot.x - 44, plot.y - 12);
   resultInsightContext.fillStyle = red;
-  resultInsightContext.fillText('LF epoch', w - 78, plot.y - 12);
+  resultInsightContext.fillText('最终确认区块高度', w - 112, plot.y - 12);
 
   if(isAttackMode){
     const haltedAlpha = INSIGHT_DEMO.mode === 'failed' ? 1 : insightClamp01((p - .78) / .18);
     if(haltedAlpha > 0){
-      drawResultInsightLfLabel(resultInsightContext, plot, red, haltedAlpha);
+      drawResultInsightStallBox(resultInsightContext, plot, red, txt, haltedAlpha);
     }
   }
 
@@ -2571,7 +2655,7 @@ function drawResultInsight() {
 
 function drawResultInsightStatus(insightContext, txt, isAttackMode) {
   const label = isAttackMode ? 'Finalization 停滞' : '正常 finalization';
-  const desc = isAttackMode ? 'LF 停滞，chain quality 降至 0' : 'LF 随 epoch 持续增长';
+  const desc = isAttackMode ? '最终确认区块高度停滞，诚实区块占比降至 0' : '最终确认区块高度随 epoch 持续增长';
   insightContext.save();
   insightContext.font = '700 13px "Noto Sans SC", "JetBrains Mono", sans-serif';
   insightContext.fillStyle = txt;
@@ -2601,9 +2685,9 @@ function drawResultInsightAxes(insightContext, plot, txt2, txt3) {
     insightContext.fillStyle = txt3;
     insightContext.fillText(`${Math.round(val * 100)}%`, plot.x - 34, y + 3);
   });
-  [0, 449, 1125, 2250].forEach((val) => {
+  [0, 1125, 2250].forEach((val) => {
     const y = plot.y + plot.h - (val / RESULT_DATA.maxEpoch) * plot.h;
-    insightContext.fillStyle = val === 449 ? txt2 : txt3;
+    insightContext.fillStyle = txt3;
     insightContext.fillText(String(val), plot.x + plot.w + 8, y + 3);
   });
   insightContext.restore();
@@ -2669,14 +2753,26 @@ function drawResultInsightSeries(insightContext, plot, visibleMaxEpoch, key, col
   insightContext.restore();
 }
 
-function drawResultInsightLfLabel(insightContext, plot, red, alpha) {
-  const x = plot.x + plot.w - 72;
-  const y = plot.y + plot.h - (RESULT_DATA.lfBeforeAttack / RESULT_DATA.maxEpoch) * plot.h;
+function drawResultInsightStallBox(insightContext, plot, red, txt, alpha) {
+  const boxW = Math.min(230, plot.w - 40);
+  const boxH = 52;
+  const x = plot.x + (plot.w - boxW) / 2;
+  const y = plot.y + (plot.h - boxH) / 2;
   insightContext.save();
   insightContext.globalAlpha = alpha;
+  insightContext.fillStyle = 'rgba(10,14,23,.86)';
+  insightContext.strokeStyle = red;
+  insightContext.lineWidth = 1.5;
+  roundRect(insightContext, x, y, boxW, boxH, 8);
+  insightContext.fill();
+  insightContext.stroke();
   insightContext.fillStyle = red;
-  insightContext.font = '700 12px "JetBrains Mono", monospace';
-  insightContext.fillText('LF = 449', x, y - 9);
+  insightContext.font = '800 13px "Noto Sans SC", sans-serif';
+  insightContext.textAlign = 'center';
+  insightContext.fillText('最终确认区块高度不再增长', x + boxW / 2, y + 22);
+  insightContext.fillStyle = txt;
+  insightContext.font = '11px "Noto Sans SC", sans-serif';
+  insightContext.fillText('活性攻击导致 finalized chain 停滞', x + boxW / 2, y + 40);
   insightContext.restore();
 }
 
@@ -2689,13 +2785,13 @@ function drawResultInsightLegend(insightContext, x, y, accent, red, txt2) {
   insightContext.lineTo(x + 18, y);
   insightContext.stroke();
   insightContext.fillStyle = txt2;
-  insightContext.fillText('Chain quality', x + 24, y + 3);
+  insightContext.fillText('诚实区块占比', x + 24, y + 3);
   insightContext.strokeStyle = red;
   insightContext.beginPath();
   insightContext.moveTo(x, y + 16);
   insightContext.lineTo(x + 18, y + 16);
   insightContext.stroke();
-  insightContext.fillText('LF epoch', x + 24, y + 19);
+  insightContext.fillText('最终确认区块高度', x + 24, y + 19);
   insightContext.restore();
 }
 // Init
@@ -2705,7 +2801,7 @@ window.addEventListener('resize', () => {
 setupCanvas();
 render();
 updateStatus();
-updateBadge();
+updateChainStatus('idle');
 initInsightBoxes();
 </script>
 </body>
