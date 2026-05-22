@@ -18,11 +18,10 @@ body{
   color:#f8fafc;
 }
 
-/* 固定 16:9 展板：预览区不是 16:9 时，只缩放，不挤压 */
+/* 16:9 大屏展示：直接铺满屏幕 */
 .board{
-  aspect-ratio:16/9;
-  width:min(100vw,177.777vh);
-  height:min(100vh,56.25vw);
+  width:100vw;
+  height:100vh;
   position:relative;
   overflow:hidden;
   background:
@@ -42,7 +41,7 @@ body{
 .board::after{
   content:"";
   position:absolute;
-  inset:3.2% 3.6%;
+  inset:2.4% 2.8%;
   border:1px solid rgba(191,219,254,.20);
   border-radius:24px;
   box-shadow:inset 0 0 70px rgba(96,165,250,.045);
@@ -52,18 +51,18 @@ body{
   position:absolute;
   inset:0;
   background-image:
-    linear-gradient(rgba(191,219,254,.04) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(191,219,254,.04) 1px,transparent 1px);
-  background-size:88px 88px;
-  opacity:.26;
+    linear-gradient(rgba(191,219,254,.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(191,219,254,.035) 1px,transparent 1px);
+  background-size:96px 96px;
+  opacity:.22;
 }
 
 .page{
   position:absolute;
-  inset:5.2% 5.2% 4.6%;
+  inset:4.1% 4.4% 3.8%;
   display:grid;
-  grid-template-rows:8% 16% 58% 10%;
-  gap:2.6%;
+  grid-template-rows:8% 17% 60% 10%;
+  gap:1.65%;
   letter-spacing:.01em;
 }
 
@@ -76,20 +75,14 @@ body{
   min-height:0;
 }
 .lab,.theme{
-  font-size:clamp(10px,.86vw,16px);
+  font-size:clamp(12px,1.02vw,19px);
   font-weight:600;
   color:#e0efff;
   white-space:nowrap;
 }
-.lab{display:flex;align-items:center;gap:.55em}
-.lab a,
-.lab a:link,
-.lab a:visited,
-.lab a:hover,
-.lab a:active {
-  color: #e0efff;
-  text-decoration: none;
-}
+.lab{display:inline-flex;align-items:center;gap:.55em;text-decoration:none;color:#e0efff;background:rgba(191,219,254,.06);border:1px solid rgba(191,219,254,.16);border-radius:999px;padding:.38em .9em;transition:background .2s,border-color .2s}
+.lab:visited{color:#e0efff}
+.lab:hover{background:rgba(191,219,254,.11);border-color:rgba(191,219,254,.28)}
 .lab::before{
   content:"";
   width:.55em;
@@ -109,17 +102,17 @@ body{
   min-height:0;
 }
 .title h1{
-  font-size:clamp(24px,3.05vw,58px);
+  font-size:clamp(32px,3.75vw,72px);
   line-height:1.12;
-  font-weight:800;
-  letter-spacing:.01em;
+  font-weight:780;
+  letter-spacing:.035em;
   color:#f8fafc;
   white-space:nowrap;
   text-shadow:0 18px 70px rgba(0,0,0,.36),0 0 28px rgba(96,165,250,.12);
 }
 .title p{
-  margin-top:.8%;
-  font-size:clamp(10px,.96vw,18px);
+  margin-top:.45%;
+  font-size:clamp(13px,1.1vw,21px);
   line-height:1.55;
   color:#d1deec;
   white-space:nowrap;
@@ -134,29 +127,17 @@ body{
 .panel{
   min-height:0;
   background:
-    linear-gradient(180deg,rgba(18,50,82,.92),rgba(10,31,54,.80));
-  border:1px solid rgba(191,219,254,.20);
+    radial-gradient(circle at 92% 8%,var(--accentShadow),transparent 28%),
+    linear-gradient(180deg,rgba(18,50,82,.94),rgba(10,31,54,.82));
+  border:1px solid rgba(191,219,254,.22);
   border-top:7px solid var(--accent);
-  border-radius:20px;
-  box-shadow:0 22px 68px rgba(0,0,0,.26),inset 0 1px 0 rgba(255,255,255,.04);
-  padding:4.8% 5.2%;
+  border-radius:22px;
+  box-shadow:0 24px 72px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.055);
+  padding:4.3% 4.8%;
   display:grid;
-  grid-template-rows:15% 30% 18% 28%;
-  gap:3%;
+  grid-template-rows:13% 32% 18% 29%;
+  gap:2.6%;
   overflow:hidden;
-  text-decoration:none;
-  color:inherit;
-  cursor:pointer;
-  transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease;
-}
-.panel:hover{
-  transform:translateY(-4px);
-  border-color:rgba(191,219,254,.42);
-  box-shadow:0 30px 80px rgba(0,0,0,.34),0 0 40px var(--accentShadow),inset 0 1px 0 rgba(255,255,255,.06);
-}
-.panel:focus-visible{
-  outline:2px solid var(--accent);
-  outline-offset:4px;
 }
 .panel.blue{--accent:#60a5fa;--soft:rgba(96,165,250,.15);--softText:#dbeafe;--accentShadow:rgba(96,165,250,.22)}
 .panel.green{--accent:#34d399;--soft:rgba(52,211,153,.14);--softText:#d7faea;--accentShadow:rgba(52,211,153,.20)}
@@ -168,7 +149,7 @@ body{
 }
 
 .tag{
-  font-size:clamp(9px,.82vw,15px);
+  font-size:clamp(11px,.92vw,17px);
   font-weight:600;
   color:var(--softText);
   background:rgba(2,6,23,.24);
@@ -184,23 +165,32 @@ body{
   min-height:0;
 }
 .mark{
-  width:7px;
-  height:70%;
+  width:8px;
+  height:72%;
   border-radius:99px;
   background:var(--accent);
   flex:0 0 auto;
   box-shadow:0 0 20px var(--accent);
 }
+.panel-title a{
+  display:inline-block;
+  text-decoration:none;
+  color:#f8fafc;
+  border-radius:10px;
+  transition:color .2s,text-shadow .2s;
+}
+.panel-title a:visited{color:#f8fafc}
+.panel-title a:hover{color:var(--softText);text-shadow:0 0 18px var(--accentShadow)}
 .panel-title h2{
-  font-size:clamp(21px,2.3vw,43px);
+  font-size:clamp(28px,2.9vw,55px);
   line-height:1.18;
   font-weight:760;
   color:#f8fafc;
   letter-spacing:.015em;
 }
 .desc{
-  font-size:clamp(10px,.9vw,16.5px);
-  line-height:1.65;
+  font-size:clamp(12px,1.02vw,19px);
+  line-height:1.7;
   color:#d3dfec;
   display:flex;
   align-items:center;
@@ -215,17 +205,18 @@ body{
 .item{
   display:flex;
   align-items:center;
-  gap:.7em;
-  background:rgba(3,12,24,.30);
-  border:1px solid rgba(191,219,254,.12);
+  gap:.75em;
+  background:linear-gradient(90deg,rgba(3,12,24,.36),rgba(15,42,70,.24));
+  border:1px solid rgba(191,219,254,.13);
   border-left:5px solid var(--accent);
-  border-radius:13px;
-  padding:0 1em;
-  color:#e4eef8;
-  font-size:clamp(11px,.96vw,17.5px);
+  border-radius:14px;
+  padding:0 1.05em;
+  color:#e8f2ff;
+  font-size:clamp(13px,1.14vw,21px);
   font-weight:650;
   white-space:nowrap;
   min-height:0;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.035);
 }
 .item::before{
   content:"";
@@ -238,8 +229,8 @@ body{
 }
 
 .footer{
-  background:linear-gradient(90deg,rgba(47,125,246,.22),rgba(52,211,153,.18));
-  border:1px solid rgba(191,219,254,.20);
+  background:linear-gradient(90deg,rgba(47,125,246,.24),rgba(52,211,153,.18));
+  border:1px solid rgba(191,219,254,.22);
   color:#f8fafc;
   border-radius:18px;
   display:flex;
@@ -247,23 +238,23 @@ body{
   justify-content:center;
   text-align:center;
   padding:0 2%;
-  font-size:clamp(11px,1vw,19px);
+  font-size:clamp(13px,1.14vw,22px);
   font-weight:650;
   white-space:nowrap;
   min-height:0;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 12px 34px rgba(0,0,0,.16);
 }
 .footer span{color:#bfdbfe;margin:0 .15em}
 
 @media(max-aspect-ratio:16/9){
-  .lab,.theme{font-size:clamp(9px,1.48vh,15px)}
-  .title h1{font-size:clamp(22px,5.25vh,56px)}
-  .title p{font-size:clamp(9px,1.68vh,17px)}
-  .index{width:clamp(27px,5.8vh,60px);height:clamp(27px,5.8vh,60px);font-size:clamp(13px,2.45vh,27px)}
-  .tag{font-size:clamp(8px,1.45vh,15px)}
-  .panel-title h2{font-size:clamp(19px,4.05vh,41px)}
-  .desc{font-size:clamp(9px,1.58vh,16px)}
-  .item{font-size:clamp(10px,1.68vh,17px)}
-  .footer{font-size:clamp(10px,1.8vh,18px)}
+  .lab,.theme{font-size:clamp(10px,1.75vh,18px)}
+  .title h1{font-size:clamp(28px,6.9vh,74px)}
+  .title p{font-size:clamp(11px,2.05vh,22px)}
+  .tag{font-size:clamp(9px,1.7vh,17px)}
+  .panel-title h2{font-size:clamp(24px,5.35vh,56px)}
+  .desc{font-size:clamp(10px,1.9vh,19px)}
+  .item{font-size:clamp(11px,2.08vh,21px)}
+  .footer{font-size:clamp(11px,2.08vh,22px)}
 }
 </style>
 </head>
@@ -272,11 +263,7 @@ body{
   <div class="board-bg"></div>
   <div class="page">
     <div class="topbar">
-      <div class="lab">
-        <a href="https://skl-crypto.sdu.edu.cn/" target="_blank" rel="noopener noreferrer">
-          密码与数字经济安全全国重点实验室
-        </a>
-      </div>
+      <a class="lab" href="https://skl-crypto.sdu.edu.cn/index.htm" target="_blank" rel="noopener noreferrer">密码与数字经济安全全国重点实验室</a>
       <div class="theme">面向国家数字经济基础设施安全</div>
     </div>
 
@@ -286,13 +273,13 @@ body{
     </div>
 
     <main class="main">
-      <a class="panel blue" href="main.html#pqc-migration">
+      <section class="panel blue">
         <div class="panel-head">
           <div class="tag">数据资产长期安全</div>
         </div>
         <div class="panel-title">
           <div class="mark"></div>
-          <h2>后量子<br>数据资产安全</h2>
+          <a href="./main.html"><h2>后量子<br>数据资产安全</h2></a>
         </div>
         <p class="desc">面向金融、政务和产业数据资产，构建抵御量子计算威胁的长期安全保护能力。</p>
         <div class="items">
@@ -300,15 +287,15 @@ body{
           <div class="item">数据资产可信流转</div>
           <div class="item">全流程审计治理</div>
         </div>
-      </a>
+      </section>
 
-      <a class="panel green" href="main.html#eth-liveness">
+      <section class="panel green">
         <div class="panel-head">
           <div class="tag">区块链可信运行</div>
         </div>
         <div class="panel-title">
           <div class="mark"></div>
-          <h2>区块链安全<br>分析平台</h2>
+          <a href="./main.html"><h2>区块链安全<br>分析平台</h2></a>
         </div>
         <p class="desc">面向主流区块链平台，开展安全风险分析、攻击验证与协议安全评估。</p>
         <div class="items">
@@ -316,7 +303,7 @@ body{
           <div class="item">攻击行为验证</div>
           <div class="item">协议安全评估</div>
         </div>
-      </a>
+      </section>
     </main>
 
     <footer class="footer">
