@@ -41,7 +41,7 @@ body{
 .board::after{
   content:"";
   position:absolute;
-  inset:2.4% 2.8%;
+  inset:2.6% 3.4%;
   border:1px solid rgba(191,219,254,.20);
   border-radius:24px;
   box-shadow:inset 0 0 70px rgba(96,165,250,.045);
@@ -59,10 +59,14 @@ body{
 
 .page{
   position:absolute;
-  inset:4.1% 4.4% 3.8%;
+  top:4.1%;
+  bottom:3.8%;
+  left:50%;
+  transform:translateX(-50%);
+  width:min(90vw,1560px);
   display:grid;
-  grid-template-rows:8% 17% 60% 10%;
-  gap:1.65%;
+  grid-template-rows:7.5% 16% 62% 9%;
+  gap:1.8%;
   letter-spacing:.01em;
 }
 
@@ -102,17 +106,17 @@ body{
   min-height:0;
 }
 .title h1{
-  font-size:clamp(32px,3.75vw,72px);
+  font-size:clamp(32px,3.35vw,64px);
   line-height:1.12;
   font-weight:780;
-  letter-spacing:.035em;
+  letter-spacing:.025em;
   color:#f8fafc;
   white-space:nowrap;
   text-shadow:0 18px 70px rgba(0,0,0,.36),0 0 28px rgba(96,165,250,.12);
 }
 .title p{
   margin-top:.45%;
-  font-size:clamp(13px,1.1vw,21px);
+  font-size:clamp(13px,.98vw,19px);
   line-height:1.55;
   color:#d1deec;
   white-space:nowrap;
@@ -121,7 +125,7 @@ body{
 .main{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:3.2%;
+  gap:3.6%;
   min-height:0;
 }
 .panel{
@@ -133,10 +137,10 @@ body{
   border-top:7px solid var(--accent);
   border-radius:22px;
   box-shadow:0 24px 72px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.055);
-  padding:4.3% 4.8%;
+  padding:4.0% 4.7%;
   display:grid;
-  grid-template-rows:13% 32% 18% 29%;
-  gap:2.6%;
+  grid-template-rows:12% 31% 18% 31%;
+  gap:2.5%;
   overflow:hidden;
 }
 .panel.blue{--accent:#60a5fa;--soft:rgba(96,165,250,.15);--softText:#dbeafe;--accentShadow:rgba(96,165,250,.22)}
@@ -182,15 +186,15 @@ body{
 .panel-title a:visited{color:#f8fafc}
 .panel-title a:hover{color:var(--softText);text-shadow:0 0 18px var(--accentShadow)}
 .panel-title h2{
-  font-size:clamp(28px,2.9vw,55px);
-  line-height:1.18;
+  font-size:clamp(28px,2.55vw,49px);
+  line-height:1.16;
   font-weight:760;
   color:#f8fafc;
   letter-spacing:.015em;
 }
 .desc{
-  font-size:clamp(12px,1.02vw,19px);
-  line-height:1.7;
+  font-size:clamp(12px,.98vw,18px);
+  line-height:1.62;
   color:#d3dfec;
   display:flex;
   align-items:center;
@@ -199,7 +203,7 @@ body{
 .items{
   display:grid;
   grid-template-rows:repeat(3,1fr);
-  gap:12%;
+  gap:10%;
   min-height:0;
 }
 .item{
@@ -212,7 +216,7 @@ body{
   border-radius:14px;
   padding:0 1.05em;
   color:#e8f2ff;
-  font-size:clamp(13px,1.14vw,21px);
+  font-size:clamp(13px,1.02vw,19px);
   font-weight:650;
   white-space:nowrap;
   min-height:0;
@@ -238,7 +242,7 @@ body{
   justify-content:center;
   text-align:center;
   padding:0 2%;
-  font-size:clamp(13px,1.14vw,22px);
+  font-size:clamp(13px,.98vw,19px);
   font-weight:650;
   white-space:nowrap;
   min-height:0;
@@ -247,14 +251,14 @@ body{
 .footer span{color:#bfdbfe;margin:0 .15em}
 
 @media(max-aspect-ratio:16/9){
-  .lab,.theme{font-size:clamp(10px,1.75vh,18px)}
-  .title h1{font-size:clamp(28px,6.9vh,74px)}
-  .title p{font-size:clamp(11px,2.05vh,22px)}
-  .tag{font-size:clamp(9px,1.7vh,17px)}
-  .panel-title h2{font-size:clamp(24px,5.35vh,56px)}
-  .desc{font-size:clamp(10px,1.9vh,19px)}
-  .item{font-size:clamp(11px,2.08vh,21px)}
-  .footer{font-size:clamp(11px,2.08vh,22px)}
+  .lab,.theme{font-size:clamp(10px,1.7vh,17px)}
+  .title h1{font-size:clamp(28px,6.45vh,68px)}
+  .title p{font-size:clamp(11px,1.92vh,20px)}
+  .tag{font-size:clamp(9px,1.65vh,16px)}
+  .panel-title h2{font-size:clamp(24px,5.05vh,52px)}
+  .desc{font-size:clamp(10px,1.78vh,18px)}
+  .item{font-size:clamp(11px,1.95vh,20px)}
+  .footer{font-size:clamp(11px,1.92vh,20px)}
 }
 </style>
 </head>
