@@ -243,7 +243,7 @@
 
     .threat-block em {
       font-style: normal;
-      font-size: .72rem;
+      font-size: .80rem;
       line-height: 1.35;
       color: #7c3aed;
       font-weight: 900;
@@ -928,9 +928,9 @@
     border-color: var(--line);
     box-shadow: 0 14px 36px rgba(0,0,0,.22);
   }
-  .hero h1 { color: var(--txt); }
+  .hero h1 { color: var(--txt); font-size: clamp(1.85rem,3.2vw,2.75rem); font-weight: 800; line-height: 1.18; }
   .hero h1 span {
-    background: linear-gradient(135deg, var(--blue) 0%, var(--violet) 100%);
+    background: linear-gradient(135deg, #f87171 0%, #fbbf24 50%, #93c5fd 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -1316,7 +1316,7 @@
     
     <h1>后量子 <span class="hl">数字资产安全</span></h1>
     
-    <p class="hero-sub">面向量子计算机对数字资产基础设施的潜在冲击，从区块链系统三层架构出发，梳理<strong style="color:#e2e8f0;font-weight:900;">应用层</strong>、<strong style="color:#e2e8f0;font-weight:900;">共识层</strong>与<strong style="color:#e2e8f0;font-weight:900;">网络层</strong>中的密码依赖和安全挑战，展示实验室<strong style="color:#e2e8f0;font-weight:900;">后量子迁移协议算法库</strong>方面的技术储备，保护数字资产免受未来量子计算机攻击。</p><div class="hero-metrics"><div class="metric-card"><div class="metric-num">10+</div><div class="metric-title">核心分布式原语储备</div><div class="metric-desc">覆盖共识类、协商类、广播类分布式原语</div></div><div class="metric-card"><div class="metric-num">3</div><div class="metric-title">代表性迁移协议</div><div class="metric-desc">WaterBear · FIN · SQ</div></div></div></div></section>
+    <p class="hero-sub">面向量子计算机对数字资产基础设施的潜在冲击，从区块链系统三层架构出发，梳理<strong style="color:#93c5fd;font-weight:900;">应用层</strong>、<strong style="color:#93c5fd;font-weight:900;">共识层</strong>与<strong style="color:#93c5fd;font-weight:900;">网络层</strong>中的密码依赖和安全挑战，展示实验室<strong style="color:#93c5fd;font-weight:900;">后量子迁移协议算法库</strong>方面的技术储备，保护数字资产免受未来量子计算机攻击。</p><div class="hero-metrics"><div class="metric-card"><div class="metric-num">10+</div><div class="metric-title">核心分布式原语储备</div><div class="metric-desc">覆盖共识类、协商类、广播类分布式原语</div></div><div class="metric-card"><div class="metric-num">3</div><div class="metric-title">代表性迁移协议</div><div class="metric-desc">WaterBear · FIN · SQ</div></div></div></div></section>
     <section class="board" aria-label="后量子数字资产安全交互展示">
       <section class="panel system-panel" aria-label="区块链分层技术架构与量子计算机威胁">
         <div class="system-risk-grid">
@@ -1326,17 +1326,17 @@
             <button class="arch-layer-title" data-layer="application"><span>应用层</span><small>Application Layer</small></button>
             <div class="arch-components"><button class="active" data-target="wallet">加密钱包</button><button data-target="dapp">DApp 应用</button><button data-target="bridge">跨链桥</button><button data-target="application">……</button></div>
           </div>
-          <div class="threat-block active" data-threat-layer="application"><strong>应用层</strong><span>数字钱包、DApp 授权与跨链桥应用层大量依赖传统数字签名、身份认证和密钥管理机制。</span><em>威胁：私钥恢复 / 授权滥用 / 隐私泄露</em></div>
+          <div class="threat-block active" data-threat-layer="application"><span>数字钱包、DApp 授权与跨链桥应用层大量依赖传统数字签名、身份认证和密钥管理机制。</span><em>威胁：私钥恢复 / 授权滥用 / 隐私泄露</em></div>
           <div class="arch-layer-card" data-layer="consensus">
             <button class="arch-layer-title" data-layer="consensus"><span>共识层</span><small>Consensus Layer</small></button>
             <div class="arch-components"><button data-target="incentive">激励机制</button><button data-target="protocol">共识协议</button><button data-target="ordering">区块排序</button><button data-target="consensus">……</button></div>
           </div>
-          <div class="threat-block" data-threat-layer="consensus"><strong>共识层</strong><span>共识投票、证书聚合、随机数与区块排序依赖数字签名或聚合/门限签名。</span><em>威胁：活性丧失 / 双花攻击 / 破坏最终性</em></div>
+          <div class="threat-block" data-threat-layer="consensus"><span>共识投票、证书聚合、随机数与区块排序依赖数字签名或聚合/门限签名。</span><em>威胁：活性丧失 / 双花攻击 / 破坏最终性</em></div>
           <div class="arch-layer-card" data-layer="network">
             <button class="arch-layer-title" data-layer="network"><span>网络层</span><small>Network Layer</small></button>
             <div class="arch-components"><button data-target="p2p">P2P 网络</button><button data-target="propagation">交易传播</button><button data-target="node">基础节点</button><button data-target="network">……</button></div>
           </div>
-          <div class="threat-block" data-threat-layer="network"><strong>网络层</strong><span>节点身份、握手协议、传输加密或消息认证依赖传统公钥密码。</span><em>威胁：节点伪装 / 消息篡改 / 传播劫持</em></div>
+          <div class="threat-block" data-threat-layer="network"><span>节点身份、握手协议、传输加密或消息认证依赖传统公钥密码。</span><em>威胁：节点伪装 / 消息篡改 / 传播劫持</em></div>
         </div>
 
         <div class="system-explain">
