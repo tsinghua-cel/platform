@@ -57,7 +57,7 @@
       width: min(1920px, max(1500px, 100vw));
       min-width: 1500px;
       margin: 0 auto;
-      padding: 14px 18px 20px;
+      padding: 14px 14px 20px;
     }
 
     .topbar {
@@ -75,14 +75,6 @@
       letter-spacing: 0;
       font-weight: 800;
       text-shadow: 0 0 22px rgba(56, 213, 255, 0.26);
-    }
-
-    .subtitle {
-      color: var(--muted);
-      font-size: 15px;
-      display: flex;
-      gap: 18px;
-      flex-wrap: wrap;
     }
 
     .demo-tag {
@@ -104,10 +96,10 @@
       margin-top: 10px;
     }
 
-    .layer-1 { grid-template-columns: minmax(0, 1.22fr) minmax(350px, 0.9fr) minmax(330px, 0.82fr); }
-    .layer-2 { grid-template-columns: minmax(320px, 0.95fr) minmax(420px, 1.35fr) minmax(340px, 1fr); }
-    .layer-3 { grid-template-columns: 1fr; }
-    .layer-4 { grid-template-columns: repeat(3, minmax(280px, 1fr)); }
+    .layer-1 { grid-template-columns: minmax(300px, 0.92fr) minmax(280px, 0.78fr) minmax(280px, 0.78fr); }
+    .layer-2 { grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); }
+    .layer-3 { grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.75fr); }
+    .layer-4 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 
     .panel {
       position: relative;
@@ -164,7 +156,7 @@
 
     .metrics {
       display: grid;
-      grid-template-columns: repeat(3, minmax(140px, 1fr));
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 8px;
       padding: 10px;
     }
@@ -193,30 +185,19 @@
       white-space: nowrap;
     }
 
-    .metric-foot {
-      margin-top: 7px;
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    .good { color: var(--green); }
-    .watch { color: var(--amber); }
-    .risk { color: var(--red); }
-    .live { color: var(--cyan); }
-
     .chart {
       position: relative;
       height: 300px;
       width: 100%;
     }
 
-    #radarChart { height: 230px; }
-    #flowChart { height: 305px; }
-    #bridgeChart { height: 215px; }
-    #riskChart { height: 230px; }
+    #radarChart { height: 220px; }
+    #flowChart { height: 250px; }
+    #bridgeChart { height: 190px; }
+    #riskChart { height: 220px; }
 
     .layer-2 .panel {
-      min-height: 430px;
+      height: 470px;
     }
 
     .chain-list,
@@ -227,6 +208,10 @@
       padding: 8px 10px 10px;
       display: grid;
       gap: 6px;
+    }
+
+    #chainList {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .row {
@@ -247,15 +232,49 @@
       background: rgba(56, 213, 255, 0.13);
     }
 
-    .row.compact { grid-template-columns: 1.1fr 1fr 0.8fr; }
-    .row.transfer { grid-template-columns: 1.15fr 0.65fr 0.75fr 0.7fr; }
+    .row.compact { grid-template-columns: 1fr 0.8fr 0.62fr; }
+    .row.transfer { grid-template-columns: minmax(170px, 1.4fr) 0.48fr 0.68fr 0.82fr; }
     .row.alert { grid-template-columns: auto 1fr auto; }
     .row.track { grid-template-columns: 1fr 0.9fr 0.65fr; }
+
+    #bridgeAlerts .row,
+    #consensusAlerts .row,
+    #txAlerts .row {
+      font-size: 11px;
+      min-height: 30px;
+      padding: 5px 7px;
+      gap: 6px;
+    }
+
+    #bridgeAlerts .tiny,
+    #consensusAlerts .tiny,
+    #txAlerts .tiny,
+    #bridgeAlerts .pill,
+    #consensusAlerts .pill,
+    #txAlerts .pill {
+      font-size: 10px;
+    }
 
     .name {
       font-weight: 700;
       color: #edf8ff;
       min-width: 0;
+    }
+
+    .transfer .name {
+      font-size: 11px;
+    }
+
+    .track-title {
+      font-size: 13px;
+    }
+
+    .risk-cell {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      justify-content: flex-end;
+      flex-wrap: wrap;
     }
 
     .meta,
@@ -282,21 +301,13 @@
       white-space: nowrap;
     }
 
-    .pill.demo { color: #b9c4d7; border-color: rgba(185, 196, 215, 0.18); background: rgba(185,196,215,0.05); }
     .pill.warn { color: #ffd79a; border-color: rgba(255,184,77,0.35); background: rgba(255,184,77,0.08); }
     .pill.high { color: #ffb1bd; border-color: rgba(255,95,118,0.42); background: rgba(255,95,118,0.08); }
     .pill.ok { color: #a9f6d5; border-color: rgba(67,231,165,0.32); background: rgba(67,231,165,0.07); }
 
-    .module-split {
-      display: grid;
-      grid-template-columns: minmax(320px, 1fr) minmax(420px, 1fr);
-      gap: 12px;
-      padding: 12px;
-    }
-
     .protocol-grid {
       display: grid;
-      grid-template-columns: repeat(6, minmax(150px, 1fr));
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 8px;
       padding: 10px;
     }
@@ -337,16 +348,15 @@
     .proto-stat {
       margin-top: 8px;
       display: grid;
-      grid-template-columns: 1fr;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 5px;
     }
 
     .proto-stat div {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      display: grid;
+      grid-template-rows: auto auto;
       gap: 8px;
-      padding: 5px 7px;
+      padding: 6px 7px;
       border-radius: 5px;
       background: rgba(255,255,255,0.03);
     }
@@ -354,12 +364,12 @@
     .bridge-metrics {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
+      gap: 6px;
       padding: 9px 10px 0;
     }
 
     .mini {
-      padding: 8px;
+      padding: 7px;
       border: 1px solid rgba(91, 209, 255, 0.13);
       border-radius: 6px;
       background: rgba(255,255,255,0.03);
@@ -368,17 +378,17 @@
     .mini b {
       display: block;
       font-family: var(--mono);
-      font-size: 18px;
+      font-size: 16px;
       margin-top: 5px;
     }
 
     .layer-4 .panel {
-      min-height: 245px;
+      min-height: 318px;
     }
 
     .layer-4 .alert-list,
     .layer-4 .track-list {
-      min-height: 198px;
+      min-height: 270px;
       align-content: stretch;
     }
 
@@ -417,17 +427,8 @@
       font-size: 12px;
     }
 
-    .fade-change {
-      animation: pulseLine 0.7s ease;
-    }
-
     .refresh-flash {
       animation: refreshGlow 0.9s ease;
-    }
-
-    @keyframes pulseLine {
-      0% { background-color: rgba(56, 213, 255, 0.12); }
-      100% { background-color: rgba(4, 13, 28, 0.46); }
     }
 
     @keyframes refreshGlow {
@@ -443,12 +444,26 @@
 
     @media (max-width: 1499px) {
       body {
-        min-width: 1500px;
+        min-width: 1200px;
       }
 
       .dashboard {
-        width: 1500px;
-        min-width: 1500px;
+        width: 100%;
+        max-width: 1500px;
+        min-width: 1200px;
+      }
+    }
+
+    
+    @media (max-width: 2000px) {
+      body {
+        min-width: 1200px;
+      }
+
+      .dashboard {
+        width: 100%;
+        max-width: 1900px;
+        min-width: 1200px;
       }
     }
 
@@ -490,13 +505,6 @@
     <section class="grid layer-2">
       <div class="panel">
         <div class="panel-head">
-          <div class="panel-title">多链运行状态</div>
-          <div class="source">多链运行监控</div>
-        </div>
-        <div class="chain-list" id="chainList"></div>
-      </div>
-      <div class="panel">
-        <div class="panel-head">
           <div class="panel-title">全球交易流向</div>
           <div class="source">链上资金路径</div>
         </div>
@@ -515,6 +523,13 @@
     </section>
 
     <section class="grid layer-3">
+      <div class="panel">
+        <div class="panel-head">
+          <div class="panel-title">多链运行状态</div>
+          <div class="source">多链运行监控</div>
+        </div>
+        <div class="chain-list" id="chainList"></div>
+      </div>
       <div class="panel">
         <div class="panel-head">
           <div class="panel-title">重点协议活动监控</div>
@@ -581,7 +596,6 @@
         { name: "Linea", chainid: 59144, live: true, baseBlock: 19874420 },
         { name: "Gnosis", chainid: 100, live: true, baseBlock: 39782411 },
         { name: "Base", chainid: 8453, live: false, baseBlock: 30488213 },
-        { name: "BNB Chain", chainid: 56, live: false, baseBlock: 49482411 },
         { name: "Optimism", chainid: 10, live: false, baseBlock: 136293721 },
         { name: "Avalanche", chainid: 43114, live: false, baseBlock: 62117390 }
       ],
@@ -591,7 +605,13 @@
         { name: "Bridge", icon: "⇄", type: "Bridge", live: true, address: "0xA0c68C638235ee32657e8f720a23ceC1bFc77C77", demoEvents: 8 },
         { name: "Curve", icon: "≈", type: "DEX", live: false, demoEvents: 18 },
         { name: "Lido", icon: "▲", type: "Staking", live: false, demoEvents: 15 },
-        { name: "EigenLayer", icon: "⬡", type: "Restaking", live: false, demoEvents: 10 }
+        { name: "EigenLayer", icon: "⬡", type: "Restaking", live: false, demoEvents: 10 },
+        { name: "Pendle", icon: "⬢", type: "DEX", live: false, demoEvents: 9 },
+        { name: "MakerDAO", icon: "◆", type: "Lending", live: false, demoEvents: 11 },
+        { name: "Rocket Pool", icon: "▲", type: "Staking", live: false, demoEvents: 7 },
+        { name: "Balancer", icon: "◇", type: "DEX", live: false, demoEvents: 13 },
+        { name: "LayerZero", icon: "⇄", type: "Bridge", live: false, demoEvents: 8 },
+        { name: "Compound", icon: "◆", type: "Lending", live: false, demoEvents: 10 }
       ]
     };
 
@@ -614,9 +634,16 @@
       protocols: [],
       alerts: [],
       ticker: [],
-      dataSource: "本地模拟",
       etherscanAvailable: false,
       securityScore: 82,
+      counters: {
+        riskAlerts: 36,
+        highRiskAlerts: 7,
+        bridgeFlow: 1840000000,
+        bridgeRiskAlerts: 9,
+        largeBridgeTransfers: 21,
+        abnormalOutflow: 73000000
+      },
       feeds: {
         consensus: [],
         tx: [],
@@ -631,12 +658,6 @@
       { from: "0xa32f00c1...11d9", to: "0x9c71d1b2...93ab", symbol: "USDC", amount: 12400000, risk: "高危关注", time: "6分钟前" },
       { from: "0x8bbd3219...aa88", to: "0x6fae9120...1200", symbol: "USDT", amount: 4200000, risk: "大额", time: "9分钟前" },
       { from: "0x11cd992a...73dc", to: "0x3a81b7c1...4e21", symbol: "USDC", amount: 1800000, risk: "大额", time: "13分钟前" }
-    ];
-
-    const bridgeAlertsData = [
-      "Bridge outflow increased in the last 15 minutes",
-      "Cross-chain flow to watched address detected",
-      "Abnormal concentration on Ethereum -> Arbitrum path"
     ];
 
     const trackingObjects = [
@@ -689,6 +710,11 @@
     function formatAddress(address) {
       if (!address || address.length < 12) return address || "--";
       return address.slice(0, 6) + "..." + address.slice(-4);
+    }
+
+    function formatShortAddress(address) {
+      if (!address || address.length < 10) return address || "--";
+      return address.slice(0, 5) + "..." + address.slice(-3);
     }
 
     function formatNumber(value) {
@@ -901,10 +927,14 @@
     const charts = {};
 
     function initCharts() {
-      charts.radar = echarts.init(document.getElementById("radarChart"));
-      charts.flow = echarts.init(document.getElementById("flowChart"));
-      charts.bridge = echarts.init(document.getElementById("bridgeChart"));
-      charts.risk = echarts.init(document.getElementById("riskChart"));
+      const radarEl = document.getElementById("radarChart");
+      const flowEl = document.getElementById("flowChart");
+      const bridgeEl = document.getElementById("bridgeChart");
+      const riskEl = document.getElementById("riskChart");
+      if (radarEl) charts.radar = echarts.init(radarEl);
+      if (flowEl) charts.flow = echarts.init(flowEl);
+      if (bridgeEl) charts.bridge = echarts.init(bridgeEl);
+      if (riskEl) charts.risk = echarts.init(riskEl);
       window.addEventListener("resize", () => Object.values(charts).forEach(chart => chart.resize()));
     }
 
@@ -917,34 +947,57 @@
       panel.classList.add("refresh-flash");
     }
 
-    function pushFeed(name, item, limit) {
+    function pushFeed(name, item, limit, unit) {
       const feed = state.feeds[name] || [];
-      feed.unshift({ ...item, fresh: true, age: Math.max(1, Math.round(jitter(3, 3))) });
+      feed.forEach(row => { row.fresh = false; });
+      feed.unshift({ ...item, fresh: true, unit, createdAt: Date.now() - (unit === "s" ? 1000 : 60000) });
       state.feeds[name] = feed.slice(0, limit);
       setTimeout(() => {
         state.feeds[name] = (state.feeds[name] || []).map(row => ({ ...row, fresh: false }));
       }, 900);
     }
 
-    function seedFeed(name, items, limit) {
+    function seedFeed(name, items, limit, unit) {
       if (state.feeds[name] && state.feeds[name].length) return;
-      state.feeds[name] = items.slice(0, limit).map((item, index) => ({ ...item, fresh: false, age: index * 3 + 2 }));
+      state.feeds[name] = items.slice(0, limit).map((item, index) => ({
+        ...item,
+        fresh: false,
+        unit,
+        createdAt: Date.now() - (unit === "s" ? (index * 4 + 1) * 1000 : (index * 3 + 1) * 60000)
+      }));
+    }
+
+    function ageText(item) {
+      const diff = Math.max(1, Date.now() - (item.createdAt || Date.now()));
+      if (item.unit === "s") return `${Math.max(1, Math.floor(diff / 1000))}秒前`;
+      return `${Math.max(1, Math.floor(diff / 60000))}分钟前`;
+    }
+
+    function shortHash() {
+      const part = () => Math.floor(Math.random() * 0xffff).toString(16).padStart(4, "0");
+      return "0x" + part() + "..." + part();
+    }
+
+    function advanceCounters(mode) {
+      if (mode === "fast") {
+        state.counters.bridgeFlow += Math.round(jitter(6200000, 2800000));
+        state.counters.bridgeRiskAlerts += Math.random() > 0.62 ? 1 : 0;
+        state.counters.largeBridgeTransfers += Math.random() > 0.48 ? 1 : 0;
+        state.counters.abnormalOutflow += Math.round(jitter(420000, 220000));
+      }
+      if (mode === "slow") {
+        state.counters.riskAlerts += Math.random() > 0.68 ? 1 : 0;
+        state.counters.highRiskAlerts += Math.random() > 0.88 ? 1 : 0;
+      }
     }
 
     function renderMetrics() {
-      const gas = state.gasOracle || {};
-      const price = state.ethPrice || {};
-      const gasText = Number(gas.ProposeGasPrice || jitter(12.4, 2)).toFixed(1);
-      const gasStatus = gasLevel(gas.ProposeGasPrice);
       const metrics = [
         ["接入链数", "60+"],
-        ["最新区块高度", formatNumber(state.latestBlock || CONFIG.CHAINS[0].baseBlock)],
-        ["ETH 当前价格", price.ethusd ? "$" + Number(price.ethusd).toLocaleString("en-US", { maximumFractionDigits: 2 }) : "$3,420.8"],
-        [`当前汽油费价格（${gasStatus}）`, gasText + " Gwei"],
         ["24小时交易规模", formatUSD(jitter(18400000000, 900000000))],
         ["24小时资金流量", formatUSD(jitter(4260000000, 280000000))],
-        ["风险预警数", String(Math.round(jitter(36, 8)))],
-        ["高危预警数", String(Math.round(jitter(7, 3)))],
+        ["风险预警数", String(state.counters.riskAlerts)],
+        ["高危预警数", String(state.counters.highRiskAlerts)],
         ["安全评分", String(state.securityScore)]
       ];
       document.getElementById("metricGrid").innerHTML = metrics.map(item => `
@@ -1015,7 +1068,7 @@
         status: index === 6 ? "监控" : index === 2 ? "活跃" : "正常",
         risk: index === 6 ? "跨链监控" : index === 3 ? "低延迟" : "正常"
       }));
-      document.getElementById("chainList").innerHTML = rows.slice(0, 9).map(chain => {
+      document.getElementById("chainList").innerHTML = rows.slice(0, 8).map(chain => {
         const statusClass = chain.status === "正常" ? "ok" : chain.status === "监控" || chain.status === "拥堵" ? "warn" : "";
         return `
           <div class="row compact">
@@ -1039,16 +1092,18 @@
     function renderFlow() {
       const highTransfer = (state.transfers[0] && state.transfers[0].amount) || 28600000;
       const data = [
-        { name: "中心化交易所", symbolSize: 66, category: 0 },
-        { name: "做市商钱包", symbolSize: 48, category: 1 },
-        { name: "巨鲸地址", symbolSize: 54, category: 1 },
-        { name: "DeFi 协议", symbolSize: 58, category: 2 },
-        { name: "借贷池", symbolSize: 44, category: 2 },
-        { name: "跨链桥", symbolSize: 52, category: 3 },
-        { name: "稳定币金库", symbolSize: 48, category: 2 },
-        { name: "高风险地址", symbolSize: 46, category: 4 },
-        { name: "Mixer", symbolSize: 42, category: 4 },
-        { name: "场外清算", symbolSize: 40, category: 1 }
+        { name: "中心化交易所", symbolSize: 60, category: 0 },
+        { name: "做市商钱包", symbolSize: 42, category: 1 },
+        { name: "巨鲸地址", symbolSize: 50, category: 1 },
+        { name: "DeFi 协议", symbolSize: 54, category: 2 },
+        { name: "借贷池", symbolSize: 40, category: 2 },
+        { name: "跨链桥", symbolSize: 48, category: 3 },
+        { name: "稳定币金库", symbolSize: 44, category: 2 },
+        { name: "高风险地址", symbolSize: 42, category: 4 },
+        { name: "Mixer", symbolSize: 38, category: 4 },
+        { name: "场外清算", symbolSize: 38, category: 1 },
+        { name: "清算机器人", symbolSize: 36, category: 1 },
+        { name: "新部署合约", symbolSize: 36, category: 4 }
       ];
       const positions = {
         "中心化交易所": [70, 110],
@@ -1060,7 +1115,9 @@
         "稳定币金库": [200, 235],
         "高风险地址": [510, 150],
         "Mixer": [595, 95],
-        "场外清算": [520, 235]
+        "场外清算": [520, 235],
+        "清算机器人": [375, 160],
+        "新部署合约": [585, 205]
       };
       data.forEach(item => {
         item.x = positions[item.name][0];
@@ -1075,7 +1132,12 @@
         { source: "跨链桥", target: "场外清算", value: 8.1 },
         { source: "场外清算", target: "高风险地址", value: 5.4 },
         { source: "高风险地址", target: "Mixer", value: 4.6 },
-        { source: "巨鲸地址", target: "稳定币金库", value: 7.2 }
+        { source: "巨鲸地址", target: "稳定币金库", value: 7.2 },
+        { source: "借贷池", target: "清算机器人", value: 6.8 },
+        { source: "清算机器人", target: "中心化交易所", value: 4.1 },
+        { source: "新部署合约", target: "DeFi 协议", value: 3.2 },
+        { source: "高风险地址", target: "新部署合约", value: 2.8 },
+        { source: "稳定币金库", target: "中心化交易所", value: 5.7 }
       ];
       charts.flow.setOption({
         tooltip: { trigger: "item", formatter: params => params.dataType === "edge" ? `${params.data.source} -> ${params.data.target}<br/>${formatUSD((params.data.value || 0) * 1000000)}` : params.name },
@@ -1099,27 +1161,27 @@
     }
 
     function renderTransfers() {
-      seedFeed("transfer", (state.transfers.length ? state.transfers : demoTransfers).slice(0, 1), 1);
-      const rows = state.feeds.transfer.slice(0, 1);
+      seedFeed("transfer", (state.transfers.length ? state.transfers : demoTransfers).slice(0, 4), 4, "s");
+      const rows = state.feeds.transfer.slice(0, 4);
       document.getElementById("transferList").innerHTML = rows.map(tx => `
         <div class="row transfer ${tx.fresh ? "new-item" : ""}">
           <div>
-            <div class="name mono">${formatAddress(tx.from)} -> ${formatAddress(tx.to)}</div>
-            <div class="tiny">${tx.time}</div>
+            <div class="name mono">${formatShortAddress(tx.from)} -> ${formatShortAddress(tx.to)}</div>
           </div>
           <div class="mono">${tx.symbol}</div>
           <div class="mono">${formatUSD(tx.amount)}</div>
-          <div><span class="pill ${tx.risk.includes("高") ? "high" : tx.risk === "大额" ? "warn" : "ok"}">${tx.risk}</span></div>
+          <div class="risk-cell"><span class="pill ${tx.risk.includes("高") ? "high" : tx.risk === "大额" ? "warn" : "ok"}">${tx.risk}</span><span class="tiny">${ageText(tx)}</span></div>
         </div>
       `).join("");
     }
 
     function renderBridge() {
+      advanceCounters("fast");
       const metrics = [
-        ["24小时跨链流量", formatUSD(jitter(1840000000, 130000000))],
-        ["桥接风险预警", String(Math.round(jitter(9, 3)))],
-        ["大额跨链转账", String(Math.round(jitter(21, 5)))],
-        ["异常流出规模", formatUSD(jitter(73000000, 18000000))]
+        ["24小时跨链流量", formatUSD(state.counters.bridgeFlow)],
+        ["桥接风险预警", String(state.counters.bridgeRiskAlerts)],
+        ["大额跨链转账", String(state.counters.largeBridgeTransfers)],
+        ["异常流出规模", formatUSD(state.counters.abnormalOutflow)]
       ];
       document.getElementById("bridgeMetrics").innerHTML = metrics.map(item => `<div class="mini"><span class="tiny">${item[0]}</span><b>${item[1]}</b></div>`).join("");
       charts.bridge.setOption({
@@ -1129,7 +1191,7 @@
           top: 20,
           bottom: 18,
           left: 8,
-          right: 82,
+          right: 76,
           nodeWidth: 14,
           nodeGap: 10,
           draggable: false,
@@ -1145,7 +1207,7 @@
             { name: "Linea", itemStyle: { color: "#9b72ff" } },
             { name: "Gnosis", itemStyle: { color: "#6bd3ff" } },
             { name: "Base", itemStyle: { color: "#2f6bff" } },
-            { name: "BNB Chain", itemStyle: { color: "#ffb84d" } },
+            { name: "Optimism", itemStyle: { color: "#ffb84d" } },
             { name: "Bridge Vault", itemStyle: { color: "#7cc8ff" } },
             { name: "Watched Wallet", itemStyle: { color: "#ff5f76" } }
           ],
@@ -1155,7 +1217,7 @@
             { source: "Ethereum", target: "Linea", value: jitter(16, 3) },
             { source: "Ethereum", target: "Gnosis", value: jitter(11, 2) },
             { source: "Ethereum", target: "Base", value: jitter(24, 4) },
-            { source: "Ethereum", target: "BNB Chain", value: jitter(18, 4) },
+            { source: "Ethereum", target: "Optimism", value: jitter(18, 4) },
             { source: "Arbitrum", target: "Bridge Vault", value: jitter(13, 3) },
             { source: "Base", target: "Bridge Vault", value: jitter(9, 2) },
             { source: "Bridge Vault", target: "Watched Wallet", value: jitter(5, 1.5) }
@@ -1169,8 +1231,9 @@
       seedFeed("bridge", [
         { level: "监控", text: "最近15分钟跨链流出上升" },
         { level: "高", text: "检测到流向重点关注地址的跨链资金" },
-        { level: "监控", text: "Ethereum -> Arbitrum 路径资金集中度异常" }
-      ], 3);
+        { level: "监控", text: "Ethereum -> Arbitrum 路径资金集中度异常" },
+        { level: "中", text: "Base 路径大额桥接频次上升" }
+      ], 4, "s");
       document.getElementById("bridgeAlerts").innerHTML = state.feeds.bridge.map(alertRow).join("");
     }
 
@@ -1182,14 +1245,13 @@
         risk: p.name === "Bridge" ? "高" : p.name === "Curve" ? "中" : "监控",
         source: "实时监控"
       }));
-      const typeMap = { DEX: "去中心化交易", Lending: "借贷", Staking: "质押", Bridge: "跨链桥", Restaking: "再质押" };
-      document.getElementById("protocolGrid").innerHTML = protocols.map((p, index) => `
+      const typeMap = { DEX: "DEX", Lending: "借贷", Staking: "质押", Bridge: "跨链桥", Restaking: "再质押" };
+      document.getElementById("protocolGrid").innerHTML = protocols.slice(0, 4).map((p, index) => `
         <article class="protocol-card ${index === activeIndex ? "active" : ""}">
           <div class="protocol-top">
             <div class="name"><span class="proto-icon">${p.icon}</span>${p.name}</div>
-            <span class="pill">${p.source === "live" ? "实时" : p.source}</span>
+            <span class="pill">${typeMap[p.type] || p.type}</span>
           </div>
-          <div class="tiny">${typeMap[p.type] || p.type}</div>
           <div class="proto-stat">
             <div><span class="tiny">近期事件</span><b class="mono">${formatNumber(p.events)}</b></div>
             <div><span class="tiny">近期风险</span><b class="mono">${p.risk}</b></div>
@@ -1204,29 +1266,29 @@
       const gas = Number(state.gasOracle && state.gasOracle.ProposeGasPrice) || 14;
       const txCount = state.blockDetail && state.blockDetail.transactions ? state.blockDetail.transactions.length : Math.round(jitter(180, 70));
       const consensus = [
-        { level: gas > 30 ? "中" : "低", text: "Ethereum 汽油费" + (gas > 30 ? "快速上升" : "处于正常区间") },
-        { level: "低", text: "Polygon 出块间隔波动已记录" },
+        { level: gas > 30 ? "中" : "低", text: "Ethereum Gas " + (gas > 30 ? "快速上升" : "正常") },
+        { level: "低", text: "Polygon 出块波动" },
         { level: utilization > 0.85 ? "中" : "监控", text: "区块 Gas 使用率 " + (utilization * 100).toFixed(1) + "% / 交易数 " + txCount },
-        { level: "监控", text: "待处理交易压力小幅增加" },
-        { level: "中", text: "Linea 最近出块延迟高于基线" },
-        { level: "监控", text: "Gnosis 验证节点响应时间波动" },
-        { level: "中", text: "Arbitrum 批量提交间隔短时拉长" },
-        { level: "低", text: "Base 区块确认速度轻微抖动" }
+        { level: "监控", text: "Pending 压力小幅增加" },
+        { level: "中", text: "Linea 出块延迟偏高" },
+        { level: "监控", text: "Gnosis 节点响应波动" },
+        { level: "中", text: "Arbitrum 提交间隔拉长" },
+        { level: "低", text: "Base 确认速度抖动" }
       ];
       const largest = (state.transfers[0] || demoTransfers[0]);
       const txAlerts = [
-        { level: largest.amount >= 10000000 ? "高" : "中", text: `检测到大额 ${largest.symbol} 转账：${formatUSD(largest.amount)}` },
-        { level: "高", text: "检测到三明治攻击候选行为" },
-        { level: "中", text: "Uniswap V3 出现高滑点兑换模式" },
-        { level: "中", text: "重点集群部署可疑合约" },
-        { level: "高", text: "协议资金流出超过监控阈值" },
-        { level: "中", text: "稳定币归集地址出现短时高频转入" },
-        { level: "高", text: "疑似攻击资金拆分转入多个新地址" },
-        { level: "中", text: "借贷池清算事件密度高于正常区间" }
+        { level: largest.amount >= 10000000 ? "高" : "中", text: `${largest.symbol} 大额转账 ${formatShortAddress(largest.from)} -> ${formatShortAddress(largest.to)} ${formatUSD(largest.amount)}` },
+        { level: "高", text: `三明治攻击候选 tx ${shortHash()}` },
+        { level: "中", text: "Uniswap V3 高滑点路径" },
+        { level: "中", text: `可疑合约部署 ${shortHash()}` },
+        { level: "高", text: "协议资金流出超阈值" },
+        { level: "中", text: "稳定币短时高频归集" },
+        { level: "高", text: `攻击资金拆分 ${shortHash()}` },
+        { level: "中", text: "借贷池清算密度上升" }
       ];
       state.alerts = consensus.concat(txAlerts);
-      seedFeed("consensus", consensus, 7);
-      seedFeed("tx", txAlerts, 7);
+      seedFeed("consensus", consensus, 8, "m");
+      seedFeed("tx", txAlerts, 8, "m");
       document.getElementById("consensusAlerts").innerHTML = state.feeds.consensus.map(alertRow).join("");
       document.getElementById("txAlerts").innerHTML = state.feeds.tx.map(alertRow).join("");
       renderTicker();
@@ -1235,22 +1297,22 @@
 
     function alertRow(item) {
       const klass = item.level === "高" ? "high" : item.level === "中" || item.level === "监控" ? "warn" : "ok";
-      return `<div class="row alert ${item.fresh ? "new-item" : ""}"><span class="pill ${klass}">${item.level}</span><span>${item.text}</span><span class="tiny">${item.age || Math.round(jitter(6, 5))}分钟前</span></div>`;
+      return `<div class="row alert ${item.fresh ? "new-item" : ""}"><span class="pill ${klass}">${item.level}</span><span>${item.text}</span><span class="tiny">${ageText(item)}</span></div>`;
     }
 
     function renderTracking() {
-      seedFeed("tracking", trackingObjects, 6);
+      seedFeed("tracking", trackingObjects, 5, "m");
       document.getElementById("trackingList").innerHTML = state.feeds.tracking.map(item => `
         <div class="row track ${item.fresh ? "new-item" : ""}">
           <div>
-            <div class="name">${translateTracking(item.name)}</div>
+            <div class="name track-title">${translateTracking(item.name)}</div>
             <div class="tiny">${translateTracking(item.type)}：${translateTracking(item.activity)}</div>
           </div>
           <div>
             <span class="pill ${item.risk === "Critical" || item.risk === "High" ? "high" : "warn"}">${translateTracking(item.risk)}</span>
             <div class="tiny">关联地址 ${item.linked} 个</div>
           </div>
-          <div class="mono tiny">${translateTracking(item.status)}<br>${item.age || Math.round(jitter(8, 6))}分钟前</div>
+          <div class="mono tiny">${translateTracking(item.status)}<br>${ageText(item)}</div>
         </div>
       `).join("");
     }
@@ -1267,11 +1329,11 @@
         "Bridge": "跨链桥",
         "Contract": "合约",
         "Cluster": "地址集群",
-        "transferred 1,240 ETH to mixer": "向 Mixer 转移 1,240 ETH",
-        "sandwich candidate activity": "出现三明治攻击候选活动",
-        "abnormal outbound bridge flow": "跨链桥异常流出",
-        "new contract deployed by watched cluster": "重点集群部署新合约",
-        "stablecoin consolidation pattern": "稳定币归集模式",
+        "transferred 1,240 ETH to mixer": "转入 Mixer",
+        "sandwich candidate activity": "三明治候选",
+        "abnormal outbound bridge flow": "跨链异常流出",
+        "new contract deployed by watched cluster": "部署新合约",
+        "stablecoin consolidation pattern": "稳定币归集",
         "Critical": "严重",
         "High": "高",
         "Medium": "中",
@@ -1291,11 +1353,11 @@
       ].map(item => ({ ...item, value: Math.round(jitter(item.value, 4)) }));
       charts.risk.setOption({
         tooltip: { trigger: "item" },
-        legend: { bottom: 0, textStyle: { color: "#85a3c4", fontSize: 10 } },
+        legend: { show: false },
         series: [{
           type: "pie",
-          radius: ["42%", "66%"],
-          center: ["50%", "47%"],
+          radius: ["44%", "70%"],
+          center: ["50%", "52%"],
           avoidLabelOverlap: true,
           label: { color: "#dbeafe", formatter: "{b}\n{d}%", fontSize: 10 },
           labelLine: { lineStyle: { color: "rgba(219,234,254,0.35)" } },
@@ -1318,44 +1380,89 @@
       ]);
     }
 
-    function pushDashboardItems() {
-      const consensusPool = [
-        { level: "中", text: "Ethereum 区块 Gas 使用率接近预警阈值" },
-        { level: "监控", text: "Polygon 出块间隔出现连续波动" },
-        { level: "低", text: "Gnosis 节点响应延迟回落至正常区间" },
-        { level: "中", text: "Linea 批量证明提交间隔偏离基线" },
-        { level: "监控", text: "Arbitrum 排队交易压力小幅上升" }
-      ];
-      const txPool = [
-        { level: "高", text: "检测到大额稳定币转入高风险地址" },
-        { level: "中", text: "Uniswap V3 高滑点路径继续活跃" },
-        { level: "高", text: "疑似攻击资金拆分转移到新地址" },
-        { level: "中", text: "借贷协议清算事件密度上升" },
-        { level: "监控", text: "可疑合约创建频率高于近一小时均值" }
-      ];
-      const bridgePool = [
-        { level: "高", text: "跨链桥流向重点地址的资金增加" },
-        { level: "监控", text: "Ethereum -> Base 路径流量短时升高" },
-        { level: "中", text: "Bridge Vault 资金集中度继续上升" }
-      ];
-      const trackingPool = [
+    const realtimePools = {
+      consensus: [
+        { level: "中", text: "Ethereum Gas 接近阈值" },
+        { level: "监控", text: "Polygon 出块连续波动" },
+        { level: "低", text: "Gnosis 节点延迟回落" },
+        { level: "中", text: "Linea 证明提交偏离" },
+        { level: "监控", text: "Arbitrum 排队压力上升" }
+      ],
+      tx: [
+        { level: "高", text: () => `大额稳定币转入风险地址 ${shortHash()}` },
+        { level: "中", text: () => `Uniswap 高滑点 tx ${shortHash()}` },
+        { level: "高", text: () => `攻击资金拆分 ${shortHash()}` },
+        { level: "中", text: "借贷清算密度上升" },
+        { level: "监控", text: () => `可疑合约高频创建 ${shortHash()}` }
+      ],
+      bridge: [
+        { level: "高", text: "跨链桥流向重点地址增加" },
+        { level: "监控", text: "Ethereum -> Base 流量升高" },
+        { level: "中", text: "Bridge Vault 集中度上升" },
+        { level: "监控", text: "Optimism 桥接脉冲流入" }
+      ],
+      tracking: [
         { name: "Exploit Wallet A", type: "Exploit Fund", activity: "transferred 1,240 ETH to mixer", risk: "Critical", linked: 18, status: "Tracking" },
         { name: "MEV Bot Cluster B", type: "MEV", activity: "sandwich candidate activity", risk: "High", linked: 42, status: "Tracking" },
         { name: "Suspicious Deployer C", type: "Contract", activity: "new contract deployed by watched cluster", risk: "Medium", linked: 7, status: "Tracking" }
-      ];
-      const transfer = (state.transfers.length ? state.transfers : demoTransfers)[Math.floor(Math.random() * (state.transfers.length || demoTransfers.length))];
-      pushFeed("consensus", consensusPool[Math.floor(Math.random() * consensusPool.length)], 7);
-      pushFeed("tx", txPool[Math.floor(Math.random() * txPool.length)], 7);
-      pushFeed("bridge", bridgePool[Math.floor(Math.random() * bridgePool.length)], 3);
-      pushFeed("tracking", trackingPool[Math.floor(Math.random() * trackingPool.length)], 6);
-      if (transfer) pushFeed("transfer", transfer, 1);
-      renderAlerts();
-      renderBridge();
-      renderTracking();
-      renderTransfers();
-      flashPanel("consensusAlerts");
-      flashPanel("txAlerts");
-      flashPanel("trackingList");
+      ]
+    };
+
+    function materializeItem(item) {
+      return { ...item, text: typeof item.text === "function" ? item.text() : item.text };
+    }
+
+    function randomFrom(items) {
+      return materializeItem(items[Math.floor(Math.random() * items.length)]);
+    }
+
+    function pushFeedByName(name) {
+      if (name === "transfer") {
+        const source = state.transfers.length ? state.transfers : demoTransfers;
+        const transfer = source[Math.floor(Math.random() * source.length)];
+        if (transfer) pushFeed("transfer", transfer, 4, "s");
+        renderTransfers();
+        flashPanel("transferList");
+        return;
+      }
+      if (name === "bridge") {
+        pushFeed("bridge", randomFrom(realtimePools.bridge), 4, "s");
+        renderBridge();
+        return;
+      }
+      if (name === "consensus") {
+        pushFeed("consensus", randomFrom(realtimePools.consensus), 8, "m");
+        document.getElementById("consensusAlerts").innerHTML = state.feeds.consensus.map(alertRow).join("");
+        flashPanel("consensusAlerts");
+        return;
+      }
+      if (name === "tx") {
+        pushFeed("tx", randomFrom(realtimePools.tx), 8, "m");
+        document.getElementById("txAlerts").innerHTML = state.feeds.tx.map(alertRow).join("");
+        flashPanel("txAlerts");
+        return;
+      }
+      if (name === "tracking") {
+        pushFeed("tracking", randomFrom(realtimePools.tracking), 5, "m");
+        renderTracking();
+        flashPanel("trackingList");
+      }
+    }
+
+    function scheduleFeed(name, minMs, maxMs) {
+      const delay = Math.round(minMs + Math.random() * (maxMs - minMs));
+      setTimeout(() => {
+        pushFeedByName(name);
+        scheduleFeed(name, minMs, maxMs);
+      }, delay);
+    }
+
+    function scheduleRealtimePush() {
+      scheduleFeed("transfer", 1600, 3200);
+      scheduleFeed("bridge", 2200, 4200);
+      scheduleFeed("consensus", 7000, 12000);
+      scheduleFeed("tx", 6500, 11000);
+      scheduleFeed("tracking", 8500, 14000);
     }
 
     let tickerIndex = 0;
@@ -1377,6 +1484,7 @@
     }
 
     async function refreshCoreData() {
+      advanceCounters("slow");
       let liveHits = 0;
       try {
         const latest = await getLatestBlock(1);
@@ -1530,17 +1638,7 @@
         renderFlow();
         renderRiskChart();
       }, 18000);
-      setInterval(pushDashboardItems, 5000);
-      setInterval(() => {
-        const list = document.querySelectorAll(".transfer-list .row, .alert-list .row");
-        list.forEach((node, index) => {
-          if (index % 5 === Math.floor(Math.random() * 5)) {
-            node.classList.remove("fade-change");
-            void node.offsetWidth;
-            node.classList.add("fade-change");
-          }
-        });
-      }, 5000);
+      scheduleRealtimePush();
     }
 
     document.addEventListener("DOMContentLoaded", () => {
