@@ -657,7 +657,7 @@ function setChainStatus(mode){
   } else {
     panel.classList.add('attacking');
     main.innerHTML = STATE.phase === 1
-      ? '<span style="color:#fecaca">攻击中：拜占庭扣留 b_j 与 A_3 票</span>'
+      ? ''
       : '<span style="color:#fecaca">攻击中：A_1 票将在 slot t_adv 被丢弃</span>';
   }
 }
@@ -1085,11 +1085,15 @@ function drawChart(){
   const pad = { l: 38, r: 12, t: 12, b: 22 };
   const plotW = chartW - pad.l - pad.r;
   const plotH = chartH - pad.t - pad.b;
+  const yMax = 1.0;
+  const yMin = -0.5;
+  const yRange = yMax - yMin;
+  const yOf = v => pad.t + plotH * (1 - (v - yMin) / yRange);
 
   chartCtx.save();
   chartCtx.strokeStyle = 'rgba(99,179,237,.06)';
-  for(let i=0;i<=4;i++){
-    const y = pad.t + plotH * i / 4;
+  for(let v=yMax;v>=yMin-1e-6;v-=0.5){
+    const y = yOf(v);
     chartCtx.beginPath();
     chartCtx.moveTo(pad.l, y);
     chartCtx.lineTo(pad.l + plotW, y);
@@ -1102,37 +1106,10 @@ function drawChart(){
   chartCtx.font = '10px JetBrains Mono';
   chartCtx.textAlign = 'right';
   chartCtx.textBaseline = 'middle';
-  const yMax = 1.5;
-  for(let v=0;v<=yMax;v+=0.5){
-    const y = pad.t + plotH * (1 - v/yMax);
-    chartCtx.fillText(Math.round(v*100)+'%', pad.l - 5, y);
+  for(let v=yMax;v>=yMin-1e-6;v-=0.5){
+    chartCtx.fillText(Math.round(v*100)+'%', pad.l - 5, yOf(v));
   }
   chartCtx.restore();
-
-  const y100 = pad.t + plotH * (1 - 1.0/yMax);
-  chartCtx.save();
-  chartCtx.strokeStyle = 'rgba(248,113,113,.4)';
-  chartCtx.setLineDash([4,3]);
-  chartCtx.beginPath();
-  chartCtx.moveTo(pad.l, y100);
-  chartCtx.lineTo(pad.l + plotW, y100);
-  chartCtx.stroke();
-  chartCtx.setLineDash([]);
-  chartCtx.restore();
-
-  const steady = steadyStateLossRate();
-  if(steady > 0){
-    const yS = pad.t + plotH * (1 - Math.min(steady, yMax)/yMax);
-    chartCtx.save();
-    chartCtx.strokeStyle = 'rgba(251,191,36,.5)';
-    chartCtx.setLineDash([2,2]);
-    chartCtx.beginPath();
-    chartCtx.moveTo(pad.l, yS);
-    chartCtx.lineTo(pad.l + plotW, yS);
-    chartCtx.stroke();
-    chartCtx.setLineDash([]);
-    chartCtx.restore();
-  }
 
   const hist = STATE.lossHistory;
   if(hist.length > 0){
@@ -1144,8 +1121,10 @@ function drawChart(){
     chartCtx.shadowBlur = 4;
     chartCtx.beginPath();
     hist.forEach((pt, i) => {
+      const revenue = 1 - pt.loss;
+      const clamped = Math.max(yMin, Math.min(yMax, revenue));
       const x = pad.l + plotW * pt.epoch / maxEp;
-      const y = pad.t + plotH * (1 - Math.min(pt.loss, yMax)/yMax);
+      const y = yOf(clamped);
       if(i === 0) chartCtx.moveTo(x, y);
       else chartCtx.lineTo(x, y);
     });
@@ -1153,8 +1132,9 @@ function drawChart(){
     chartCtx.restore();
 
     const last = hist[hist.length-1];
+    const lastRev = Math.max(yMin, Math.min(yMax, 1 - last.loss));
     const lx = pad.l + plotW * last.epoch / maxEp;
-    const ly = pad.t + plotH * (1 - Math.min(last.loss, yMax)/yMax);
+    const ly = yOf(lastRev);
     chartCtx.save();
     chartCtx.fillStyle = '#f87171';
     chartCtx.beginPath();
@@ -1165,11 +1145,14 @@ function drawChart(){
 }
 
 function pushLossPoint(){
+  if(STATE.lossHistory.length === 0){
+    STATE.lossHistory.push({ epoch: 0, loss: 0 });
+  }
   STATE.lossHistory.push({ epoch: STATE.currentEpoch, loss: STATE.cumulativeLoss });
   if(STATE.lossHistory.length > 200) STATE.lossHistory.shift();
   drawChart();
   document.getElementById('chart-sub').textContent =
-    `已攻击 ${STATE.lossHistory.length} epoch · 当前 ${(STATE.cumulativeLoss*100).toFixed(1)}%`;
+    `已攻击 ${STATE.lossHistory.length - 1} epoch · 当前收益 ${((1-STATE.cumulativeLoss)*100).toFixed(1)}%`;
 }
 
 // ============= Attack heartbeat =============
