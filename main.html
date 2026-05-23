@@ -37,83 +37,309 @@ body:before{
   position:fixed;
   inset:0;
   pointer-events:none;
-  background-image:linear-gradient(rgba(142,190,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(142,190,255,.035) 1px,transparent 1px);
+  background-image:
+    linear-gradient(rgba(142,190,255,.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(142,190,255,.035) 1px,transparent 1px);
   background-size:64px 64px;
   mask-image:radial-gradient(ellipse 85% 72% at 52% 38%,black 18%,transparent 100%);
 }
-.topbar{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 3rem;height:64px;display:flex;align-items:center;justify-content:space-between;background:rgba(7,17,33,.76);backdrop-filter:blur(24px);border-bottom:1px solid rgba(128,166,224,.22);box-shadow:0 8px 28px rgba(0,0,0,.18)}
-.logo-mark{width:9px;height:9px;background:#ffd86b;border-radius:50%;margin-right:.7rem;box-shadow:0 0 16px rgba(255,216,107,.7);animation:pulse 2s ease-in-out infinite;flex-shrink:0}
-@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(255,216,107,.55)}50%{box-shadow:0 0 0 6px rgba(255,216,107,0)}}
-.logo-title{font-size:1.12rem;font-weight:800;color:var(--text-primary);display:flex;align-items:center;white-space:nowrap;letter-spacing:.01em;text-decoration:none}.logo-title:hover{color:var(--accent-bright)}.topbar-right{margin-left:auto;color:var(--accent-mint);font-size:1.02rem;font-weight:800;white-space:nowrap;text-shadow:0 0 18px rgba(155,246,216,.16);text-decoration:none}.topbar-right:hover{color:var(--accent-bright)}
-.layout{position:relative;z-index:1;display:grid;grid-template-columns:310px 1fr;gap:24px;padding:84px 24px 24px;min-height:100vh}
-.sidebar{background:linear-gradient(180deg,rgba(18,35,61,.88),rgba(10,24,45,.88));border:1px solid rgba(128,166,224,.24);border-radius:18px;box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 18px 45px rgba(0,0,0,.18);padding:18px 12px;height:calc(100vh - 120px);position:sticky;top:92px;overflow:auto}
-.side-title{color:var(--accent-bright);font-size:15px;font-weight:800;padding:10px 14px 8px;display:flex;align-items:center;gap:8px}
-.side-title:before{content:"";width:7px;height:7px;border-radius:50%;background:var(--accent-green);box-shadow:0 0 12px rgba(52,211,153,.55)}
-.tree-group{margin-top:12px}.tree-group-name{color:var(--accent-mint);font-size:13px;font-weight:900;padding:8px 14px 5px;letter-spacing:.04em}
-.tree-list{list-style:none;border-left:1px dashed rgba(96,165,250,.18);margin-left:12px}.tree-item{position:relative;margin:6px 0 6px 12px}.tree-item:before{content:"";position:absolute;left:-12px;top:20px;width:10px;height:1px;background:rgba(96,165,250,.28)}
-.tree-link{display:block;text-decoration:none;color:var(--text-secondary);border-radius:12px;padding:10px 12px;transition:.22s;border:1px solid rgba(128,166,224,.08);background:rgba(7,17,33,.34)}
-.tree-link:hover,.tree-link.active{background:linear-gradient(90deg,rgba(127,176,255,.18),rgba(113,223,171,.10));color:#fff;border-color:rgba(127,176,255,.36);transform:translateX(2px);box-shadow:0 0 18px rgba(127,176,255,.08)}
-.tree-link strong{display:block;font-size:15px;line-height:1.35;font-weight:800}.tree-link span{display:block;font-size:12px;line-height:1.45;color:var(--text-muted);margin-top:4px}.tree-link:hover span,.tree-link.active span{color:var(--text-secondary)}
-.content{min-width:0;height:calc(100vh - 108px)}.page-head{margin-bottom:18px}.page-title{font-size:28px;font-weight:900;color:var(--text-primary);letter-spacing:-.01em}.page-desc{font-size:16px;color:var(--text-secondary);margin-top:4px}
-.module-card{background:linear-gradient(145deg,rgba(18,35,61,.94),rgba(13,30,55,.92));border:1px solid rgba(128,166,224,.24);border-radius:22px;box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 22px 55px rgba(0,0,0,.20);margin:0;overflow:hidden;scroll-margin-top:92px;transition:.28s;position:relative;height:100%}.module-card:before{content:"";position:absolute;left:0;right:0;top:0;height:7px;background:linear-gradient(90deg,#7fb0ff,#71dfab);opacity:.95}
-.module-card:hover{border-color:rgba(132,182,255,.42);box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 24px 60px rgba(0,0,0,.24),0 0 34px rgba(127,176,255,.08)}
-.module-head,.module-title,.module-desc,.impact-line,.module-note,.module-actions,.open-link{display:none}
-.html-frame-wrap{height:100%;background:linear-gradient(135deg,rgba(9,22,42,.88),rgba(18,51,58,.42));padding:10px}.html-frame{width:100%;height:100%;border:1px solid rgba(128,166,224,.24);border-radius:16px;background:#fff;display:block;box-shadow:0 0 28px rgba(127,176,255,.06)}
-.impact-line{display:none}.venue{display:inline-flex;align-items:center;margin-right:8px;font-size:12px;font-weight:800;border-radius:4px;padding:2px 7px;background:rgba(248,113,113,.12);color:var(--accent-red);vertical-align:middle}.venue.good{background:rgba(52,211,153,.12);color:var(--accent-green)}
+.topbar{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  z-index:100;
+  padding:0 3rem;
+  height:64px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  background:rgba(7,17,33,.76);
+  backdrop-filter:blur(24px);
+  border-bottom:1px solid rgba(128,166,224,.22);
+  box-shadow:0 8px 28px rgba(0,0,0,.18);
+}
+.logo-mark{
+  width:9px;
+  height:9px;
+  background:#ffd86b;
+  border-radius:50%;
+  margin-right:.7rem;
+  box-shadow:0 0 16px rgba(255,216,107,.7);
+  animation:pulse 2s ease-in-out infinite;
+  flex-shrink:0;
+}
+@keyframes pulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(255,216,107,.55)}
+  50%{box-shadow:0 0 0 6px rgba(255,216,107,0)}
+}
+.logo-title{
+  font-size:1.12rem;
+  font-weight:800;
+  color:var(--text-primary);
+  display:flex;
+  align-items:center;
+  white-space:nowrap;
+  letter-spacing:.01em;
+  text-decoration:none;
+}
+.logo-title:hover{color:var(--accent-bright)}
+.topbar-right{
+  margin-left:auto;
+  color:var(--accent-mint);
+  font-size:1.02rem;
+  font-weight:800;
+  white-space:nowrap;
+  text-shadow:0 0 18px rgba(155,246,216,.16);
+  text-decoration:none;
+}
+.topbar-right:hover{color:var(--accent-bright)}
+.layout{
+  position:relative;
+  z-index:1;
+  display:grid;
+  grid-template-columns:310px 1fr;
+  gap:24px;
+  padding:84px 24px 24px;
+  min-height:100vh;
+}
+.sidebar{
+  background:linear-gradient(180deg,rgba(18,35,61,.88),rgba(10,24,45,.88));
+  border:1px solid rgba(128,166,224,.24);
+  border-radius:18px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 18px 45px rgba(0,0,0,.18);
+  padding:18px 12px;
+  height:calc(100vh - 120px);
+  position:sticky;
+  top:92px;
+  overflow:auto;
+}
+.tree-group{margin-top:12px}
+.tree-group-name{
+  color:var(--accent-mint);
+  font-size:13px;
+  font-weight:900;
+  padding:8px 14px 5px;
+  letter-spacing:.04em;
+}
+.tree-list{
+  list-style:none;
+  border-left:1px dashed rgba(96,165,250,.18);
+  margin-left:12px;
+}
+.tree-item{
+  position:relative;
+  margin:6px 0 6px 12px;
+}
+.tree-item:before{
+  content:"";
+  position:absolute;
+  left:-12px;
+  top:20px;
+  width:10px;
+  height:1px;
+  background:rgba(96,165,250,.28);
+}
+.tree-link{
+  display:block;
+  text-decoration:none;
+  color:var(--text-secondary);
+  border-radius:12px;
+  padding:10px 12px;
+  transition:.22s;
+  border:1px solid rgba(128,166,224,.08);
+  background:rgba(7,17,33,.34);
+}
+.tree-link:hover,
+.tree-link.active{
+  background:linear-gradient(90deg,rgba(127,176,255,.18),rgba(113,223,171,.10));
+  color:#fff;
+  border-color:rgba(127,176,255,.36);
+  transform:translateX(2px);
+  box-shadow:0 0 18px rgba(127,176,255,.08);
+}
+.tree-link strong{
+  display:block;
+  font-size:15px;
+  line-height:1.35;
+  font-weight:800;
+}
+.tree-link span{
+  display:block;
+  font-size:12px;
+  line-height:1.45;
+  color:var(--text-muted);
+  margin-top:4px;
+}
+.tree-link:hover span,
+.tree-link.active span{
+  color:var(--text-secondary);
+}
+.content{
+  min-width:0;
+  height:calc(100vh - 108px);
+}
+.module-card{
+  background:linear-gradient(145deg,rgba(18,35,61,.94),rgba(13,30,55,.92));
+  border:1px solid rgba(128,166,224,.24);
+  border-radius:22px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 22px 55px rgba(0,0,0,.20);
+  margin:0;
+  overflow:hidden;
+  scroll-margin-top:92px;
+  transition:.28s;
+  position:relative;
+  height:100%;
+}
+.module-card:before{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  top:0;
+  height:7px;
+  background:linear-gradient(90deg,#7fb0ff,#71dfab);
+  opacity:.95;
+}
+.module-card:hover{
+  border-color:rgba(132,182,255,.42);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.04),
+    0 24px 60px rgba(0,0,0,.24),
+    0 0 34px rgba(127,176,255,.08);
+}
+.html-frame-wrap{
+  height:100%;
+  background:linear-gradient(135deg,rgba(9,22,42,.88),rgba(18,51,58,.42));
+  padding:10px;
+}
+.html-frame{
+  width:100%;
+  height:100%;
+  border:1px solid rgba(128,166,224,.24);
+  border-radius:16px;
+  background:#fff;
+  display:block;
+  box-shadow:0 0 28px rgba(127,176,255,.06);
+}
 footer{display:none}
-@media(max-width:900px){.topbar{padding:0 16px}.topbar-right{display:none}.layout{grid-template-columns:1fr;padding:82px 14px 18px}.sidebar{position:relative;top:auto;height:auto}.content{height:calc(100vh - 100px)}.page-title{font-size:24px}.html-frame-wrap{height:100%}}
+@media(max-width:900px){
+  .topbar{padding:0 16px}
+  .topbar-right{display:none}
+  .layout{
+    grid-template-columns:1fr;
+    padding:82px 14px 18px;
+  }
+  .sidebar{
+    position:relative;
+    top:auto;
+    height:auto;
+  }
+  .content{
+    height:calc(100vh - 100px);
+  }
+  .html-frame-wrap{
+    height:100%;
+  }
+}
 </style>
 </head>
+
 <body>
 <header class="topbar">
-  <div style="display:flex;align-items:center"><div class="logo-mark"></div><a class="logo-title" href="./index.html">区块链及数字金融安全测评平台</a></div>
-  <a class="topbar-right" href="https://skl-crypto.sdu.edu.cn/" target="_blank" rel="noopener noreferrer">密码与数字经济安全全国重点实验室</a>
+  <div style="display:flex;align-items:center">
+    <div class="logo-mark"></div>
+    <a class="logo-title" href="./index.html">区块链及数字金融安全测评平台</a>
+  </div>
+  <a class="topbar-right" href="https://skl-crypto.sdu.edu.cn/" target="_blank" rel="noopener noreferrer">
+    密码与数字经济安全全国重点实验室
+  </a>
 </header>
 
 <main class="layout">
   <aside class="sidebar">
 
     <div class="tree-group">
-      <div class="tree-group-name">数据资产长期安全</div>
+      <div class="tree-group-name">区块链安全分析平台</div>
       <ul class="tree-list">
-        <li class="tree-item"><a class="tree-link active" href="#pqc-migration" data-page="pqc-migration"><strong>后量子密码迁移</strong><span>密码算法升级、兼容迁移与安全评估。</span></a></li>
+        <li class="tree-item">
+          <a class="tree-link active" href="#eth-liveness" data-page="eth-liveness">
+            <strong>以太坊零成本活性攻击</strong>
+          </a>
+        </li>
+
+        <li class="tree-item">
+          <a class="tree-link" href="#eth-staircase" data-page="eth-staircase">
+            <strong>以太坊激励机制攻击</strong>
+          </a>
+        </li>
+
+        <li class="tree-item">
+          <a class="tree-link" href="#bsc-finality" data-page="bsc-finality">
+            <strong>币安链共识活性攻击</strong>
+          </a>
+        </li>
+
+        <li class="tree-item">
+          <a class="tree-link" href="#polkadot-selfish" data-page="polkadot-selfish">
+            <strong>波卡链无风险自私挖矿攻击</strong>
+          </a>
+        </li>
+
+        <li class="tree-item">
+          <a class="tree-link" href="#eth-incentive" data-page="eth-incentive">
+            <strong>以太坊自动化激励漏洞发掘</strong>
+          </a>
+        </li>
       </ul>
     </div>
 
     <div class="tree-group">
-      <div class="tree-group-name">区块链可信运行</div>
+      <div class="tree-group-name">数字资产安全分析平台</div>
       <ul class="tree-list">
-        <li class="tree-item"><a class="tree-link" href="#eth-liveness" data-page="eth-liveness"><strong>以太坊PoS零成本活性攻击</strong><span>IEEE S&amp;P 2026</span></a></li>
-        <li class="tree-item"><a class="tree-link" href="#eth-staircase" data-page="eth-staircase"><strong>以太坊激励机制攻击</strong><span>USENIX Security 2024</span></a></li>
-        <li class="tree-item"><a class="tree-link" href="#aa-reorg" data-page="aa-reorg"><strong>以太坊链重组防御</strong><span>USENIX Security 2025</span></a></li>
-        <li class="tree-item"><a class="tree-link" href="#bsc-finality" data-page="bsc-finality"><strong>币安链共识活性攻击</strong><span>USENIX Security 2025</span></a></li>
-        <li class="tree-item"><a class="tree-link" href="#polkadot-selfish" data-page="polkadot-selfish"><strong>波卡链无风险自私挖矿攻击</strong><span>WWW 2026</span></a></li>
-        <li class="tree-item"><a class="tree-link" href="#eth-incentive" data-page="eth-incentive"><strong>以太坊自动化激励漏洞发掘</strong><span>NDSS 2026</span></a></li>
+        <li class="tree-item">
+          <a class="tree-link" href="#global-data-security" data-page="global-data-security">
+            <strong>全球数据资产安全监控</strong>
+          </a>
+        </li>
+
+        <li class="tree-item">
+          <a class="tree-link" href="#pqc-migration" data-page="pqc-migration">
+            <strong>密码协议分析</strong>
+          </a>
+        </li>
       </ul>
     </div>
+
   </aside>
 
   <section class="content">
     <div class="module-card" id="active-module">
-      <div class="html-frame-wrap"><iframe class="html-frame" id="active-frame" src="./pqc-migration.html" title="后量子密码迁移"></iframe></div>
+      <div class="html-frame-wrap">
+        <iframe
+          class="html-frame"
+          id="active-frame"
+          src="./eth-liveness.html"
+          title="以太坊零成本活性攻击">
+        </iframe>
+      </div>
     </div>
   </section>
 </main>
+
 <script>
 const pages = {
   "pqc-migration": { file: "pqc-migration.html" },
-  "data-flow": { file: "data-flow.html" },
-  "audit": { file: "audit.html" },
+  "global-data-security": { file: "global-data-security.html" },
   "eth-liveness": { file: "eth-liveness.html" },
   "eth-staircase": { file: "eth-staircase.html" },
-  "aa-reorg": { file: "aa-reorg.html" },
   "bsc-finality": { file: "bsc-finality.html" },
   "polkadot-selfish": { file: "polkadot-selfish.html" },
   "eth-incentive": { file: "eth-incentive.html" }
 };
 
 (function(){
-  const defaultKey = "pqc-migration";
+  const defaultKey = "eth-liveness";
 
   function getKeyFromHash(){
     const key = decodeURIComponent((window.location.hash || "").replace(/^#/, ""));
@@ -131,9 +357,11 @@ const pages = {
     });
 
     const href = "./" + page.file;
+
     if(frame.getAttribute("src") !== href){
       frame.setAttribute("src", href);
     }
+
     frame.setAttribute("title", page.file);
 
     if(updateHash && window.location.hash !== "#" + activeKey){
@@ -165,6 +393,7 @@ const pages = {
   }
 })();
 </script>
+
 <footer>
   区块链及数字金融安全测评平台<br>
   <span style="margin-top:.3rem;display:inline-block;">© 2026</span>
