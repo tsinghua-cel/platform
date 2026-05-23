@@ -1410,6 +1410,197 @@
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   }
 }
+
+
+/* === Final responsive structure fix ===
+   When the main board collapses to one column, keep "区块链分层技术架构" and
+   "量子计算机威胁" in the same row; place the explanation box below them,
+   followed by the protocol library panel. */
+@media (max-width: 1180px) {
+  .page {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+  }
+
+  .board {
+    grid-template-columns: 1fr !important;
+    align-items: start !important;
+    gap: 18px !important;
+  }
+
+  .board > .panel,
+  .system-panel,
+  .library-panel {
+    align-self: start !important;
+    height: auto !important;
+    min-height: 0 !important;
+  }
+
+  .system-panel {
+    display: grid !important;
+    grid-template-rows: auto auto !important;
+    gap: 14px !important;
+    overflow: visible !important;
+  }
+
+  .system-risk-grid {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+    grid-template-areas: "arch threat" !important;
+    gap: 16px !important;
+    align-items: start !important;
+    grid-auto-rows: auto !important;
+  }
+
+  .system-col.arch-col { grid-area: arch !important; }
+  .system-col.threat-col { grid-area: threat !important; }
+
+  .system-col {
+    align-self: start !important;
+    height: auto !important;
+    min-height: 0 !important;
+  }
+
+  .system-panel .arch-layer-card,
+  .threat-block,
+  .threat-block:nth-child(2),
+  .threat-block:nth-child(3) {
+    min-height: 0 !important;
+  }
+
+  .system-panel .arch-layer-card {
+    padding-top: 14px !important;
+    padding-bottom: 14px !important;
+  }
+
+  .threat-block {
+    padding-top: 14px !important;
+    padding-bottom: 14px !important;
+  }
+
+  .system-explain {
+    margin-top: 0 !important;
+    grid-row: 2 !important;
+  }
+}
+
+@media (max-width: 820px) and (min-width: 721px) {
+  .system-risk-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+    grid-template-areas: "arch threat" !important;
+  }
+}
+
+@media (max-width: 720px) {
+  .system-risk-grid {
+    grid-template-columns: 1fr !important;
+    grid-template-areas:
+      "arch"
+      "threat" !important;
+  }
+}
+
+
+
+/* === Pair-row responsive repair: keep flat grid pairs, avoid overlap === */
+@media (max-width: 1180px) {
+  .board {
+    grid-template-columns: 1fr !important;
+    align-items: start !important;
+    gap: 18px !important;
+  }
+
+  .board > .panel,
+  .system-panel,
+  .library-panel {
+    align-self: start !important;
+    height: auto !important;
+    min-height: 0 !important;
+  }
+
+  .system-panel {
+    display: grid !important;
+    grid-template-rows: auto auto !important;
+    gap: 16px !important;
+    overflow: visible !important;
+  }
+
+  .system-risk-grid {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+    grid-template-areas:
+      "archTitle threatTitle"
+      "app appThreat"
+      "consensus consensusThreat"
+      "network networkThreat" !important;
+    gap: 12px 16px !important;
+    align-items: stretch !important;
+    grid-auto-rows: auto !important;
+  }
+
+  .system-risk-grid > .blue-heading:nth-child(1) { grid-area: archTitle !important; }
+  .system-risk-grid > .blue-heading:nth-child(2) { grid-area: threatTitle !important; }
+  .system-risk-grid > .arch-layer-card[data-layer="application"] { grid-area: app !important; }
+  .system-risk-grid > .threat-block[data-threat-layer="application"] { grid-area: appThreat !important; }
+  .system-risk-grid > .arch-layer-card[data-layer="consensus"] { grid-area: consensus !important; }
+  .system-risk-grid > .threat-block[data-threat-layer="consensus"] { grid-area: consensusThreat !important; }
+  .system-risk-grid > .arch-layer-card[data-layer="network"] { grid-area: network !important; }
+  .system-risk-grid > .threat-block[data-threat-layer="network"] { grid-area: networkThreat !important; }
+
+  .system-risk-grid > * {
+    position: relative !important;
+    inset: auto !important;
+    transform: none !important;
+    width: auto !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    justify-self: stretch !important;
+    align-self: stretch !important;
+  }
+
+  .system-panel .arch-layer-card,
+  .threat-block,
+  .threat-block:nth-child(2),
+  .threat-block:nth-child(3) {
+    min-height: 0 !important;
+    margin: 0 !important;
+  }
+
+  .system-panel .arch-layer-card {
+    padding: 14px 16px !important;
+  }
+
+  .threat-block {
+    padding: 14px 16px !important;
+  }
+
+  .system-panel .arch-layer-card::after,
+  .system-panel .arch-layer-card:not([data-layer="network"])::after {
+    display: none !important;
+    content: none !important;
+  }
+
+  .system-explain {
+    grid-row: auto !important;
+    margin-top: 0 !important;
+  }
+}
+
+@media (max-width: 720px) {
+  .system-risk-grid {
+    grid-template-columns: 1fr !important;
+    grid-template-areas:
+      "archTitle"
+      "app"
+      "consensus"
+      "network"
+      "threatTitle"
+      "appThreat"
+      "consensusThreat"
+      "networkThreat" !important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -1765,11 +1956,13 @@ function activateArchitecture(layer,target){archLayerCards.forEach(c=>c.classLis
     document.getElementById("resetFlow").addEventListener("click",renderFlow);
     function renderAll(){const d=protocolData[currentProtocol];currentProtocolName.textContent=d.name;updatePrimitiveHighlight();renderPaper();renderFlow()}
     function syncPanelBoxes(){
-      if(currentView!=='primitives')return;
       const explain=document.querySelector('.system-explain');
       const overview=document.querySelector('.protocol-overview');
       if(!explain||!overview)return;
       explain.style.marginTop='';
+      // Only align the explanation box with the protocol overview on wide, two-column layouts.
+      // When the board collapses to one column, this alignment would create a large blank area.
+      if(currentView!=='primitives' || window.innerWidth<=1180)return;
       const diff=overview.getBoundingClientRect().top-explain.getBoundingClientRect().top;
       if(diff>0)explain.style.marginTop=diff+'px';
     }
