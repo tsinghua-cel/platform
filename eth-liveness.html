@@ -2639,7 +2639,7 @@ function drawResultInsight() {
 
   resultInsightContext.font = '11px "JetBrains Mono", monospace';
   resultInsightContext.fillStyle = txt3;
-  resultInsightContext.fillText('Epoch', plot.x + plot.w - 30, h - 18);
+  resultInsightContext.fillText('时期', plot.x + plot.w - 30, h - 18);
   resultInsightContext.fillStyle = accent;
   resultInsightContext.fillText('诚实区块占比', plot.x - 44, plot.y - 12);
   resultInsightContext.fillStyle = red;
@@ -2648,7 +2648,7 @@ function drawResultInsight() {
   if(isAttackMode){
     const haltedAlpha = INSIGHT_DEMO.mode === 'failed' ? 1 : insightClamp01((p - .78) / .18);
     if(haltedAlpha > 0){
-      drawResultInsightStallBox(resultInsightContext, plot, red, txt, haltedAlpha);
+      drawResultInsightStallBox(resultInsightContext, plot, amber, haltedAlpha);
     }
   }
 
@@ -2754,26 +2754,24 @@ function drawResultInsightSeries(insightContext, plot, visibleMaxEpoch, key, col
   insightContext.restore();
 }
 
-function drawResultInsightStallBox(insightContext, plot, red, txt, alpha) {
+function drawResultInsightStallBox(insightContext, plot, amber, alpha) {
   const boxW = Math.min(230, plot.w - 40);
-  const boxH = 52;
+  const boxH = 32;
   const x = plot.x + (plot.w - boxW) / 2;
   const y = plot.y + (plot.h - boxH) / 2;
   insightContext.save();
   insightContext.globalAlpha = alpha;
-  insightContext.fillStyle = 'rgba(10,14,23,.86)';
-  insightContext.strokeStyle = red;
+  insightContext.fillStyle = 'rgba(245,158,11,.14)';
+  insightContext.strokeStyle = amber;
   insightContext.lineWidth = 1.5;
   roundRect(insightContext, x, y, boxW, boxH, 8);
   insightContext.fill();
   insightContext.stroke();
-  insightContext.fillStyle = red;
+  insightContext.fillStyle = amber;
   insightContext.font = '800 13px "Noto Sans SC", sans-serif';
   insightContext.textAlign = 'center';
-  insightContext.fillText('最终确认区块高度不再增长', x + boxW / 2, y + 22);
-  insightContext.fillStyle = txt;
-  insightContext.font = '11px "Noto Sans SC", sans-serif';
-  insightContext.fillText('活性攻击导致 finalized chain 停滞', x + boxW / 2, y + 40);
+  insightContext.textBaseline = 'middle';
+  insightContext.fillText('最终确认区块高度不再增长', x + boxW / 2, y + boxH / 2);
   insightContext.restore();
 }
 

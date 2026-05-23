@@ -1,0 +1,1555 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>全球数据资产安全监控</title>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+  <style>
+    :root {
+      --bg: #06101f;
+      --panel: rgba(10, 25, 47, 0.78);
+      --panel-2: rgba(12, 31, 58, 0.62);
+      --line: rgba(91, 209, 255, 0.24);
+      --line-strong: rgba(91, 209, 255, 0.46);
+      --text: #dbeafe;
+      --muted: #85a3c4;
+      --cyan: #38d5ff;
+      --blue: #4f8dff;
+      --violet: #9b72ff;
+      --green: #43e7a5;
+      --amber: #ffb84d;
+      --red: #ff5f76;
+      --shadow: 0 18px 50px rgba(0, 0, 0, 0.32);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-width: 1500px;
+      min-height: 100vh;
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+      background:
+        linear-gradient(rgba(56, 213, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(56, 213, 255, 0.04) 1px, transparent 1px),
+        radial-gradient(circle at 18% 12%, rgba(79, 141, 255, 0.2), transparent 28%),
+        radial-gradient(circle at 85% 18%, rgba(155, 114, 255, 0.16), transparent 30%),
+        linear-gradient(135deg, #040914 0%, var(--bg) 48%, #09172a 100%);
+      background-size: 42px 42px, 42px 42px, auto, auto, auto;
+      overflow-x: auto;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), transparent 22%, rgba(0,0,0,0.2));
+      z-index: 0;
+    }
+
+    .dashboard {
+      position: relative;
+      z-index: 1;
+      width: min(1920px, max(1500px, 100vw));
+      min-width: 1500px;
+      margin: 0 auto;
+      padding: 14px 18px 20px;
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 18px;
+      align-items: start;
+      padding: 10px 4px 14px;
+      border-bottom: 1px solid rgba(91, 209, 255, 0.18);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(28px, 2.5vw, 44px);
+      letter-spacing: 0;
+      font-weight: 800;
+      text-shadow: 0 0 22px rgba(56, 213, 255, 0.26);
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 15px;
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .demo-tag {
+      justify-self: end;
+      max-width: 470px;
+      padding: 9px 13px;
+      border: 1px solid rgba(255, 184, 77, 0.42);
+      color: #ffd89a;
+      background: rgba(255, 184, 77, 0.08);
+      font-size: 13px;
+      line-height: 1.45;
+      border-radius: 6px;
+      box-shadow: 0 0 24px rgba(255, 184, 77, 0.08);
+    }
+
+    .grid {
+      display: grid;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .layer-1 { grid-template-columns: minmax(0, 1.22fr) minmax(350px, 0.9fr) minmax(330px, 0.82fr); }
+    .layer-2 { grid-template-columns: minmax(320px, 0.95fr) minmax(420px, 1.35fr) minmax(340px, 1fr); }
+    .layer-3 { grid-template-columns: 1fr; }
+    .layer-4 { grid-template-columns: repeat(3, minmax(280px, 1fr)); }
+
+    .panel {
+      position: relative;
+      min-width: 0;
+      background: linear-gradient(180deg, rgba(16, 39, 72, 0.84), var(--panel));
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,0.04);
+      overflow: hidden;
+    }
+
+    .panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      border-top: 1px solid rgba(91, 209, 255, 0.18);
+      background: linear-gradient(90deg, rgba(56, 213, 255, 0.08), transparent 26%, transparent 74%, rgba(155, 114, 255, 0.06));
+    }
+
+    .panel-head {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 9px 12px 7px;
+      border-bottom: 1px solid rgba(91, 209, 255, 0.13);
+    }
+
+    .panel-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #eef8ff;
+    }
+
+    .panel-title::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      background: var(--cyan);
+      box-shadow: 0 0 12px var(--cyan);
+      transform: rotate(45deg);
+    }
+
+    .source {
+      font-size: 12px;
+      color: var(--muted);
+      font-family: var(--mono);
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(140px, 1fr));
+      gap: 8px;
+      padding: 10px;
+    }
+
+    .metric {
+      min-height: 66px;
+      padding: 9px 10px;
+      border: 1px solid rgba(91, 209, 255, 0.16);
+      border-radius: 7px;
+      background: linear-gradient(145deg, rgba(7, 18, 36, 0.74), rgba(13, 34, 63, 0.62));
+    }
+
+    .metric-label {
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+
+    .metric-value {
+      margin-top: 7px;
+      font-family: var(--mono);
+      font-size: clamp(18px, 1.45vw, 27px);
+      font-weight: 800;
+      color: #f2fbff;
+      white-space: nowrap;
+    }
+
+    .metric-foot {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .good { color: var(--green); }
+    .watch { color: var(--amber); }
+    .risk { color: var(--red); }
+    .live { color: var(--cyan); }
+
+    .chart {
+      position: relative;
+      height: 300px;
+      width: 100%;
+    }
+
+    #radarChart { height: 230px; }
+    #flowChart { height: 305px; }
+    #bridgeChart { height: 215px; }
+    #riskChart { height: 230px; }
+
+    .layer-2 .panel {
+      min-height: 430px;
+    }
+
+    .chain-list,
+    .transfer-list,
+    .alert-list,
+    .track-list {
+      position: relative;
+      padding: 8px 10px 10px;
+      display: grid;
+      gap: 6px;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1.1fr 0.8fr 0.8fr 0.8fr;
+      gap: 8px;
+      align-items: center;
+      min-height: 34px;
+      padding: 6px 8px;
+      border: 1px solid rgba(91, 209, 255, 0.12);
+      border-radius: 6px;
+      background: rgba(4, 13, 28, 0.46);
+    }
+
+    .row.new-item {
+      animation: pushIn 0.75s ease;
+      border-color: rgba(56, 213, 255, 0.58);
+      background: rgba(56, 213, 255, 0.13);
+    }
+
+    .row.compact { grid-template-columns: 1.1fr 1fr 0.8fr; }
+    .row.transfer { grid-template-columns: 1.15fr 0.65fr 0.75fr 0.7fr; }
+    .row.alert { grid-template-columns: auto 1fr auto; }
+    .row.track { grid-template-columns: 1fr 0.9fr 0.65fr; }
+
+    .name {
+      font-weight: 700;
+      color: #edf8ff;
+      min-width: 0;
+    }
+
+    .meta,
+    .tiny {
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.35;
+    }
+
+    .mono { font-family: var(--mono); }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: fit-content;
+      padding: 2px 6px;
+      border-radius: 999px;
+      border: 1px solid rgba(91, 209, 255, 0.24);
+      background: rgba(56, 213, 255, 0.08);
+      color: #bdeeff;
+      font-size: 10px;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    .pill.demo { color: #b9c4d7; border-color: rgba(185, 196, 215, 0.18); background: rgba(185,196,215,0.05); }
+    .pill.warn { color: #ffd79a; border-color: rgba(255,184,77,0.35); background: rgba(255,184,77,0.08); }
+    .pill.high { color: #ffb1bd; border-color: rgba(255,95,118,0.42); background: rgba(255,95,118,0.08); }
+    .pill.ok { color: #a9f6d5; border-color: rgba(67,231,165,0.32); background: rgba(67,231,165,0.07); }
+
+    .module-split {
+      display: grid;
+      grid-template-columns: minmax(320px, 1fr) minmax(420px, 1fr);
+      gap: 12px;
+      padding: 12px;
+    }
+
+    .protocol-grid {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(150px, 1fr));
+      gap: 8px;
+      padding: 10px;
+    }
+
+    .protocol-card {
+      padding: 9px;
+      border: 1px solid rgba(91, 209, 255, 0.14);
+      border-radius: 7px;
+      background: rgba(5, 16, 33, 0.5);
+      transition: border-color 0.25s ease, transform 0.25s ease;
+    }
+
+    .protocol-card.active {
+      border-color: rgba(56, 213, 255, 0.55);
+      transform: translateY(-1px);
+    }
+
+    .protocol-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .proto-icon {
+      display: inline-grid;
+      place-items: center;
+      width: 24px;
+      height: 24px;
+      margin-right: 7px;
+      border: 1px solid rgba(91, 209, 255, 0.28);
+      color: var(--cyan);
+      border-radius: 4px;
+      font-family: var(--mono);
+      background: rgba(56, 213, 255, 0.07);
+    }
+
+    .proto-stat {
+      margin-top: 8px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 5px;
+    }
+
+    .proto-stat div {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 5px 7px;
+      border-radius: 5px;
+      background: rgba(255,255,255,0.03);
+    }
+
+    .bridge-metrics {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      padding: 9px 10px 0;
+    }
+
+    .mini {
+      padding: 8px;
+      border: 1px solid rgba(91, 209, 255, 0.13);
+      border-radius: 6px;
+      background: rgba(255,255,255,0.03);
+    }
+
+    .mini b {
+      display: block;
+      font-family: var(--mono);
+      font-size: 18px;
+      margin-top: 5px;
+    }
+
+    .layer-4 .panel {
+      min-height: 245px;
+    }
+
+    .layer-4 .alert-list,
+    .layer-4 .track-list {
+      min-height: 198px;
+      align-content: stretch;
+    }
+
+    .ticker {
+      margin-top: 14px;
+      border: 1px solid rgba(255, 184, 77, 0.25);
+      background: rgba(255, 184, 77, 0.07);
+      border-radius: 8px;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+    }
+
+    .ticker-label {
+      padding: 12px 14px;
+      color: #ffd28b;
+      font-weight: 800;
+      border-right: 1px solid rgba(255, 184, 77, 0.2);
+    }
+
+    .ticker-text {
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      font-family: var(--mono);
+      color: #fff4df;
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+
+    .ticker-time {
+      padding: 0 14px;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 12px;
+    }
+
+    .fade-change {
+      animation: pulseLine 0.7s ease;
+    }
+
+    .refresh-flash {
+      animation: refreshGlow 0.9s ease;
+    }
+
+    @keyframes pulseLine {
+      0% { background-color: rgba(56, 213, 255, 0.12); }
+      100% { background-color: rgba(4, 13, 28, 0.46); }
+    }
+
+    @keyframes refreshGlow {
+      0% { box-shadow: 0 0 0 rgba(56, 213, 255, 0), var(--shadow); }
+      35% { box-shadow: 0 0 24px rgba(56, 213, 255, 0.22), var(--shadow); border-color: rgba(91, 209, 255, 0.5); }
+      100% { box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,0.04); }
+    }
+
+    @keyframes pushIn {
+      0% { opacity: 0; transform: translateY(-12px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 1499px) {
+      body {
+        min-width: 1500px;
+      }
+
+      .dashboard {
+        width: 1500px;
+        min-width: 1500px;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <main class="dashboard">
+    <header class="topbar">
+      <div>
+        <h1>全球数据资产安全监控</h1>
+      </div>
+      <div class="demo-tag">预览模式 / 建设中：部分数据为演示数据，全部接口正在逐步接入</div>
+    </header>
+
+    <section class="grid layer-1">
+      <div class="panel">
+        <div class="panel-head">
+          <div class="panel-title">核心态势总览</div>
+          <div class="source">安全态势概览</div>
+        </div>
+        <div class="metrics" id="metricGrid"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head">
+          <div class="panel-title">安全态势雷达</div>
+          <div class="source" id="radarScore">综合评分 --</div>
+        </div>
+        <div id="radarChart" class="chart"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head">
+          <div class="panel-title">近期风险分布</div>
+          <div class="source">风险结构</div>
+        </div>
+        <div id="riskChart" class="chart"></div>
+      </div>
+    </section>
+
+    <section class="grid layer-2">
+      <div class="panel">
+        <div class="panel-head">
+          <div class="panel-title">多链运行状态</div>
+          <div class="source">多链运行监控</div>
+        </div>
+        <div class="chain-list" id="chainList"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head">
+          <div class="panel-title">全球交易流向</div>
+          <div class="source">链上资金路径</div>
+        </div>
+        <div id="flowChart" class="chart"></div>
+        <div class="transfer-list" id="transferList"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head">
+          <div class="panel-title">跨链安全监控</div>
+          <div class="source">跨链流动风险</div>
+        </div>
+        <div class="bridge-metrics" id="bridgeMetrics"></div>
+        <div id="bridgeChart" class="chart"></div>
+        <div class="alert-list" id="bridgeAlerts"></div>
+      </div>
+    </section>
+
+    <section class="grid layer-3">
+      <div class="panel">
+        <div class="panel-head">
+          <div class="panel-title">重点协议活动监控</div>
+          <div class="source">协议活动监控</div>
+        </div>
+        <div class="protocol-grid" id="protocolGrid"></div>
+      </div>
+    </section>
+
+    <section class="grid layer-4">
+      <div class="panel">
+        <div class="panel-head">
+          <div class="panel-title">共识 / 出块异常预警</div>
+          <div class="source">区块与拥堵</div>
+        </div>
+        <div class="alert-list" id="consensusAlerts"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head">
+          <div class="panel-title">交易层异常与攻击预警</div>
+          <div class="source">交易异常</div>
+        </div>
+        <div class="alert-list" id="txAlerts"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head">
+          <div class="panel-title">攻击追踪与重点对象</div>
+          <div class="source">重点对象</div>
+        </div>
+        <div class="track-list" id="trackingList"></div>
+      </div>
+    </section>
+
+    <section class="ticker">
+      <div class="ticker-label">实时预警</div>
+      <div class="ticker-text" id="tickerText">系统初始化中，演示模式已启用。</div>
+      <div class="ticker-time" id="tickerTime">--</div>
+    </section>
+  </main>
+
+  <script>
+    "use strict";
+
+    const CONFIG = {
+      ETHERSCAN_API_KEY: "IF4W9FY2DA49591MT2CJA3KZDN2I7TPXC5",
+      ETHERSCAN_BASE_URL: "https://api.etherscan.io/v2/api",
+      REQUEST_INTERVAL_MS: 400,
+      REFRESH: {
+        block: 10000,
+        blockDetail: 18000,
+        gas: 18000,
+        ethPrice: 120000,
+        tokenTransfers: 45000,
+        protocolLogs: 90000
+      },
+      TOKENS: [
+        { symbol: "USDT", contract: "0xdAC17F958D2ee523a2206206994597C13D831ec7", decimals: 6 },
+        { symbol: "USDC", contract: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", decimals: 6 }
+      ],
+      CHAINS: [
+        { name: "Ethereum", chainid: 1, live: true, baseBlock: 23467872 },
+        { name: "Polygon", chainid: 137, live: true, baseBlock: 71829344 },
+        { name: "Arbitrum", chainid: 42161, live: true, baseBlock: 333804221 },
+        { name: "Linea", chainid: 59144, live: true, baseBlock: 19874420 },
+        { name: "Gnosis", chainid: 100, live: true, baseBlock: 39782411 },
+        { name: "Base", chainid: 8453, live: false, baseBlock: 30488213 },
+        { name: "BNB Chain", chainid: 56, live: false, baseBlock: 49482411 },
+        { name: "Optimism", chainid: 10, live: false, baseBlock: 136293721 },
+        { name: "Avalanche", chainid: 43114, live: false, baseBlock: 62117390 }
+      ],
+      PROTOCOLS: [
+        { name: "Uniswap V3", icon: "◇", type: "DEX", live: true, address: "0x1F98431c8aD98523631AE4a59f267346ea31F984", demoEvents: 24 },
+        { name: "Aave Pool", icon: "◆", type: "Lending", live: true, address: "0x87870Bca3F3fD6335C3F4c6d1cC5d4D62f4a8E7", demoEvents: 12 },
+        { name: "Bridge", icon: "⇄", type: "Bridge", live: true, address: "0xA0c68C638235ee32657e8f720a23ceC1bFc77C77", demoEvents: 8 },
+        { name: "Curve", icon: "≈", type: "DEX", live: false, demoEvents: 18 },
+        { name: "Lido", icon: "▲", type: "Staking", live: false, demoEvents: 15 },
+        { name: "EigenLayer", icon: "⬡", type: "Restaking", live: false, demoEvents: 10 }
+      ]
+    };
+
+    const cacheTtl = {
+      eth_blockNumber: 10000,
+      eth_getBlockByNumber: 18000,
+      gasoracle: 18000,
+      ethprice: 120000,
+      tokentx: 45000,
+      getLogs: 90000
+    };
+
+    const state = {
+      latestBlock: null,
+      blockDetail: null,
+      gasOracle: null,
+      ethPrice: null,
+      chains: [],
+      transfers: [],
+      protocols: [],
+      alerts: [],
+      ticker: [],
+      dataSource: "本地模拟",
+      etherscanAvailable: false,
+      securityScore: 82,
+      feeds: {
+        consensus: [],
+        tx: [],
+        bridge: [],
+        tracking: [],
+        transfer: []
+      }
+    };
+
+    const demoTransfers = [
+      { from: "0x7be8a9d9...8fa1", to: "0x4f32c1aa...7012", symbol: "USDT", amount: 28600000, risk: "高危关注", time: "2分钟前" },
+      { from: "0xa32f00c1...11d9", to: "0x9c71d1b2...93ab", symbol: "USDC", amount: 12400000, risk: "高危关注", time: "6分钟前" },
+      { from: "0x8bbd3219...aa88", to: "0x6fae9120...1200", symbol: "USDT", amount: 4200000, risk: "大额", time: "9分钟前" },
+      { from: "0x11cd992a...73dc", to: "0x3a81b7c1...4e21", symbol: "USDC", amount: 1800000, risk: "大额", time: "13分钟前" }
+    ];
+
+    const bridgeAlertsData = [
+      "Bridge outflow increased in the last 15 minutes",
+      "Cross-chain flow to watched address detected",
+      "Abnormal concentration on Ethereum -> Arbitrum path"
+    ];
+
+    const trackingObjects = [
+      { name: "Exploit Wallet A", type: "Exploit Fund", activity: "transferred 1,240 ETH to mixer", risk: "Critical", linked: 18, status: "Critical" },
+      { name: "MEV Bot Cluster B", type: "MEV", activity: "sandwich candidate activity", risk: "High", linked: 42, status: "Tracking" },
+      { name: "Bridge Incident X", type: "Bridge", activity: "abnormal outbound bridge flow", risk: "High", linked: 11, status: "Watch" },
+      { name: "Suspicious Deployer C", type: "Contract", activity: "new contract deployed by watched cluster", risk: "Medium", linked: 7, status: "Tracking" },
+      { name: "Risk Address Group D", type: "Cluster", activity: "stablecoin consolidation pattern", risk: "High", linked: 29, status: "Watch" }
+    ];
+
+    function hasApiKey() {
+      return CONFIG.ETHERSCAN_API_KEY && CONFIG.ETHERSCAN_API_KEY !== "YOUR_API_KEY";
+    }
+
+    function apiEnabled() {
+      return hasApiKey() && state.etherscanAvailable;
+    }
+
+    async function testEtherscanAvailability() {
+      if (!hasApiKey()) {
+        console.info("[全球数据资产安全监控] 未配置 Etherscan API Key，使用本地模拟数据。");
+        return false;
+      }
+      const url = new URL(CONFIG.ETHERSCAN_BASE_URL);
+      Object.entries({
+        chainid: 1,
+        module: "proxy",
+        action: "eth_blockNumber",
+        apikey: CONFIG.ETHERSCAN_API_KEY
+      }).forEach(([key, value]) => url.searchParams.set(key, value));
+      try {
+        const json = await requestQueue.enqueue(async () => {
+          const response = await fetch(url.toString(), { cache: "no-store" });
+          if (!response.ok) throw new Error("HTTP " + response.status);
+          return response.json();
+        });
+        const ok = Boolean(json.result) && !String(json.result).match(/error|invalid|rate/i);
+        state.etherscanAvailable = ok;
+        console.info(ok
+          ? "[全球数据资产安全监控] Etherscan API 可用，启用真实接口与本地模拟混合模式。"
+          : "[全球数据资产安全监控] Etherscan API 暂不可用，继续使用本地模拟数据。", json);
+        return ok;
+      } catch (error) {
+        state.etherscanAvailable = false;
+        console.info("[全球数据资产安全监控] Etherscan API 连通性测试失败，继续使用本地模拟数据。", error);
+        return false;
+      }
+    }
+
+    function formatAddress(address) {
+      if (!address || address.length < 12) return address || "--";
+      return address.slice(0, 6) + "..." + address.slice(-4);
+    }
+
+    function formatNumber(value) {
+      const num = Number(value);
+      if (!Number.isFinite(num)) return "--";
+      return Math.round(num).toLocaleString("en-US");
+    }
+
+    function formatUSD(value) {
+      const num = Number(value);
+      if (!Number.isFinite(num)) return "--";
+      if (num >= 1e9) return "$" + (num / 1e9).toFixed(1) + "B";
+      if (num >= 1e6) return "$" + (num / 1e6).toFixed(1) + "M";
+      if (num >= 1e3) return "$" + (num / 1e3).toFixed(1) + "K";
+      return "$" + num.toFixed(0);
+    }
+
+    function hexToNumber(hex) {
+      if (!hex) return null;
+      return parseInt(hex, 16);
+    }
+
+    function nowText() {
+      return new Date().toLocaleString("zh-CN", { hour12: false });
+    }
+
+    function jitter(base, spread) {
+      return Math.max(0, base + (Math.random() - 0.5) * spread);
+    }
+
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    function cacheKey(params) {
+      const clean = Object.keys(params).sort().map(key => key + "=" + params[key]).join("&");
+      return "etherscan_v2:" + clean;
+    }
+
+    function readCache(key, allowExpired) {
+      try {
+        const raw = localStorage.getItem(key);
+        if (!raw) return null;
+        const item = JSON.parse(raw);
+        if (!allowExpired && Date.now() - item.time > item.ttl) return null;
+        return item.data;
+      } catch (error) {
+        return null;
+      }
+    }
+
+    function writeCache(key, data, ttl) {
+      try {
+        localStorage.setItem(key, JSON.stringify({ time: Date.now(), ttl, data }));
+      } catch (error) {
+        // Storage can be unavailable in privacy modes; the dashboard still runs on in-memory data.
+      }
+    }
+
+    class RequestQueue {
+      constructor(interval) {
+        this.interval = interval;
+        this.queue = [];
+        this.running = false;
+      }
+
+      enqueue(task) {
+        return new Promise((resolve, reject) => {
+          this.queue.push({ task, resolve, reject });
+          this.run();
+        });
+      }
+
+      async run() {
+        if (this.running) return;
+        this.running = true;
+        while (this.queue.length) {
+          const item = this.queue.shift();
+          try {
+            item.resolve(await item.task());
+          } catch (error) {
+            item.reject(error);
+          }
+          await sleep(this.interval);
+        }
+        this.running = false;
+      }
+    }
+
+    const requestQueue = new RequestQueue(CONFIG.REQUEST_INTERVAL_MS);
+
+    async function etherscanRequest(params, ttl) {
+      const key = cacheKey(params);
+      const fresh = readCache(key, false);
+      if (fresh) return { data: fresh, source: "cache" };
+      if (!apiEnabled()) {
+        const stale = readCache(key, true);
+        if (stale) return { data: stale, source: "stale-cache" };
+        throw new Error("No Etherscan API key configured");
+      }
+      return requestQueue.enqueue(async () => {
+        const url = new URL(CONFIG.ETHERSCAN_BASE_URL);
+        Object.entries({ ...params, apikey: CONFIG.ETHERSCAN_API_KEY }).forEach(([keyName, value]) => {
+          url.searchParams.set(keyName, value);
+        });
+        try {
+          const response = await fetch(url.toString(), { cache: "no-store" });
+          if (!response.ok) throw new Error("HTTP " + response.status);
+          const json = await response.json();
+          if (json.status === "0" && typeof json.result === "string" && /error|invalid|rate/i.test(json.result)) {
+            throw new Error(json.result);
+          }
+          writeCache(key, json, ttl);
+          return { data: json, source: "live" };
+        } catch (error) {
+          const stale = readCache(key, true);
+          if (stale) return { data: stale, source: "stale-cache" };
+          throw error;
+        }
+      });
+    }
+
+    async function getLatestBlock(chainid) {
+      const params = { chainid, module: "proxy", action: "eth_blockNumber" };
+      const res = await etherscanRequest(params, cacheTtl.eth_blockNumber);
+      return { block: hexToNumber(res.data.result), source: res.source };
+    }
+
+    async function getLatestBlockDetail(chainid) {
+      const params = { chainid, module: "proxy", action: "eth_getBlockByNumber", tag: "latest", boolean: "true" };
+      const res = await etherscanRequest(params, cacheTtl.eth_getBlockByNumber);
+      return { block: res.data.result, source: res.source };
+    }
+
+    async function getGasOracle(chainid) {
+      const params = { chainid, module: "gastracker", action: "gasoracle" };
+      const res = await etherscanRequest(params, cacheTtl.gasoracle);
+      return { gas: res.data.result, source: res.source };
+    }
+
+    async function getEthPrice() {
+      const params = { chainid: 1, module: "stats", action: "ethprice" };
+      const res = await etherscanRequest(params, cacheTtl.ethprice);
+      return { price: res.data.result, source: res.source };
+    }
+
+    async function getTokenTransfers(token) {
+      const params = {
+        chainid: 1,
+        module: "account",
+        action: "tokentx",
+        contractaddress: token.contract,
+        page: 1,
+        offset: 20,
+        sort: "desc"
+      };
+      const res = await etherscanRequest(params, cacheTtl.tokentx);
+      return { transfers: Array.isArray(res.data.result) ? res.data.result : [], source: res.source };
+    }
+
+    async function getProtocolLogs(protocol, latestBlock) {
+      if (!protocol.address || !latestBlock) throw new Error("Protocol address or latest block unavailable");
+      const params = {
+        chainid: 1,
+        module: "logs",
+        action: "getLogs",
+        address: protocol.address,
+        fromBlock: Math.max(0, latestBlock - 800),
+        toBlock: "latest",
+        page: 1,
+        offset: 20
+      };
+      const res = await etherscanRequest(params, cacheTtl.getLogs);
+      return { count: Array.isArray(res.data.result) ? res.data.result.length : 0, source: res.source };
+    }
+
+    function normalizeTransfers(rawGroups) {
+      const rows = rawGroups.flatMap(group => group.items.map(tx => {
+        const decimals = Number(tx.tokenDecimal || group.decimals || 6);
+        const amount = Number(tx.value || 0) / Math.pow(10, decimals);
+        return {
+          from: tx.from,
+          to: tx.to,
+          symbol: tx.tokenSymbol || group.symbol,
+          amount,
+          risk: amount >= 10000000 ? "高危关注" : amount >= 1000000 ? "大额" : "正常",
+          time: tx.timeStamp ? timeAgo(Number(tx.timeStamp) * 1000) : "recent"
+        };
+      }));
+      const large = rows.filter(row => row.amount >= 1000000).sort((a, b) => b.amount - a.amount).slice(0, 6);
+      return large.length ? large : demoTransfers;
+    }
+
+    function timeAgo(ts) {
+      const diff = Math.max(1, Math.floor((Date.now() - ts) / 1000));
+      if (diff < 60) return diff + "秒前";
+      if (diff < 3600) return Math.floor(diff / 60) + "分钟前";
+      return Math.floor(diff / 3600) + "小时前";
+    }
+
+    function gasLevel(gwei) {
+      const n = Number(gwei);
+      if (!Number.isFinite(n)) return "中";
+      if (n > 80) return "极高";
+      if (n > 30) return "高";
+      if (n > 12) return "中";
+      return "低";
+    }
+
+    const charts = {};
+
+    function initCharts() {
+      charts.radar = echarts.init(document.getElementById("radarChart"));
+      charts.flow = echarts.init(document.getElementById("flowChart"));
+      charts.bridge = echarts.init(document.getElementById("bridgeChart"));
+      charts.risk = echarts.init(document.getElementById("riskChart"));
+      window.addEventListener("resize", () => Object.values(charts).forEach(chart => chart.resize()));
+    }
+
+    function flashPanel(elementId) {
+      const node = document.getElementById(elementId);
+      const panel = node && node.closest(".panel");
+      if (!panel) return;
+      panel.classList.remove("refresh-flash");
+      void panel.offsetWidth;
+      panel.classList.add("refresh-flash");
+    }
+
+    function pushFeed(name, item, limit) {
+      const feed = state.feeds[name] || [];
+      feed.unshift({ ...item, fresh: true, age: Math.max(1, Math.round(jitter(3, 3))) });
+      state.feeds[name] = feed.slice(0, limit);
+      setTimeout(() => {
+        state.feeds[name] = (state.feeds[name] || []).map(row => ({ ...row, fresh: false }));
+      }, 900);
+    }
+
+    function seedFeed(name, items, limit) {
+      if (state.feeds[name] && state.feeds[name].length) return;
+      state.feeds[name] = items.slice(0, limit).map((item, index) => ({ ...item, fresh: false, age: index * 3 + 2 }));
+    }
+
+    function renderMetrics() {
+      const gas = state.gasOracle || {};
+      const price = state.ethPrice || {};
+      const gasText = Number(gas.ProposeGasPrice || jitter(12.4, 2)).toFixed(1);
+      const gasStatus = gasLevel(gas.ProposeGasPrice);
+      const metrics = [
+        ["接入链数", "60+"],
+        ["最新区块高度", formatNumber(state.latestBlock || CONFIG.CHAINS[0].baseBlock)],
+        ["ETH 当前价格", price.ethusd ? "$" + Number(price.ethusd).toLocaleString("en-US", { maximumFractionDigits: 2 }) : "$3,420.8"],
+        [`当前汽油费价格（${gasStatus}）`, gasText + " Gwei"],
+        ["24小时交易规模", formatUSD(jitter(18400000000, 900000000))],
+        ["24小时资金流量", formatUSD(jitter(4260000000, 280000000))],
+        ["风险预警数", String(Math.round(jitter(36, 8)))],
+        ["高危预警数", String(Math.round(jitter(7, 3)))],
+        ["安全评分", String(state.securityScore)]
+      ];
+      document.getElementById("metricGrid").innerHTML = metrics.map(item => `
+        <article class="metric">
+          <div class="metric-label">${item[0]}</div>
+          <div class="metric-value">${item[1]}</div>
+        </article>
+      `).join("");
+    }
+
+    function renderRadar() {
+      const gas = Number(state.gasOracle && state.gasOracle.ProposeGasPrice) || 14;
+      const utilization = getBlockUtilization();
+      const values = [
+        Math.max(62, Math.round(90 - utilization * 10)),
+        Math.max(60, Math.round(86 - jitter(8, 4))),
+        Math.max(55, Math.round(94 - gas * 1.2)),
+        Math.round(jitter(72, 7)),
+        Math.round(jitter(78, 6)),
+        Math.round(jitter(74, 7))
+      ];
+      state.securityScore = Math.round(values.reduce((sum, item) => sum + item, 0) / values.length);
+      document.getElementById("radarScore").textContent = "综合评分 " + state.securityScore;
+      charts.radar.setOption({
+        color: [getComputedStyle(document.documentElement).getPropertyValue("--cyan").trim()],
+        tooltip: { trigger: "item" },
+        radar: {
+          radius: "66%",
+          center: ["50%", "54%"],
+          splitNumber: 4,
+          axisName: { color: "#b9d9f4", fontSize: 12 },
+          axisLine: { lineStyle: { color: "rgba(91,209,255,0.26)" } },
+          splitLine: { lineStyle: { color: "rgba(91,209,255,0.2)" } },
+          splitArea: { areaStyle: { color: ["rgba(56,213,255,0.03)", "rgba(155,114,255,0.04)"] } },
+          indicator: [
+            { name: "出块延迟", max: 100 },
+            { name: "跨链延迟", max: 100 },
+            { name: "网络拥堵情况", max: 100 },
+            { name: "异常交易规模", max: 100 },
+            { name: "异常合约活跃强度", max: 100 },
+            { name: "重点地址活跃度", max: 100 }
+          ]
+        },
+        series: [{
+          type: "radar",
+          data: [{ value: values, name: "Security Posture" }],
+          areaStyle: { color: "rgba(56,213,255,0.22)" },
+          lineStyle: { width: 2 },
+          symbolSize: 4
+        }]
+      });
+    }
+
+    function getBlockUtilization() {
+      const block = state.blockDetail;
+      if (!block) return 0.62;
+      const gasUsed = hexToNumber(block.gasUsed);
+      const gasLimit = hexToNumber(block.gasLimit);
+      return gasUsed && gasLimit ? gasUsed / gasLimit : 0.62;
+    }
+
+    function renderChains() {
+      const rows = state.chains.length ? state.chains : CONFIG.CHAINS.map((chain, index) => ({
+        ...chain,
+        block: chain.baseBlock + Math.round(Date.now() / 12000) % 100000,
+        delay: index % 3 === 0 ? "2.1s" : index % 3 === 1 ? "4.8s" : "8.5s",
+        fee: index < 5 ? jitter(8 + index * 2, 4).toFixed(1) + " gwei" : jitter(0.8, 0.8).toFixed(1) + " gwei",
+        status: index === 6 ? "监控" : index === 2 ? "活跃" : "正常",
+        risk: index === 6 ? "跨链监控" : index === 3 ? "低延迟" : "正常"
+      }));
+      document.getElementById("chainList").innerHTML = rows.slice(0, 9).map(chain => {
+        const statusClass = chain.status === "正常" ? "ok" : chain.status === "监控" || chain.status === "拥堵" ? "warn" : "";
+        return `
+          <div class="row compact">
+            <div>
+              <div class="name">${chain.name} <span class="pill">实时</span></div>
+              <div class="tiny">链ID ${chain.chainid} / ${chain.risk}</div>
+            </div>
+            <div class="mono">
+              <div>${formatNumber(chain.block)}</div>
+              <div class="tiny">延迟 ${chain.delay}</div>
+            </div>
+            <div>
+              <div class="mono">${chain.fee}</div>
+              <span class="pill ${statusClass}">${chain.status}</span>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderFlow() {
+      const highTransfer = (state.transfers[0] && state.transfers[0].amount) || 28600000;
+      const data = [
+        { name: "中心化交易所", symbolSize: 66, category: 0 },
+        { name: "做市商钱包", symbolSize: 48, category: 1 },
+        { name: "巨鲸地址", symbolSize: 54, category: 1 },
+        { name: "DeFi 协议", symbolSize: 58, category: 2 },
+        { name: "借贷池", symbolSize: 44, category: 2 },
+        { name: "跨链桥", symbolSize: 52, category: 3 },
+        { name: "稳定币金库", symbolSize: 48, category: 2 },
+        { name: "高风险地址", symbolSize: 46, category: 4 },
+        { name: "Mixer", symbolSize: 42, category: 4 },
+        { name: "场外清算", symbolSize: 40, category: 1 }
+      ];
+      const positions = {
+        "中心化交易所": [70, 110],
+        "做市商钱包": [75, 230],
+        "巨鲸地址": [190, 105],
+        "DeFi 协议": [300, 120],
+        "借贷池": [405, 80],
+        "跨链桥": [405, 215],
+        "稳定币金库": [200, 235],
+        "高风险地址": [510, 150],
+        "Mixer": [595, 95],
+        "场外清算": [520, 235]
+      };
+      data.forEach(item => {
+        item.x = positions[item.name][0];
+        item.y = positions[item.name][1];
+      });
+      const links = [
+        { source: "中心化交易所", target: "巨鲸地址", value: 28.6, label: { show: true, formatter: "USDT " + formatUSD(highTransfer) } },
+        { source: "巨鲸地址", target: "DeFi 协议", value: 34.2, label: { show: true, formatter: "ETH $34.2M" } },
+        { source: "稳定币金库", target: "借贷池", value: 12.4, label: { show: true, formatter: "USDC $12.4M" } },
+        { source: "DeFi 协议", target: "跨链桥", value: 18.3, label: { show: true, formatter: "跨链 $18.3M" } },
+        { source: "做市商钱包", target: "中心化交易所", value: 10.2 },
+        { source: "跨链桥", target: "场外清算", value: 8.1 },
+        { source: "场外清算", target: "高风险地址", value: 5.4 },
+        { source: "高风险地址", target: "Mixer", value: 4.6 },
+        { source: "巨鲸地址", target: "稳定币金库", value: 7.2 }
+      ];
+      charts.flow.setOption({
+        tooltip: { trigger: "item", formatter: params => params.dataType === "edge" ? `${params.data.source} -> ${params.data.target}<br/>${formatUSD((params.data.value || 0) * 1000000)}` : params.name },
+        legend: { show: false },
+        series: [{
+          type: "graph",
+          layout: "none",
+          roam: false,
+          data,
+          links,
+          categories: [{ name: "交易所" }, { name: "资金主体" }, { name: "协议" }, { name: "跨链" }, { name: "风险" }],
+          force: { repulsion: 260, edgeLength: [80, 150] },
+          label: { show: true, color: "#dbeafe", fontSize: 12 },
+          edgeLabel: { color: "#a8c8e8", fontSize: 10 },
+          lineStyle: { color: "source", opacity: 0.58, width: 1.8, curveness: 0.18 },
+          itemStyle: { borderColor: "rgba(255,255,255,0.55)", borderWidth: 1 },
+          emphasis: { focus: "adjacency" },
+          color: ["#38d5ff", "#4f8dff", "#43e7a5", "#9b72ff", "#ff5f76"]
+        }]
+      });
+    }
+
+    function renderTransfers() {
+      seedFeed("transfer", (state.transfers.length ? state.transfers : demoTransfers).slice(0, 1), 1);
+      const rows = state.feeds.transfer.slice(0, 1);
+      document.getElementById("transferList").innerHTML = rows.map(tx => `
+        <div class="row transfer ${tx.fresh ? "new-item" : ""}">
+          <div>
+            <div class="name mono">${formatAddress(tx.from)} -> ${formatAddress(tx.to)}</div>
+            <div class="tiny">${tx.time}</div>
+          </div>
+          <div class="mono">${tx.symbol}</div>
+          <div class="mono">${formatUSD(tx.amount)}</div>
+          <div><span class="pill ${tx.risk.includes("高") ? "high" : tx.risk === "大额" ? "warn" : "ok"}">${tx.risk}</span></div>
+        </div>
+      `).join("");
+    }
+
+    function renderBridge() {
+      const metrics = [
+        ["24小时跨链流量", formatUSD(jitter(1840000000, 130000000))],
+        ["桥接风险预警", String(Math.round(jitter(9, 3)))],
+        ["大额跨链转账", String(Math.round(jitter(21, 5)))],
+        ["异常流出规模", formatUSD(jitter(73000000, 18000000))]
+      ];
+      document.getElementById("bridgeMetrics").innerHTML = metrics.map(item => `<div class="mini"><span class="tiny">${item[0]}</span><b>${item[1]}</b></div>`).join("");
+      charts.bridge.setOption({
+        tooltip: { trigger: "item", triggerOn: "mousemove" },
+        series: [{
+          type: "sankey",
+          top: 20,
+          bottom: 18,
+          left: 8,
+          right: 82,
+          nodeWidth: 14,
+          nodeGap: 10,
+          draggable: false,
+          levels: [
+            { depth: 0, itemStyle: { color: "#38d5ff" }, lineStyle: { color: "source", opacity: 0.45 } },
+            { depth: 1, itemStyle: { color: "#4f8dff" }, lineStyle: { color: "source", opacity: 0.42 } },
+            { depth: 2, itemStyle: { color: "#9b72ff" }, lineStyle: { color: "source", opacity: 0.36 } }
+          ],
+          data: [
+            { name: "Ethereum", itemStyle: { color: "#38d5ff" } },
+            { name: "Arbitrum", itemStyle: { color: "#4f8dff" } },
+            { name: "Polygon", itemStyle: { color: "#43e7a5" } },
+            { name: "Linea", itemStyle: { color: "#9b72ff" } },
+            { name: "Gnosis", itemStyle: { color: "#6bd3ff" } },
+            { name: "Base", itemStyle: { color: "#2f6bff" } },
+            { name: "BNB Chain", itemStyle: { color: "#ffb84d" } },
+            { name: "Bridge Vault", itemStyle: { color: "#7cc8ff" } },
+            { name: "Watched Wallet", itemStyle: { color: "#ff5f76" } }
+          ],
+          links: [
+            { source: "Ethereum", target: "Arbitrum", value: jitter(42, 6) },
+            { source: "Ethereum", target: "Polygon", value: jitter(31, 5) },
+            { source: "Ethereum", target: "Linea", value: jitter(16, 3) },
+            { source: "Ethereum", target: "Gnosis", value: jitter(11, 2) },
+            { source: "Ethereum", target: "Base", value: jitter(24, 4) },
+            { source: "Ethereum", target: "BNB Chain", value: jitter(18, 4) },
+            { source: "Arbitrum", target: "Bridge Vault", value: jitter(13, 3) },
+            { source: "Base", target: "Bridge Vault", value: jitter(9, 2) },
+            { source: "Bridge Vault", target: "Watched Wallet", value: jitter(5, 1.5) }
+          ],
+          label: { color: "#dbeafe", fontSize: 11 },
+          lineStyle: { color: "gradient", curveness: 0.5, opacity: 0.42 },
+          itemStyle: { color: "#38d5ff", borderColor: "rgba(255,255,255,0.35)" },
+          emphasis: { focus: "adjacency" }
+        }]
+      });
+      seedFeed("bridge", [
+        { level: "监控", text: "最近15分钟跨链流出上升" },
+        { level: "高", text: "检测到流向重点关注地址的跨链资金" },
+        { level: "监控", text: "Ethereum -> Arbitrum 路径资金集中度异常" }
+      ], 3);
+      document.getElementById("bridgeAlerts").innerHTML = state.feeds.bridge.map(alertRow).join("");
+    }
+
+    function renderProtocols(activeIndex) {
+      const protocols = state.protocols.length ? state.protocols : CONFIG.PROTOCOLS.map(p => ({
+        ...p,
+        events: p.demoEvents,
+        netFlow: jitter(40, 24) * 1000000,
+        risk: p.name === "Bridge" ? "高" : p.name === "Curve" ? "中" : "监控",
+        source: "实时监控"
+      }));
+      const typeMap = { DEX: "去中心化交易", Lending: "借贷", Staking: "质押", Bridge: "跨链桥", Restaking: "再质押" };
+      document.getElementById("protocolGrid").innerHTML = protocols.map((p, index) => `
+        <article class="protocol-card ${index === activeIndex ? "active" : ""}">
+          <div class="protocol-top">
+            <div class="name"><span class="proto-icon">${p.icon}</span>${p.name}</div>
+            <span class="pill">${p.source === "live" ? "实时" : p.source}</span>
+          </div>
+          <div class="tiny">${typeMap[p.type] || p.type}</div>
+          <div class="proto-stat">
+            <div><span class="tiny">近期事件</span><b class="mono">${formatNumber(p.events)}</b></div>
+            <div><span class="tiny">近期风险</span><b class="mono">${p.risk}</b></div>
+            <div><span class="tiny">净流量</span><b class="mono">${formatUSD(p.netFlow)}</b></div>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    function renderAlerts() {
+      const utilization = getBlockUtilization();
+      const gas = Number(state.gasOracle && state.gasOracle.ProposeGasPrice) || 14;
+      const txCount = state.blockDetail && state.blockDetail.transactions ? state.blockDetail.transactions.length : Math.round(jitter(180, 70));
+      const consensus = [
+        { level: gas > 30 ? "中" : "低", text: "Ethereum 汽油费" + (gas > 30 ? "快速上升" : "处于正常区间") },
+        { level: "低", text: "Polygon 出块间隔波动已记录" },
+        { level: utilization > 0.85 ? "中" : "监控", text: "区块 Gas 使用率 " + (utilization * 100).toFixed(1) + "% / 交易数 " + txCount },
+        { level: "监控", text: "待处理交易压力小幅增加" },
+        { level: "中", text: "Linea 最近出块延迟高于基线" },
+        { level: "监控", text: "Gnosis 验证节点响应时间波动" },
+        { level: "中", text: "Arbitrum 批量提交间隔短时拉长" },
+        { level: "低", text: "Base 区块确认速度轻微抖动" }
+      ];
+      const largest = (state.transfers[0] || demoTransfers[0]);
+      const txAlerts = [
+        { level: largest.amount >= 10000000 ? "高" : "中", text: `检测到大额 ${largest.symbol} 转账：${formatUSD(largest.amount)}` },
+        { level: "高", text: "检测到三明治攻击候选行为" },
+        { level: "中", text: "Uniswap V3 出现高滑点兑换模式" },
+        { level: "中", text: "重点集群部署可疑合约" },
+        { level: "高", text: "协议资金流出超过监控阈值" },
+        { level: "中", text: "稳定币归集地址出现短时高频转入" },
+        { level: "高", text: "疑似攻击资金拆分转入多个新地址" },
+        { level: "中", text: "借贷池清算事件密度高于正常区间" }
+      ];
+      state.alerts = consensus.concat(txAlerts);
+      seedFeed("consensus", consensus, 7);
+      seedFeed("tx", txAlerts, 7);
+      document.getElementById("consensusAlerts").innerHTML = state.feeds.consensus.map(alertRow).join("");
+      document.getElementById("txAlerts").innerHTML = state.feeds.tx.map(alertRow).join("");
+      renderTicker();
+      renderRiskChart();
+    }
+
+    function alertRow(item) {
+      const klass = item.level === "高" ? "high" : item.level === "中" || item.level === "监控" ? "warn" : "ok";
+      return `<div class="row alert ${item.fresh ? "new-item" : ""}"><span class="pill ${klass}">${item.level}</span><span>${item.text}</span><span class="tiny">${item.age || Math.round(jitter(6, 5))}分钟前</span></div>`;
+    }
+
+    function renderTracking() {
+      seedFeed("tracking", trackingObjects, 6);
+      document.getElementById("trackingList").innerHTML = state.feeds.tracking.map(item => `
+        <div class="row track ${item.fresh ? "new-item" : ""}">
+          <div>
+            <div class="name">${translateTracking(item.name)}</div>
+            <div class="tiny">${translateTracking(item.type)}：${translateTracking(item.activity)}</div>
+          </div>
+          <div>
+            <span class="pill ${item.risk === "Critical" || item.risk === "High" ? "high" : "warn"}">${translateTracking(item.risk)}</span>
+            <div class="tiny">关联地址 ${item.linked} 个</div>
+          </div>
+          <div class="mono tiny">${translateTracking(item.status)}<br>${item.age || Math.round(jitter(8, 6))}分钟前</div>
+        </div>
+      `).join("");
+    }
+
+    function translateTracking(text) {
+      const map = {
+        "Exploit Wallet A": "攻击资金钱包",
+        "MEV Bot Cluster B": "MEV 机器人集群",
+        "Bridge Incident X": "跨链桥事件",
+        "Suspicious Deployer C": "可疑部署者",
+        "Risk Address Group D": "风险地址组",
+        "Exploit Fund": "攻击资金",
+        "MEV": "MEV",
+        "Bridge": "跨链桥",
+        "Contract": "合约",
+        "Cluster": "地址集群",
+        "transferred 1,240 ETH to mixer": "向 Mixer 转移 1,240 ETH",
+        "sandwich candidate activity": "出现三明治攻击候选活动",
+        "abnormal outbound bridge flow": "跨链桥异常流出",
+        "new contract deployed by watched cluster": "重点集群部署新合约",
+        "stablecoin consolidation pattern": "稳定币归集模式",
+        "Critical": "严重",
+        "High": "高",
+        "Medium": "中",
+        "Tracking": "追踪中",
+        "Watch": "监控",
+      };
+      return map[text] || text;
+    }
+
+    function renderRiskChart() {
+      const data = [
+        { name: "共识 / 出块", value: 14 },
+        { name: "MEV", value: 18 },
+        { name: "异常资金流", value: 24 },
+        { name: "合约漏洞", value: 16 },
+        { name: "跨链异常", value: 19 }
+      ].map(item => ({ ...item, value: Math.round(jitter(item.value, 4)) }));
+      charts.risk.setOption({
+        tooltip: { trigger: "item" },
+        legend: { bottom: 0, textStyle: { color: "#85a3c4", fontSize: 10 } },
+        series: [{
+          type: "pie",
+          radius: ["42%", "66%"],
+          center: ["50%", "47%"],
+          avoidLabelOverlap: true,
+          label: { color: "#dbeafe", formatter: "{b}\n{d}%", fontSize: 10 },
+          labelLine: { lineStyle: { color: "rgba(219,234,254,0.35)" } },
+          data,
+          color: ["#38d5ff", "#9b72ff", "#ffb84d", "#4f8dff", "#43e7a5", "#ff5f76"]
+        }]
+      });
+    }
+
+    function renderTicker() {
+      const transferItems = (state.transfers.length ? state.transfers : demoTransfers).slice(0, 3).map(tx => ({
+        level: tx.risk.includes("高") ? "高" : "中",
+        text: `${tx.symbol} ${formatUSD(tx.amount)} 转移：${formatAddress(tx.from)} -> ${formatAddress(tx.to)}`
+      }));
+      state.ticker = transferItems.concat([
+        { level: "高", text: "高滑点兑换路径上检测到 MEV 三明治攻击候选行为" },
+        { level: "中", text: "Ethereum -> Arbitrum 跨链流出集中度上升" },
+        { level: "高", text: "已知攻击地址活动命中重点集群特征" },
+        { level: "中", text: "协议风险模型发现异常流动性撤出模式" }
+      ]);
+    }
+
+    function pushDashboardItems() {
+      const consensusPool = [
+        { level: "中", text: "Ethereum 区块 Gas 使用率接近预警阈值" },
+        { level: "监控", text: "Polygon 出块间隔出现连续波动" },
+        { level: "低", text: "Gnosis 节点响应延迟回落至正常区间" },
+        { level: "中", text: "Linea 批量证明提交间隔偏离基线" },
+        { level: "监控", text: "Arbitrum 排队交易压力小幅上升" }
+      ];
+      const txPool = [
+        { level: "高", text: "检测到大额稳定币转入高风险地址" },
+        { level: "中", text: "Uniswap V3 高滑点路径继续活跃" },
+        { level: "高", text: "疑似攻击资金拆分转移到新地址" },
+        { level: "中", text: "借贷协议清算事件密度上升" },
+        { level: "监控", text: "可疑合约创建频率高于近一小时均值" }
+      ];
+      const bridgePool = [
+        { level: "高", text: "跨链桥流向重点地址的资金增加" },
+        { level: "监控", text: "Ethereum -> Base 路径流量短时升高" },
+        { level: "中", text: "Bridge Vault 资金集中度继续上升" }
+      ];
+      const trackingPool = [
+        { name: "Exploit Wallet A", type: "Exploit Fund", activity: "transferred 1,240 ETH to mixer", risk: "Critical", linked: 18, status: "Tracking" },
+        { name: "MEV Bot Cluster B", type: "MEV", activity: "sandwich candidate activity", risk: "High", linked: 42, status: "Tracking" },
+        { name: "Suspicious Deployer C", type: "Contract", activity: "new contract deployed by watched cluster", risk: "Medium", linked: 7, status: "Tracking" }
+      ];
+      const transfer = (state.transfers.length ? state.transfers : demoTransfers)[Math.floor(Math.random() * (state.transfers.length || demoTransfers.length))];
+      pushFeed("consensus", consensusPool[Math.floor(Math.random() * consensusPool.length)], 7);
+      pushFeed("tx", txPool[Math.floor(Math.random() * txPool.length)], 7);
+      pushFeed("bridge", bridgePool[Math.floor(Math.random() * bridgePool.length)], 3);
+      pushFeed("tracking", trackingPool[Math.floor(Math.random() * trackingPool.length)], 6);
+      if (transfer) pushFeed("transfer", transfer, 1);
+      renderAlerts();
+      renderBridge();
+      renderTracking();
+      renderTransfers();
+      flashPanel("consensusAlerts");
+      flashPanel("txAlerts");
+      flashPanel("trackingList");
+    }
+
+    let tickerIndex = 0;
+    function startTicker() {
+      setInterval(() => {
+        const ticker = document.getElementById("tickerText");
+        const time = document.getElementById("tickerTime");
+        const item = state.ticker[tickerIndex % state.ticker.length] || { level: "监控", text: "本地演示模式运行中" };
+        ticker.style.opacity = "0";
+        ticker.style.transform = "translateY(6px)";
+        setTimeout(() => {
+          ticker.textContent = `[${item.level}] ${item.text}`;
+          time.textContent = nowText();
+          ticker.style.opacity = "1";
+          ticker.style.transform = "translateY(0)";
+        }, 220);
+        tickerIndex += 1;
+      }, 4000);
+    }
+
+    async function refreshCoreData() {
+      let liveHits = 0;
+      try {
+        const latest = await getLatestBlock(1);
+        if (latest.block) {
+          state.latestBlock = latest.block;
+          if (latest.source === "live") liveHits += 1;
+        }
+      } catch (error) {
+        state.latestBlock = CONFIG.CHAINS[0].baseBlock + Math.round(Date.now() / 12000) % 100000;
+      }
+      try {
+        const detail = await getLatestBlockDetail(1);
+        if (detail.block) {
+          state.blockDetail = detail.block;
+          if (detail.source === "live") liveHits += 1;
+        }
+      } catch (error) {
+        state.blockDetail = null;
+      }
+      try {
+        const gas = await getGasOracle(1);
+        if (gas.gas) {
+          state.gasOracle = gas.gas;
+          if (gas.source === "live") liveHits += 1;
+        }
+      } catch (error) {
+        state.gasOracle = { SafeGasPrice: "9", ProposeGasPrice: jitter(13, 3).toFixed(1), FastGasPrice: "16" };
+      }
+      try {
+        const price = await getEthPrice();
+        if (price.price) {
+          state.ethPrice = price.price;
+          if (price.source === "live") liveHits += 1;
+        }
+      } catch (error) {
+        state.ethPrice = { ethusd: "3420.8" };
+      }
+      renderRadar();
+      renderMetrics();
+      renderAlerts();
+      flashPanel("metricGrid");
+      flashPanel("radarChart");
+    }
+
+    async function refreshChains() {
+      const rows = [];
+      for (const [index, chain] of CONFIG.CHAINS.entries()) {
+        let block = chain.baseBlock + Math.round(Date.now() / 12000) % 100000;
+        let live = chain.live;
+        if (chain.live) {
+          try {
+            const result = await getLatestBlock(chain.chainid);
+            if (result.block) block = result.block;
+          } catch (error) {
+            live = false;
+          }
+        }
+        const feeValue = chain.chainid === 1 && state.gasOracle ? Number(state.gasOracle.ProposeGasPrice) : jitter(2 + index * 1.7, 3);
+        const fee = (Number.isFinite(feeValue) ? feeValue : jitter(12, 3)).toFixed(1) + " gwei";
+        rows.push({
+          ...chain,
+          live,
+          block,
+          delay: jitter(chain.chainid === 1 ? 12 : 4, 3).toFixed(1) + "s",
+          fee,
+          status: index === 6 ? "监控" : Number.parseFloat(fee) > 30 ? "拥堵" : index === 2 ? "活跃" : "正常",
+          risk: index === 6 ? "跨链监控" : Number.parseFloat(fee) > 30 ? "Gas 监控" : "正常"
+        });
+      }
+      state.chains = rows;
+      renderChains();
+      flashPanel("chainList");
+    }
+
+    async function refreshTransfers() {
+      const groups = [];
+      for (const token of CONFIG.TOKENS) {
+        try {
+          const res = await getTokenTransfers(token);
+          groups.push({ symbol: token.symbol, decimals: token.decimals, items: res.transfers });
+        } catch (error) {
+          groups.push({ symbol: token.symbol, decimals: token.decimals, items: [] });
+        }
+      }
+      state.transfers = normalizeTransfers(groups);
+      renderFlow();
+      renderTransfers();
+      renderAlerts();
+      flashPanel("flowChart");
+    }
+
+    async function refreshProtocols() {
+      const latest = state.latestBlock || CONFIG.CHAINS[0].baseBlock;
+      const protocols = [];
+      for (const protocol of CONFIG.PROTOCOLS) {
+        let events = Math.round(jitter(protocol.demoEvents, 5));
+        let source = "本地校准";
+        if (protocol.live && apiEnabled()) {
+          try {
+            const res = await getProtocolLogs(protocol, latest);
+            events = Math.max(res.count, Math.round(jitter(protocol.demoEvents, 4)));
+            source = res.source === "live" ? "实时" : "缓存";
+          } catch (error) {
+            source = "本地校准";
+          }
+        }
+        protocols.push({
+          ...protocol,
+          events,
+          source,
+          netFlow: jitter(protocol.name === "Bridge" ? 82 : 38, 20) * 1000000,
+          risk: protocol.name === "Bridge" ? "高" : events > 20 ? "中" : "监控"
+        });
+      }
+      state.protocols = protocols;
+      let index = 0;
+      renderProtocols(index);
+      flashPanel("protocolGrid");
+      const timer = setInterval(() => {
+        index += 1;
+        renderProtocols(index % protocols.length);
+        if (index >= protocols.length + 1) clearInterval(timer);
+      }, 1000);
+    }
+
+    function renderStaticModules() {
+      renderRadar();
+      renderMetrics();
+      renderChains();
+      renderFlow();
+      renderTransfers();
+      renderBridge();
+      renderProtocols(0);
+      renderAlerts();
+      renderTracking();
+      renderRiskChart();
+    }
+
+    async function startSchedulers() {
+      await testEtherscanAvailability();
+      refreshCoreData();
+      refreshChains();
+      refreshTransfers();
+      refreshProtocols();
+      setInterval(refreshCoreData, CONFIG.REFRESH.blockDetail);
+      setInterval(refreshChains, CONFIG.REFRESH.block);
+      setInterval(refreshTransfers, CONFIG.REFRESH.tokenTransfers);
+      setInterval(refreshProtocols, CONFIG.REFRESH.protocolLogs);
+      setInterval(() => {
+        renderBridge();
+        renderFlow();
+        renderRiskChart();
+      }, 18000);
+      setInterval(pushDashboardItems, 5000);
+      setInterval(() => {
+        const list = document.querySelectorAll(".transfer-list .row, .alert-list .row");
+        list.forEach((node, index) => {
+          if (index % 5 === Math.floor(Math.random() * 5)) {
+            node.classList.remove("fade-change");
+            void node.offsetWidth;
+            node.classList.add("fade-change");
+          }
+        });
+      }, 5000);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      initCharts();
+      renderStaticModules();
+      renderTicker();
+      startTicker();
+      startSchedulers();
+    });
+  </script>
+</body>
+</html>
