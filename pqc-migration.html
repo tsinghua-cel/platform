@@ -1,1975 +1,319 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>后量子数字资产安全：从系统分层风险到分布式协议技术储备</title>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    :root{--bg:#0a0e17;--card:#141c2b;--line:rgba(99,179,237,.12);--blue:#60a5fa;--blue2:#93c5fd;--green:#34d399;--red:#f87171;--violet:#a78bfa;--txt:#e2e8f0;--txt2:#94a3b8;--txt3:#64748b;--shadow:0 18px 40px rgba(0,0,0,.4);--shadow2:0 10px 24px rgba(0,0,0,.25);--radius-lg:18px;--mono:"JetBrains Mono","Consolas",monospace;--sans:"Noto Sans SC","Inter","PingFang SC","Microsoft YaHei",sans-serif}*{box-sizing:border-box}body{margin:0;font-family:var(--sans);color:var(--txt);background:radial-gradient(circle at top right,rgba(79,109,245,.10),transparent 28%),radial-gradient(circle at bottom left,rgba(5,150,105,.06),transparent 24%),linear-gradient(180deg,#fbfcff 0%,#f2f5fb 100%);line-height:1.65;overflow-x:hidden;min-height:100vh}body:before{content:"";position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(rgba(37,99,235,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(37,99,235,.035) 1px,transparent 1px);background-size:52px 52px;mask-image:radial-gradient(ellipse 70% 55% at 50% 18%,black,transparent)}.topbar{position:fixed;top:0;left:0;right:0;z-index:100;height:52px;display:flex;align-items:center;gap:1rem;padding:0 2rem;background:rgba(255,255,255,.86);backdrop-filter:blur(18px);border-bottom:1px solid var(--line);box-shadow:0 6px 18px rgba(15,23,42,.04)}.back-btn{color:var(--txt2);text-decoration:none;font-size:.98rem;white-space:nowrap}.back-btn:hover{color:var(--blue2)}.topbar-title{font-weight:700;color:var(--txt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.topbar-venue{margin-left:auto;font-family:var(--mono);font-size:.78rem;color:var(--red);background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.12);padding:.16rem .5rem;border-radius:999px;font-weight:700;white-space:nowrap}.page{position:relative;z-index:1;max-width:100%;margin:0;padding:12px 28px 40px}.hero{position:relative;overflow:hidden;padding:34px 28px 26px;border-radius:0 0 22px 22px;background:rgba(255,255,255,.55);border:1px solid rgba(15,23,42,.06);box-shadow:0 14px 36px rgba(15,23,42,.04)}.hero:before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(79,109,245,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(79,109,245,.035) 1px,transparent 1px);background-size:50px 50px;mask-image:radial-gradient(ellipse 72% 70% at 45% 40%,black,transparent);pointer-events:none}.hero-inner{position:relative;z-index:1;max-width:980px}.hero h1{margin:0 0 .8rem;font-size:clamp(2.8rem,5vw,4.7rem);line-height:1.08;letter-spacing:-.05em;font-weight:900;color:#0f172a}.hero h1 span{background:linear-gradient(135deg,#3149e8 0%,#7c3aed 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}.hero-sub{margin:0;max-width:920px;color:var(--txt3);font-size:clamp(1.02rem,1.65vw,1.38rem);line-height:1.85;font-weight:400}.hero-metrics{display:grid;grid-template-columns:repeat(2,minmax(260px,1fr));gap:18px;margin-top:22px;max-width:730px}.metric-card{position:relative;padding:16px 20px 16px 22px;border-left:3px solid var(--blue);background:rgba(248,251,255,.86);border-radius:0 14px 14px 0;box-shadow:0 10px 22px rgba(15,23,42,.05)}.metric-card:before{content:"";position:absolute;inset:0;border-radius:0 14px 14px 0;border:1px solid rgba(37,99,235,.12);border-left:none;pointer-events:none}.metric-num{font-family:var(--mono);font-size:1.7rem;line-height:1;font-weight:800;color:var(--blue2);margin-bottom:8px}.metric-title{font-size:1rem;font-weight:800;color:var(--txt);margin-bottom:3px}.metric-desc{font-size:.84rem;color:var(--txt3);line-height:1.5}.board{margin-top:18px;display:grid;grid-template-columns:minmax(245px,.9fr) minmax(220px,.78fr) minmax(560px,1.95fr);gap:16px;align-items:stretch}.panel{min-width:0;background:rgba(255,255,255,.92);border:1px solid rgba(15,23,42,.08);border-radius:var(--radius-lg);box-shadow:var(--shadow2);overflow:hidden}.panel-pad{padding:16px}.panel-head{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px}.panel-index{flex:0 0 auto;width:26px;height:26px;border-radius:999px;display:grid;place-items:center;font-family:var(--mono);font-size:.7rem;font-weight:800;color:var(--blue2);background:rgba(79,109,245,.10);border:1px solid rgba(79,109,245,.14)}.panel h2{margin:0;font-size:1.05rem;line-height:1.35;font-weight:900;color:var(--txt)}.panel p{margin:0;color:var(--txt3);font-size:.84rem;line-height:1.62}.architecture-panel{display:block}.architecture-layers{display:grid;gap:9px;align-content:start}.arch-layer-card{border-radius:14px;padding:10px;background:linear-gradient(180deg,#f8fbff 0%,#fff 100%);border:1px solid rgba(37,99,235,.13);transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease,background .18s ease}.arch-layer-card:hover{transform:translateY(-1px);border-color:rgba(37,99,235,.30)}.arch-layer-card.active{border-color:rgba(79,109,245,.48);box-shadow:0 14px 28px rgba(79,109,245,.12);background:linear-gradient(180deg,rgba(79,109,245,.09),#fff)}.arch-layer-title{width:100%;border:none;background:transparent;padding:0;margin:0 0 8px;display:flex;justify-content:space-between;align-items:baseline;color:var(--txt);cursor:pointer;font-family:var(--sans);text-align:left}.arch-layer-title span{font-weight:900;font-size:.94rem}.arch-layer-title small{font-family:var(--mono);color:var(--txt3);font-size:.56rem;letter-spacing:.04em}.arch-components{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}button{font:inherit}.arch-components button{min-height:32px;border-radius:11px;border:1px solid rgba(37,99,235,.16);background:rgba(255,255,255,.82);color:#334155;font-size:.72rem;font-weight:800;cursor:pointer;transition:transform .18s ease,color .18s ease,background .18s ease,border-color .18s ease;padding:5px 4px}.arch-components button:hover,.arch-components button.active{transform:translateY(-1px);color:var(--blue2);background:rgba(79,109,245,.10);border-color:rgba(79,109,245,.36)}.challenge-panel{display:block}.challenge-focus{margin-top:10px;border-radius:14px;padding:12px;background:linear-gradient(180deg,rgba(124,58,237,.08),rgba(255,255,255,.95));border:1px solid rgba(124,58,237,.16)}.challenge-tag{display:inline-flex;align-items:center;width:fit-content;font-family:var(--mono);color:var(--violet);background:rgba(124,58,237,.08);border:1px solid rgba(124,58,237,.12);border-radius:999px;padding:.14rem .42rem;font-size:.64rem;font-weight:800;margin-bottom:7px}.challenge-focus h3{margin:0 0 6px;font-size:.94rem;line-height:1.36;color:var(--txt)}.challenge-focus p{color:var(--txt2);font-size:.8rem;line-height:1.58}.challenge-list{display:grid;gap:8px;margin-top:10px}.challenge-item{padding:9px 10px;border-radius:12px;background:#f8fafc;border:1px solid rgba(15,23,42,.06)}.challenge-item strong{display:block;font-size:.72rem;color:var(--txt);margin-bottom:3px}.challenge-item span{display:block;font-size:.74rem;line-height:1.48;color:var(--txt3)}.selection-note{margin:0 0 10px;padding:10px 11px;border-radius:13px;background:linear-gradient(180deg,rgba(79,109,245,.065),rgba(255,255,255,.92));border:1px solid rgba(79,109,245,.13);display:grid;gap:4px}.selection-note strong{font-size:.76rem;color:var(--blue2);font-weight:900}.selection-note span{font-size:.82rem;color:var(--txt);font-weight:800;line-height:1.35}.selection-note p{font-size:.75rem!important;line-height:1.52!important;color:var(--txt3)!important}.challenge-summary{margin:0 0 10px;padding:10px 11px;border-radius:13px;background:linear-gradient(180deg,rgba(124,58,237,.065),rgba(255,255,255,.94));border:1px solid rgba(124,58,237,.13);display:grid;gap:4px}.challenge-summary strong{font-size:.76rem;color:var(--violet);font-weight:900}.challenge-summary span{font-size:.78rem;line-height:1.52;color:var(--txt2)}.library-panel{display:grid;grid-template-rows:auto auto auto auto}.library-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:16px 16px 10px}.library-title{display:flex;gap:10px;align-items:flex-start;min-width:0}.library-title h2{font-size:1.08rem}.library-title p{max-width:530px}.protocol-tabs,.view-tabs{display:flex;gap:8px;flex-wrap:wrap}.protocol-tabs{justify-content:flex-end;flex:0 0 auto}.tab-btn{border:1px solid rgba(37,99,235,.18);color:#334155;background:#edf4ff;border-radius:999px;padding:.48rem .78rem;font-size:.82rem;font-weight:900;cursor:pointer;transition:transform .18s ease,background .18s ease,color .18s ease,border-color .18s ease,box-shadow .18s ease}.tab-btn:hover{transform:translateY(-1px);color:var(--blue2);border-color:rgba(79,109,245,.32)}.tab-btn.active{color:#fff;background:linear-gradient(135deg,var(--blue),var(--blue2));border-color:rgba(37,99,235,.28);box-shadow:0 10px 20px rgba(79,109,245,.20)}.view-tabs{padding:0 16px 12px}.view-tabs .tab-btn{background:#fff;font-size:.78rem;padding:.42rem .68rem}.view-tabs .tab-btn.active{background:rgba(79,109,245,.10);color:var(--blue2);box-shadow:none}.library-display{margin:0 16px 12px;border-radius:16px;background:linear-gradient(180deg,#f8fbff,#fff);border:1px solid rgba(37,99,235,.10);min-height:390px;overflow:hidden;position:relative}.view{display:none;height:100%;min-height:390px}.view.active{display:block}.primitive-view{position:relative;height:100%;min-height:390px}.primitive-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}.primitive-line{fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:7 7;opacity:.88;transition:opacity .2s ease}.primitive-line.faded{opacity:.14}.primitive-line.consensus{stroke:rgba(239,68,68,.78)}.primitive-line.agreement{stroke:rgba(79,109,245,.78)}.primitive-line.broadcast{stroke:rgba(124,58,237,.78)}.primitive-node{position:absolute;width:112px;min-height:62px;transform:translate(-50%,-50%);padding:10px 11px;border-radius:13px;background:rgba(255,255,255,.96);border:1px solid rgba(15,23,42,.08);box-shadow:0 12px 24px rgba(15,23,42,.07);display:grid;gap:3px;transition:opacity .2s ease,transform .2s ease,box-shadow .2s ease,border-color .2s ease}.primitive-node small{font-family:var(--mono);color:var(--txt3);font-size:.64rem}.primitive-node strong{color:var(--txt);font-size:.88rem;line-height:1.2}.primitive-node span{color:var(--txt3);font-size:.68rem;line-height:1.35}.primitive-node.faded{opacity:.22;filter:grayscale(.5)}.primitive-node.active{transform:translate(-50%,-50%) scale(1.03);border-color:rgba(79,109,245,.32);box-shadow:0 16px 30px rgba(79,109,245,.14)}.primitive-node.consensus{border-left:3px solid var(--red)}.primitive-node.agreement{border-left:3px solid var(--blue)}.primitive-node.broadcast{border-left:3px solid var(--violet)}.primitive-class{position:absolute;width:110px;min-height:74px;transform:translate(-50%,-50%);padding:12px;border-radius:14px;background:rgba(79,109,245,.09);border:1px solid rgba(79,109,245,.16);display:grid;gap:4px;place-items:center;text-align:center;box-shadow:0 12px 24px rgba(37,99,235,.08)}.primitive-class small{font-family:var(--mono);color:var(--blue2);font-size:.62rem}.primitive-class strong{color:var(--txt);font-size:.95rem}.primitive-legend{position:absolute;left:14px;bottom:12px;display:flex;gap:12px;flex-wrap:wrap;font-size:.72rem;color:var(--txt3)}.legend-item{display:inline-flex;align-items:center;gap:5px}.legend-dot{width:8px;height:8px;border-radius:999px}.legend-dot.consensus{background:var(--red)}.legend-dot.agreement{background:var(--blue)}.legend-dot.broadcast{background:var(--violet)}.flow-view{padding:18px}.flow-controls{display:flex;align-items:center;gap:8px;margin-bottom:14px}.flow-controls button{border:1px solid rgba(37,99,235,.18);background:#fff;color:var(--blue2);border-radius:999px;padding:.48rem .78rem;font-weight:900;font-size:.82rem;cursor:pointer}.flow-stage{position:relative;min-height:318px;border-radius:16px;background:linear-gradient(rgba(37,99,235,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(37,99,235,.035) 1px,transparent 1px),#fff;background-size:38px 38px;border:1px solid rgba(37,99,235,.10);overflow:hidden;padding:18px}.process-nodes,.process-modules{display:flex;justify-content:space-around;gap:12px;position:relative;z-index:2}.process-nodes{margin-bottom:62px}.process-node{width:64px;height:64px;border-radius:18px;display:grid;place-items:center;font-family:var(--mono);font-weight:900;color:var(--txt);background:#f8fafc;border:1px solid rgba(15,23,42,.08);opacity:.35;transform:translateY(-8px);transition:opacity .25s ease,transform .25s ease,border-color .25s ease,background .25s ease}.process-node.active{opacity:1;transform:translateY(0);background:rgba(79,109,245,.10);border-color:rgba(79,109,245,.30)}.flow-arrow-band{position:absolute;left:12%;right:12%;top:106px;height:70px;border-top:2px dashed rgba(79,109,245,.22);border-bottom:2px dashed rgba(124,58,237,.16);opacity:0;transition:opacity .25s ease}.flow-arrow-band.active{opacity:1}.process-module{width:92px;min-height:64px;border-radius:15px;background:#f8fafc;border:1px solid rgba(15,23,42,.08);display:grid;place-items:center;text-align:center;padding:9px;opacity:.28;transform:translateY(10px);transition:opacity .25s ease,transform .25s ease,border-color .25s ease,box-shadow .25s ease,background .25s ease}.process-module strong{font-size:.86rem;color:var(--txt)}.process-module span{display:block;margin-top:2px;font-size:.65rem;color:var(--txt3);line-height:1.3}.process-module.active{opacity:1;transform:translateY(0);background:#fff;border-color:rgba(79,109,245,.30);box-shadow:0 14px 28px rgba(79,109,245,.12)}.flow-note{margin-top:12px;padding:12px 14px;border-radius:14px;background:#f8fafc;border:1px solid rgba(15,23,42,.06);color:var(--txt2);font-size:.84rem;min-height:58px}.paper-view{padding:18px}.paper-card{height:100%;min-height:420px;border-radius:16px;background:#fff;border:1px solid rgba(37,99,235,.10);padding:20px;display:grid;align-content:start;gap:14px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.5)}.paper-venue{width:fit-content;font-family:var(--mono);color:var(--blue2);background:rgba(79,109,245,.09);border:1px solid rgba(79,109,245,.14);border-radius:999px;padding:.18rem .55rem;font-size:.72rem;font-weight:900}.paper-card h3{margin:0;color:var(--txt);font-size:1.35rem;line-height:1.35}.paper-card p{color:var(--txt2);font-size:.94rem;line-height:1.75}.paper-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}.paper-tags span{font-family:var(--mono);font-size:.72rem;color:var(--blue2);background:rgba(79,109,245,.08);border:1px solid rgba(79,109,245,.12);border-radius:999px;padding:.18rem .5rem;font-weight:800}.protocol-overview{margin:0 16px 12px;border-radius:16px;background:linear-gradient(180deg,rgba(79,109,245,.045),#fff);border:1px solid rgba(37,99,235,.12);padding:14px}.overview-title-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}.overview-title-row span{font-size:1rem;font-weight:900;color:var(--txt)}.overview-title-row strong{font-family:var(--mono);font-size:.78rem;color:var(--blue2);background:rgba(79,109,245,.09);border:1px solid rgba(79,109,245,.14);border-radius:999px;padding:.18rem .55rem;white-space:nowrap}.overview-grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:12px}.overview-card{border-radius:14px;background:rgba(255,255,255,.9);border:1px solid rgba(15,23,42,.07);padding:13px;min-width:0}.overview-card h3{margin:0 0 10px;font-size:.92rem;color:var(--txt);font-weight:900}.overview-card h4{margin:8px 0 6px;font-size:.94rem;color:var(--txt);line-height:1.45}.overview-card p{font-size:.8rem;line-height:1.65;color:var(--txt3)}.overview-feature-list{margin:0;padding:0;list-style:none;display:grid;gap:7px}.overview-feature-list li{position:relative;padding-left:14px;font-size:.8rem;color:var(--txt2);line-height:1.55}.overview-feature-list li:before{content:"";position:absolute;left:0;top:.65em;width:5px;height:5px;border-radius:50%;background:var(--blue)}.overview-primitives{margin-top:10px}.library-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 16px 16px;color:var(--txt3);font-size:.76rem}.library-foot strong{color:var(--txt2)}@media(max-width:1180px){.board{grid-template-columns:1fr}.library-display,.view{min-height:500px}.topbar-venue{display:none}}@media(max-width:720px){.page{padding:10px 14px 28px}.hero{padding:28px 18px 22px}.hero-metrics{grid-template-columns:1fr}.library-top{flex-direction:column}.protocol-tabs{justify-content:flex-start}.overview-grid{grid-template-columns:1fr}.primitive-node{width:100px}.arch-components{grid-template-columns:1fr}.topbar{padding:0 14px}}
-  
-    /* PPT-style left/middle diagram */
-    .board{grid-template-columns:minmax(560px,.95fr) minmax(560px,1.05fr);align-items:stretch}
-    .system-panel{padding:16px;background:rgba(255,255,255,.94);border:1px solid rgba(15,23,42,.08);border-radius:var(--radius-lg);box-shadow:var(--shadow2);overflow:hidden;display:grid;gap:12px;align-content:start}
-    .system-risk-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:14px;align-items:start}
-    .system-col{min-width:0;display:grid;gap:10px;align-content:start}
-    .blue-heading{justify-self:center;min-width:190px;text-align:center;padding:10px 18px;border-radius:2px;background:#4975d1;color:#fff;font-size:1.05rem;font-weight:900;letter-spacing:.02em;box-shadow:0 8px 16px rgba(37,99,235,.14)}
-    .arch-flow{position:relative;display:grid;gap:7px;padding:2px 0 0 26px}
-    .system-panel .arch-layer-card{position:relative;min-height:86px;padding:12px 12px 11px;background:#fff;border:1px solid rgba(15,23,42,.12);border-radius:2px;box-shadow:0 3px 10px rgba(15,23,42,.12);display:grid;align-content:center;gap:9px}
-    .system-panel .arch-layer-card.active{border-color:#8fa7f9;background:linear-gradient(180deg,#fff,#f8fbff);box-shadow:0 0 0 1px rgba(79,109,245,.20),0 8px 18px rgba(79,109,245,.10)}
-    .system-panel .arch-layer-title{display:grid;grid-template-columns:1fr auto;align-items:center;margin:0;border:none;background:transparent;padding:0;color:#0f172a;cursor:pointer;text-align:center;font-family:var(--sans)}
-    .system-panel .arch-layer-title span{font-size:1.08rem;font-weight:900;justify-self:center}
-    .system-panel .arch-layer-title small{font-size:.52rem;color:#64748b;font-family:var(--mono);letter-spacing:.05em;justify-self:end}
-    .system-panel .arch-components{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
-    .system-panel .arch-components button{min-height:30px;padding:4px 4px;border-radius:2px;border:1px solid rgba(37,99,235,.16);background:#eaf0f8;box-shadow:0 2px 5px rgba(15,23,42,.12);color:#334155;font-size:.70rem;font-weight:900;cursor:pointer;white-space:nowrap}
-    .system-panel .arch-components button:hover,.system-panel .arch-components button.active{color:#2548d8;background:#dfe8ff;border-color:rgba(79,109,245,.45);transform:none}
-    .arch-icon{position:absolute;left:-24px;width:28px;height:28px;opacity:.82;filter:drop-shadow(0 5px 8px rgba(37,99,235,.18))}
-    .arch-icon.cube{top:-8px;background:linear-gradient(135deg,#8fb0ef,#4975d1);clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%)}
-    .arch-icon.network-a{top:105px;border-radius:50%;background:radial-gradient(circle,#8fb0ef 0 18%,transparent 19%);box-shadow:-13px 14px 0 -6px #8fb0ef,13px 14px 0 -6px #8fb0ef,0 28px 0 -6px #8fb0ef}
-    .arch-icon.network-b{top:220px;border-radius:50%;border:2px solid #8fb0ef;background:transparent;box-shadow:-12px 10px 0 -5px #8fb0ef,12px 10px 0 -5px #8fb0ef,-7px 25px 0 -5px #8fb0ef,7px 25px 0 -5px #8fb0ef}
-    .layer-arrow{height:14px;position:relative}
-    .layer-arrow:before{content:"";position:absolute;left:50%;top:-3px;transform:translateX(-50%);width:48px;height:14px;background:linear-gradient(90deg,transparent,rgba(73,117,209,.35),transparent);clip-path:polygon(50% 0,100% 100%,0 100%);opacity:.65}
-    .threat-stack{display:grid;gap:10px;margin-top:4px}
-    .threat-block{min-height:86px;background:#4975d1;color:#fff;border-radius:2px;padding:12px 14px;display:grid;align-content:center;gap:5px;box-shadow:0 8px 16px rgba(37,99,235,.16);opacity:.86;transition:opacity .18s ease,transform .18s ease,box-shadow .18s ease}
-    .threat-block:nth-child(2){min-height:105px}.threat-block:nth-child(3){min-height:86px}
-    .threat-block.active{opacity:1;transform:translateY(-1px);box-shadow:0 12px 24px rgba(37,99,235,.26)}
-    .threat-block strong{font-size:.9rem}.threat-block span{font-size:.78rem;line-height:1.45;color:rgba(255,255,255,.88)}.threat-block em{font-style:normal;font-size:.74rem;line-height:1.35;color:#fff;font-weight:800}
-    .system-explain{border:2px solid #315cc6;background:#fff;border-radius:2px;padding:12px 14px;display:grid;gap:10px}
-    .explain-title{text-align:center;font-size:1.08rem;font-weight:900;color:#0f172a;letter-spacing:.02em}
-    .explain-grid{display:grid;grid-template-columns:1.15fr 1.15fr .9fr .9fr;gap:8px}
-    .explain-card{border:1px solid rgba(37,99,235,.13);background:#f8fbff;border-radius:8px;padding:9px 10px;display:grid;gap:3px;align-content:start;min-height:70px}
-    .explain-card strong{font-size:.70rem;color:#2548d8;font-weight:900}.explain-card span{font-size:.76rem;line-height:1.42;color:#1e293b;font-weight:800}.explain-card p{font-size:.72rem!important;line-height:1.45!important;color:#64748b!important}.explain-card.threat strong{color:#7c3aed}.explain-card.detail strong{color:#0f172a}
-    .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
-    @media(max-width:1180px){.board{grid-template-columns:1fr}.system-risk-grid{grid-template-columns:1fr 1fr}.library-display{height:480px}}
-    @media(max-width:760px){.system-risk-grid,.explain-grid{grid-template-columns:1fr}.system-panel .arch-components{grid-template-columns:repeat(2,minmax(0,1fr))}.blue-heading{justify-self:stretch}}
-
-
-
-    /* Harmonized PPT-like layout: keep the PPT spatial structure, soften colors/icons */
-    .board {
-      grid-template-columns: minmax(560px, 0.98fr) minmax(580px, 1.02fr);
-      gap: 18px;
-      align-items: stretch;
-    }
-
-    .system-panel {
-      padding: 18px;
-      background: rgba(255,255,255,.94);
-      border: 1px solid rgba(15,23,42,.08);
-      border-radius: 20px;
-      box-shadow: 0 16px 36px rgba(15,23,42,.07);
-      display: grid;
-      gap: 14px;
-      overflow: hidden;
-    }
-
-    .system-risk-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1.08fr) minmax(0, .92fr);
-      gap: 20px 16px;
-      align-items: stretch;
-    }
-
-    .system-col {
-      display: grid;
-      gap: 12px;
-      align-content: start;
-      min-width: 0;
-    }
-
-    .blue-heading {
-      justify-self: center;
-      min-width: 190px;
-      text-align: center;
-      padding: 14px 18px;
-      border-radius: 999px;
-      background: linear-gradient(135deg, rgba(79,109,245,.13), rgba(124,58,237,.10));
-      color: #2548d8;
-      border: 1px solid rgba(79,109,245,.18);
-      box-shadow: none;
-      font-size: 1.18rem;
-      font-weight: 900;
-      letter-spacing: .01em;
-    }
-
-    .arch-flow {
-      position: relative;
-      display: grid;
-      gap: 8px;
-      padding: 2px 0 0 0;
-    }
-
-    .system-panel .arch-layer-card {
-      position: relative;
-      min-height: 86px;
-      padding: 18px 13px;
-      background: linear-gradient(180deg, #ffffff, #f8fbff);
-      border: 1px solid rgba(37,99,235,.12);
-      border-radius: 16px;
-      box-shadow: 0 10px 24px rgba(15,23,42,.055);
-      display: grid;
-      align-content: center;
-      gap: 9px;
-    }
-
-    .system-panel .arch-layer-card.active {
-      background: linear-gradient(180deg, rgba(79,109,245,.08), #ffffff);
-      border-color: rgba(79,109,245,.42);
-      box-shadow: 0 14px 28px rgba(79,109,245,.12);
-    }
-
-    .system-panel .arch-layer-title {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      align-items: center;
-      margin: 0;
-      border: none;
-      background: transparent;
-      padding: 0;
-      color: #0f172a;
-      cursor: pointer;
-      text-align: left;
-      font-family: var(--sans);
-    }
-
-    .system-panel .arch-layer-title span {
-      font-size: 1.18rem;
-      font-weight: 900;
-      justify-self: start;
-    }
-
-    .system-panel .arch-layer-title small {
-      font-size: .55rem;
-      color: #64748b;
-      font-family: var(--mono);
-      letter-spacing: .05em;
-      justify-self: end;
-    }
-
-    .system-panel .arch-components {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 6px;
-    }
-
-    .system-panel .arch-components button {
-      min-height: 30px;
-      padding: 4px 4px;
-      border-radius: 10px;
-      border: 1px solid rgba(37,99,235,.16);
-      background: rgba(255,255,255,.88);
-      box-shadow: none;
-      color: #334155;
-      font-size: .70rem;
-      font-weight: 900;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-
-    .system-panel .arch-components button:hover,
-    .system-panel .arch-components button.active {
-      color: #2548d8;
-      background: rgba(79,109,245,.10);
-      border-color: rgba(79,109,245,.40);
-      transform: none;
-    }
-
-    .arch-icon {
-      display: none;
-    }
-
-    .layer-arrow {
-      height: 12px;
-      position: relative;
-    }
-
-    .layer-arrow:before {
-      content: "";
-      position: absolute;
-      left: 50%;
-      top: -2px;
-      transform: translateX(-50%);
-      width: 52px;
-      height: 12px;
-      background: linear-gradient(90deg, transparent, rgba(79,109,245,.28), transparent);
-      clip-path: polygon(50% 0, 100% 100%, 0 100%);
-      opacity: .75;
-    }
-
-    .threat-stack {
-      display: grid;
-      gap: 9px;
-      margin-top: 4px;
-    }
-
-    .threat-block {
-      min-height: 86px;
-      background: linear-gradient(180deg, #ffffff, #f8fbff);
-      color: #0f172a;
-      border-radius: 16px;
-      padding: 18px 14px;
-      display: grid;
-      align-content: center;
-      gap: 5px;
-      border: 1px solid rgba(15,23,42,.08);
-      border-left: 3px solid rgba(79,109,245,.22);
-      box-shadow: 0 10px 24px rgba(15,23,42,.055);
-      opacity: .72;
-      transition: opacity .18s ease, transform .18s ease, box-shadow .18s ease, border-color .18s ease;
-    }
-
-    .threat-block:nth-child(2) { min-height: 104px; }
-    .threat-block:nth-child(3) { min-height: 86px; }
-
-    .threat-block.active {
-      opacity: 1;
-      transform: translateY(-1px);
-      border-color: rgba(124,58,237,.38);
-      border-left-color: #7c3aed;
-      box-shadow: 0 14px 28px rgba(124,58,237,.12);
-      background: linear-gradient(180deg, rgba(124,58,237,.065), #ffffff);
-    }
-
-    .threat-block strong {
-      font-size: .9rem;
-      color: #0f172a;
-    }
-
-    .threat-block span {
-      font-size: .76rem;
-      line-height: 1.45;
-      color: #475569;
-    }
-
-    .threat-block em {
-      font-style: normal;
-      font-size: .72rem;
-      line-height: 1.35;
-      color: #7c3aed;
-      font-weight: 900;
-    }
-
-    .system-explain {
-      border: 1px solid rgba(37,99,235,.13);
-      background: linear-gradient(180deg, rgba(248,251,255,.95), #ffffff);
-      border-radius: 16px;
-      padding: 13px 14px;
-      display: grid;
-      gap: 10px;
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,.6);
-    }
-
-    .explain-title {
-      text-align: center;
-      font-size: 1rem;
-      font-weight: 900;
-      color: #0f172a;
-      letter-spacing: .01em;
-    }
-
-    .explain-grid {
-      display: grid;
-      grid-template-columns: 1.25fr 1.05fr .9fr .9fr;
-      gap: 8px;
-    }
-
-    .explain-card {
-      border: 1px solid rgba(37,99,235,.12);
-      background: #ffffff;
-      border-radius: 12px;
-      padding: 9px 10px;
-      display: grid;
-      gap: 3px;
-      align-content: start;
-      min-height: 68px;
-    }
-
-    .explain-card strong {
-      font-size: .68rem;
-      color: #2548d8;
-      font-weight: 900;
-    }
-
-    .explain-card span {
-      font-size: .74rem;
-      line-height: 1.42;
-      color: #1e293b;
-      font-weight: 800;
-    }
-
-    .explain-card p {
-      font-size: .71rem !important;
-      line-height: 1.45 !important;
-      color: #64748b !important;
-    }
-
-    .explain-card.threat strong { color: #7c3aed; }
-    .explain-card.detail strong { color: #0f172a; }
-
-    @media (max-width: 1180px) {
-      .board { grid-template-columns: 1fr; }
-      .system-risk-grid { grid-template-columns: 1fr 1fr; }
-    }
-
-    @media (max-width: 760px) {
-      .system-risk-grid,
-      .explain-grid { grid-template-columns: 1fr; }
-      .system-panel .arch-components { grid-template-columns: repeat(2, minmax(0,1fr)); }
-      .blue-heading { justify-self: stretch; }
-    }
-
-
-    /* Refined explanation panel: one primary block + two secondary blocks */
-    .system-explain {
-      margin-top: 2px;
-      border: 1px solid rgba(37,99,235,.13) !important;
-      background: linear-gradient(180deg, rgba(248,251,255,.96), #ffffff) !important;
-      border-radius: 18px !important;
-      padding: 16px 18px !important;
-      display: grid !important;
-      gap: 14px !important;
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,.65), 0 10px 24px rgba(15,23,42,.045) !important;
-    }
-
-    .explain-title {
-      text-align: center;
-      font-size: 1.05rem !important;
-      font-weight: 900;
-      color: #0f172a;
-      letter-spacing: .01em;
-      margin-bottom: 0;
-    }
-
-    .explain-main {
-      padding: 15px 18px;
-      border-radius: 16px;
-      background: linear-gradient(180deg, rgba(79,109,245,.075), rgba(255,255,255,.98));
-      border: 1px solid rgba(79,109,245,.16);
-      box-shadow: 0 10px 24px rgba(79,109,245,.055);
-    }
-
-    .explain-main strong,
-    .explain-subcard strong {
-      display: block;
-      font-size: .76rem;
-      font-weight: 900;
-      color: #4f46e5;
-      margin-bottom: 5px;
-    }
-
-    .explain-main h4 {
-      margin: 0 0 6px;
-      font-size: 1.08rem;
-      line-height: 1.36;
-      color: #0f172a;
-      font-weight: 900;
-    }
-
-    .explain-main p {
-      margin: 0;
-      max-width: 760px;
-      font-size: .86rem !important;
-      line-height: 1.68 !important;
-      color: #475569 !important;
-    }
-
-    .explain-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 7px;
-      margin-top: 10px;
-    }
-
-    .explain-tags span {
-      font-family: var(--mono);
-      font-size: .66rem;
-      color: #2548d8;
-      background: #ffffff;
-      border: 1px solid rgba(37,99,235,.15);
-      border-radius: 999px;
-      padding: 4px 8px;
-      font-weight: 800;
-      line-height: 1.25;
-    }
-
-    .explain-subgrid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-    }
-
-    .explain-subcard {
-      padding: 13px 15px;
-      border-radius: 15px;
-      background: #ffffff;
-      border: 1px solid rgba(15,23,42,.075);
-      min-height: 92px;
-      display: grid;
-      align-content: start;
-      gap: 4px;
-    }
-
-    .explain-subcard.threat {
-      border-color: rgba(124,58,237,.16);
-      background: linear-gradient(180deg, rgba(124,58,237,.045), #ffffff);
-    }
-
-    .explain-subcard.migration {
-      border-color: rgba(5,150,105,.16);
-      background: linear-gradient(180deg, rgba(5,150,105,.04), #ffffff);
-    }
-
-    .explain-subcard.threat strong { color: #7c3aed; }
-    .explain-subcard.migration strong { color: #059669; }
-
-    .explain-subcard p {
-      margin: 0;
-      font-size: .82rem !important;
-      line-height: 1.58 !important;
-      color: #334155 !important;
-      font-weight: 700;
-    }
-
-    .library-title.no-index { gap: 0; }
-    .library-title.no-index h2 { font-size: 1.18rem; }
-
-    @media (max-width: 760px) {
-      .explain-subgrid { grid-template-columns: 1fr; }
-    }
-
-  
-/* === Right library animation and overview refinement === */
-.flow-stage {
-  min-height: 340px;
-  padding: 16px;
-  overflow: hidden;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>区块链及数字金融安全测评平台</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden}
+body{
+  font-family:"PingFang SC","Microsoft YaHei","Noto Sans SC","Source Han Sans SC",Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:geometricPrecision;
+  background:#061426;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#f8fafc;
 }
 
-.flow-diagram {
-  position: relative;
-  min-height: 304px;
-  display: grid;
-  grid-template-columns: 78px 48px minmax(0, 1fr);
-  gap: 10px;
-  align-items: center;
+/* 16:9 大屏展示：直接铺满屏幕 */
+.board{
+  width:100vw;
+  height:100vh;
+  position:relative;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 16% 18%,rgba(47,125,246,.24),transparent 32%),
+    radial-gradient(circle at 86% 22%,rgba(52,211,153,.16),transparent 34%),
+    radial-gradient(circle at 50% 112%,rgba(96,165,250,.10),transparent 36%),
+    linear-gradient(135deg,#061426 0%,#0a213b 52%,#061426 100%);
+  box-shadow:0 28px 100px rgba(0,0,0,.38);
+}
+.board::before{
+  content:"";
+  position:absolute;
+  left:0;right:0;top:0;
+  height:1%;
+  background:linear-gradient(90deg,transparent,#60a5fa 18%,#93c5fd 48%,#34d399 82%,transparent);
+}
+.board::after{
+  content:"";
+  position:absolute;
+  inset:2.6% 3.4%;
+  border:1px solid rgba(191,219,254,.20);
+  border-radius:24px;
+  box-shadow:inset 0 0 70px rgba(96,165,250,.045);
+  pointer-events:none;
+}
+.board-bg{
+  position:absolute;
+  inset:0;
+  background-image:
+    linear-gradient(rgba(191,219,254,.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(191,219,254,.035) 1px,transparent 1px);
+  background-size:96px 96px;
+  opacity:.22;
 }
 
-.flow-participants {
-  display: grid;
-  gap: 12px;
-  z-index: 2;
+.page{
+  position:absolute;
+  top:4.1%;
+  bottom:3.8%;
+  left:50%;
+  transform:translateX(-50%);
+  width:min(90vw,1560px);
+  display:grid;
+  grid-template-rows:7.5% 16% 62% 9%;
+  gap:1.8%;
+  letter-spacing:.01em;
 }
 
-.flow-p {
-  width: 58px;
-  height: 48px;
-  border-radius: 999px;
-  display: grid;
-  place-items: center;
-  font-family: var(--mono);
-  font-weight: 900;
-  color: #2445c7;
-  background: rgba(79,109,245,.09);
-  border: 1px solid rgba(79,109,245,.22);
-  opacity: .34;
-  transform: translateX(-4px);
-  transition: opacity .24s ease, transform .24s ease, box-shadow .24s ease;
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid rgba(191,219,254,.18);
+  padding-bottom:.7%;
+  min-height:0;
+}
+.lab,.theme{
+  font-size:clamp(12px,1.02vw,19px);
+  font-weight:600;
+  color:#e0efff;
+  white-space:nowrap;
+}
+.lab{display:inline-flex;align-items:center;gap:.55em;text-decoration:none;color:#e0efff;background:rgba(191,219,254,.06);border:1px solid rgba(191,219,254,.16);border-radius:999px;padding:.38em .9em;transition:background .2s,border-color .2s}
+.lab:visited{color:#e0efff}
+.lab:hover{background:rgba(191,219,254,.11);border-color:rgba(191,219,254,.28)}
+.lab::before{
+  content:"";
+  width:.55em;
+  height:.55em;
+  border-radius:50%;
+  background:#f2c14e;
+  box-shadow:0 0 14px rgba(242,193,78,.65);
+}
+.theme{color:#9ff2d7}
+
+.title{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  min-height:0;
+}
+.title h1{
+  font-size:clamp(32px,3.35vw,64px);
+  line-height:1.12;
+  font-weight:780;
+  letter-spacing:.025em;
+  color:#f8fafc;
+  white-space:nowrap;
+  text-shadow:0 18px 70px rgba(0,0,0,.36),0 0 28px rgba(96,165,250,.12);
+}
+.title p{
+  margin-top:.45%;
+  font-size:clamp(13px,.98vw,19px);
+  line-height:1.55;
+  color:#d1deec;
+  white-space:nowrap;
 }
 
-.flow-p.active {
-  opacity: 1;
-  transform: translateX(0);
-  box-shadow: 0 10px 22px rgba(79,109,245,.12);
+.main{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:3.6%;
+  min-height:0;
+}
+.panel{
+  min-height:0;
+  background:
+    radial-gradient(circle at 92% 8%,var(--accentShadow),transparent 28%),
+    linear-gradient(180deg,rgba(18,50,82,.94),rgba(10,31,54,.82));
+  border:1px solid rgba(191,219,254,.22);
+  border-top:7px solid var(--accent);
+  border-radius:22px;
+  box-shadow:0 24px 72px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.055);
+  padding:4.0% 4.7%;
+  display:grid;
+  grid-template-rows:12% 31% 18% 31%;
+  gap:2.5%;
+  overflow:hidden;
+}
+.panel.blue{--accent:#60a5fa;--soft:rgba(96,165,250,.15);--softText:#dbeafe;--accentShadow:rgba(96,165,250,.22)}
+.panel.green{--accent:#34d399;--soft:rgba(52,211,153,.14);--softText:#d7faea;--accentShadow:rgba(52,211,153,.20)}
+.panel-head{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  min-height:0;
 }
 
-.flow-input-lines {
-  display: grid;
-  gap: 12px;
-  z-index: 1;
+.tag{
+  font-size:clamp(11px,.92vw,17px);
+  font-weight:600;
+  color:var(--softText);
+  background:rgba(2,6,23,.24);
+  border:1px solid rgba(191,219,254,.18);
+  border-radius:999px;
+  padding:.45em 1em;
+  white-space:nowrap;
+}
+.panel-title{
+  display:flex;
+  align-items:center;
+  gap:4%;
+  min-height:0;
+}
+.mark{
+  width:8px;
+  height:72%;
+  border-radius:99px;
+  background:var(--accent);
+  flex:0 0 auto;
+  box-shadow:0 0 20px var(--accent);
+}
+.panel-title a{
+  display:inline-block;
+  text-decoration:none;
+  color:#f8fafc;
+  border-radius:10px;
+  transition:color .2s,text-shadow .2s;
+}
+.panel-title a:visited{color:#f8fafc}
+.panel-title a:hover{color:var(--softText);text-shadow:0 0 18px var(--accentShadow)}
+.panel-title h2{
+  font-size:clamp(28px,2.55vw,49px);
+  line-height:1.16;
+  font-weight:760;
+  color:#f8fafc;
+  letter-spacing:.015em;
+}
+.desc{
+  font-size:clamp(12px,.98vw,18px);
+  line-height:1.62;
+  color:#d3dfec;
+  display:flex;
+  align-items:center;
+  min-height:0;
+}
+.items{
+  display:grid;
+  grid-template-rows:repeat(3,1fr);
+  gap:10%;
+  min-height:0;
+}
+.item{
+  display:flex;
+  align-items:center;
+  gap:.75em;
+  background:linear-gradient(90deg,rgba(3,12,24,.36),rgba(15,42,70,.24));
+  border:1px solid rgba(191,219,254,.13);
+  border-left:5px solid var(--accent);
+  border-radius:14px;
+  padding:0 1.05em;
+  color:#e8f2ff;
+  font-size:clamp(13px,1.02vw,19px);
+  font-weight:650;
+  white-space:nowrap;
+  min-height:0;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.035);
+}
+.item::before{
+  content:"";
+  width:.45em;
+  height:.45em;
+  border-radius:50%;
+  background:var(--accent);
+  box-shadow:0 0 10px var(--accent);
+  flex:0 0 auto;
 }
 
-.flow-input-line {
-  position: relative;
-  height: 48px;
-  opacity: .25;
-  transition: opacity .24s ease;
+.footer{
+  background:linear-gradient(90deg,rgba(47,125,246,.24),rgba(52,211,153,.18));
+  border:1px solid rgba(191,219,254,.22);
+  color:#f8fafc;
+  border-radius:18px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:0 2%;
+  font-size:clamp(13px,.98vw,19px);
+  font-weight:650;
+  white-space:nowrap;
+  min-height:0;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 12px 34px rgba(0,0,0,.16);
 }
+.footer span{color:#bfdbfe;margin:0 .15em}
 
-.flow-input-line::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 8px;
-  top: 50%;
-  height: 2px;
-  background: rgba(79,109,245,.34);
-  transform: translateY(-50%);
+@media(max-aspect-ratio:16/9){
+  .lab,.theme{font-size:clamp(10px,1.7vh,17px)}
+  .title h1{font-size:clamp(28px,6.45vh,68px)}
+  .title p{font-size:clamp(11px,1.92vh,20px)}
+  .tag{font-size:clamp(9px,1.65vh,16px)}
+  .panel-title h2{font-size:clamp(24px,5.05vh,52px)}
+  .desc{font-size:clamp(10px,1.78vh,18px)}
+  .item{font-size:clamp(11px,1.95vh,20px)}
+  .footer{font-size:clamp(11px,1.92vh,20px)}
 }
-
-.flow-input-line::after {
-  content: "";
-  position: absolute;
-  right: 0;
-  top: 50%;
-  width: 9px;
-  height: 9px;
-  border-top: 2px solid rgba(79,109,245,.55);
-  border-right: 2px solid rgba(79,109,245,.55);
-  transform: translateY(-50%) rotate(45deg);
-}
-
-.flow-input-line.active {
-  opacity: 1;
-}
-
-.flow-steps {
-  min-width: 0;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  z-index: 2;
-}
-
-.flow-step {
-  flex: 1 1 0;
-  min-width: 88px;
-  min-height: 82px;
-  border-radius: 18px;
-  padding: 12px 10px;
-  display: grid;
-  place-items: center;
-  text-align: center;
-  align-content: center;
-  gap: 3px;
-  opacity: .34;
-  transition: opacity .24s ease, transform .24s ease, border-color .24s ease, box-shadow .24s ease, background .24s ease;
-}
-
-.flow-step strong {
-  font-size: .9rem;
-  line-height: 1.25;
-}
-
-.flow-step span {
-  display: block;
-  font-size: .68rem;
-  line-height: 1.35;
-  color: #64748b;
-}
-
-.flow-step.primitive {
-  color: #047857;
-  background: linear-gradient(180deg, rgba(5,150,105,.10), #ffffff);
-  border: 1px solid rgba(5,150,105,.22);
-}
-
-.flow-step.primitive strong {
-  color: #047857;
-}
-
-.flow-step.logic {
-  color: #2548d8;
-  background: linear-gradient(180deg, rgba(79,109,245,.09), #ffffff);
-  border: 1px solid rgba(79,109,245,.20);
-}
-
-.flow-step.logic strong {
-  color: #2548d8;
-}
-
-.flow-step.output {
-  color: #334155;
-  background: linear-gradient(180deg, rgba(15,23,42,.045), #ffffff);
-  border: 1px solid rgba(15,23,42,.10);
-}
-
-.flow-step.active {
-  opacity: 1;
-  transform: translateY(-2px);
-  box-shadow: 0 14px 28px rgba(15,23,42,.08);
-}
-
-.flow-connector {
-  flex: 0 0 26px;
-  height: 2px;
-  position: relative;
-  background: rgba(79,109,245,.22);
-  opacity: .30;
-  transition: opacity .24s ease, background .24s ease;
-}
-
-.flow-connector::after {
-  content: "";
-  position: absolute;
-  right: -1px;
-  top: 50%;
-  width: 9px;
-  height: 9px;
-  border-top: 2px solid currentColor;
-  border-right: 2px solid currentColor;
-  color: rgba(79,109,245,.46);
-  transform: translateY(-50%) rotate(45deg);
-}
-
-.flow-connector.active {
-  opacity: 1;
-  background: rgba(79,109,245,.56);
-}
-
-.flow-parallel {
-  width: 100%;
-  display: grid;
-  gap: 5px;
-}
-
-.flow-mini {
-  min-height: 28px;
-  border-radius: 10px;
-  display: grid;
-  place-items: center;
-  background: rgba(255,255,255,.78);
-  border: 1px solid rgba(5,150,105,.16);
-  font-family: var(--mono);
-  font-size: .74rem;
-  font-weight: 900;
-  color: #047857;
-}
-
-.flow-mini small {
-  display: block;
-  font-size: .55rem;
-  font-weight: 700;
-  color: #64748b;
-}
-
-.pcbw-wrap {
-  position: relative;
-  padding: 30px 10px 25px;
-  border: 1.5px dashed rgba(5,150,105,.34);
-  border-radius: 20px;
-  background: rgba(5,150,105,.035);
-}
-
-.pcbw-title {
-  position: absolute;
-  top: 7px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-family: var(--mono);
-  font-size: .72rem;
-  color: #047857;
-  font-weight: 900;
-  background: rgba(255,255,255,.92);
-  padding: 0 6px;
-}
-
-.pcbw-caption {
-  position: absolute;
-  left: 50%;
-  bottom: 6px;
-  transform: translateX(-50%);
-  white-space: nowrap;
-  font-family: var(--mono);
-  font-size: .55rem;
-  color: #047857;
-  font-weight: 800;
-}
-
-.flow-note {
-  font-size: .8rem;
-  line-height: 1.6;
-}
-
-.overview-card.feature-card {
-  display: grid;
-  align-content: start;
-  gap: 10px;
-}
-
-.overview-feature-list {
-  gap: 8px;
-}
-
-.overview-feature-list li {
-  font-size: .78rem;
-  line-height: 1.55;
-}
-
-.migration-guide-card {
-  margin-top: 6px;
-  border-radius: 14px;
-  padding: 12px;
-  background: linear-gradient(180deg, rgba(5,150,105,.055), #ffffff);
-  border: 1px solid rgba(5,150,105,.16);
-}
-
-.migration-guide-card h3 {
-  margin: 0 0 8px;
-  font-size: .9rem;
-  color: #047857;
-  font-weight: 900;
-}
-
-.migration-list li::before {
-  background: #059669;
-}
-
-@media (max-width: 760px) {
-  .flow-diagram { grid-template-columns: 1fr; }
-  .flow-participants { grid-template-columns: repeat(4, 1fr); }
-  .flow-input-lines { display: none; }
-  .flow-steps { overflow-x: auto; padding-bottom: 4px; }
-  .flow-step { min-width: 116px; }
-}
-
-  
-
-    /* Right-side protocol animation: keep consistent with consensus_animated_v4.html */
-    .flow-stage.protocol-pipeline{position:relative;height:352px;min-height:352px;border-radius:16px;background:linear-gradient(rgba(37,99,235,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(37,99,235,.03) 1px,transparent 1px),#fff;background-size:36px 36px;border:1px solid rgba(37,99,235,.10);overflow:hidden;padding:0}
-    .flow-svg-abs{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1}
-    .flow-svg-abs path{fill:none;stroke:rgba(91,109,244,.34);stroke-width:2.1;stroke-linecap:round;stroke-linejoin:round;transition:opacity .22s ease,stroke .22s ease,stroke-width .22s ease,filter .22s ease;opacity:.30}
-    .flow-svg-abs path.flow-line-input{stroke:rgba(91,109,244,.34)}
-    .flow-svg-abs path.flow-line-stage{stroke:rgba(91,109,244,.38)}
-    .flow-svg-abs path.active{opacity:1;stroke:#5b6df4;stroke-width:2.8;filter:drop-shadow(0 0 7px rgba(91,109,244,.20));stroke-dasharray:9 7;animation:dashFlow 1.1s linear infinite}
-    @keyframes dashFlow{to{stroke-dashoffset:-32}}
-    .flow-item{position:absolute;z-index:2;transform:translate(-50%,-50%);transition:opacity .24s ease,transform .24s ease,box-shadow .24s ease,border-color .24s ease,background .24s ease;opacity:.36}
-    .flow-item.active{opacity:1;transform:translate(-50%,-50%) scale(1.02)}
-    .flow-actor{width:50px;height:50px;border-radius:999px;display:grid;place-items:center;font-family:var(--mono);font-weight:900;color:#25358f;background:#e0e7ff;border:1.5px solid rgba(91,109,244,.28);box-shadow:0 8px 18px rgba(37,99,235,.08)}
-    .flow-msg{min-width:48px;padding:4px 7px;border-radius:9px;background:#f8fafc;border:1px solid rgba(15,23,42,.10);font-family:var(--mono);font-size:.7rem;font-weight:900;text-align:center;color:#334155}
-    .flow-module{width:102px;min-height:52px;border-radius:14px;background:#f8fafc;border:1px solid rgba(15,23,42,.09);display:grid;align-content:center;justify-items:center;gap:2px;padding:8px;text-align:center;box-shadow:0 10px 22px rgba(15,23,42,.05)}
-    .flow-module strong{font-size:.82rem;line-height:1.15;color:#0f172a}.flow-module span{display:block;margin-top:2px;font-size:.62rem;line-height:1.25;color:#64748b}
-    .flow-module.primitive{background:linear-gradient(180deg,#eefbf6,#f8fffc);border-color:rgba(5,150,105,.24)}
-    .flow-module.primitive strong{color:#047857}
-    .flow-module.stage{background:linear-gradient(180deg,#eef2ff,#fbfcff);border-color:rgba(91,109,244,.18)}
-    .flow-module.stage strong{color:#3149e8}
-    .flow-module.wide{width:138px}
-    .flow-output{position:absolute;z-index:2;transform:translate(-50%,-50%);min-width:82px;min-height:42px;border-radius:999px;padding:8px 12px;background:#ecfdf5;border:1px solid rgba(5,150,105,.24);font-weight:900;font-size:.74rem;color:#047857;display:grid;place-items:center;text-align:center;box-shadow:0 10px 22px rgba(5,150,105,.08);opacity:.36;transition:opacity .24s ease,transform .24s ease,box-shadow .24s ease,border-color .24s ease,background .24s ease}
-    .flow-output span{font-size:.62rem;color:#059669;font-weight:800}
-    .flow-output.active{opacity:1;transform:translate(-50%,-50%) scale(1.02);box-shadow:0 16px 32px rgba(5,150,105,.18);border-color:rgba(5,150,105,.38);background:#ecfdf5;color:#047857}
-    .flow-small-label{position:absolute;z-index:2;transform:translate(-50%,-50%);font-family:var(--mono);font-weight:900;font-size:.7rem;color:#334155;opacity:.45;transition:opacity .22s ease,color .22s ease}
-    .flow-small-label.active{opacity:1;color:var(--blue2)}
-    .flow-star{font-size:1.55rem;color:#dc2626;text-shadow:0 8px 18px rgba(220,38,38,.18)}
-    .flow-item.active.flow-module{box-shadow:0 14px 28px rgba(91,109,244,.13);border-color:rgba(91,109,244,.38)}
-    .flow-item.active.flow-module.primitive{box-shadow:0 14px 28px rgba(5,150,105,.13);border-color:rgba(5,150,105,.40)}
-    .flow-group{position:absolute;z-index:1;transform:translate(-50%,-50%);border:1.5px dashed rgba(91,109,244,.34);border-radius:16px;background:rgba(91,109,244,.04);opacity:.28;transition:opacity .24s ease,box-shadow .24s ease,border-color .24s ease,background .24s ease;pointer-events:none}
-    .flow-group.active{opacity:1;border-color:rgba(91,109,244,.60);background:rgba(91,109,244,.075);box-shadow:0 14px 28px rgba(91,109,244,.12)}
-    .flow-group-label{z-index:5!important;opacity:.95!important;background:#fff;border:1px solid rgba(91,109,244,.22);border-radius:999px;padding:2px 9px;color:#3149e8!important;box-shadow:0 8px 18px rgba(91,109,244,.10);white-space:nowrap}
-    .flow-group-label.active{opacity:1!important;color:#3149e8!important}
-    .flow-complex-label{z-index:5!important;opacity:.88!important;background:#f0fdf4;border:1px solid rgba(5,150,105,.20);border-radius:999px;padding:2px 8px;color:#047857!important;white-space:nowrap}
-    .flow-complex-label.active{opacity:1!important;color:#047857!important}
-    .flow-module.cbw{width:92px;min-height:42px;padding:5px}
-    .flow-module.cbw strong{font-size:.76rem}
-    .flow-module.cbw span{font-size:.58rem}
-    .flow-note{font-size:.80rem;min-height:38px}
-
-.paper-authors{font-size:.78rem!important;line-height:1.5!important;color:#334155!important;font-weight:700;margin:-2px 0 0}.paper-authors::before{content:"Authors: ";font-family:var(--mono);font-size:.68rem;color:#64748b;font-weight:800}
-  
-
-/* === Compact readable protocol overview === */
-.protocol-overview { padding: 12px 14px 14px; }
-.overview-grid { grid-template-columns: minmax(0,1fr) minmax(0,1fr); align-items: stretch; }
-.overview-card { padding: 13px 14px; }
-.overview-card h3 { margin: 0 0 9px; font-size: .92rem; }
-
-.overview-feature-list {
-  gap: 8px;
-}
-.overview-feature-list li {
-  position: relative;
-  padding-left: 14px;
-  font-size: .79rem;
-  line-height: 1.48;
-  color: #334155;
-  font-weight: 500;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-.overview-feature-list li::before {
-  top: .62em;
-}
-
-.migration-guide-card {
-  margin-top: 10px;
-  padding: 11px 12px;
-  border-radius: 13px;
-  background: linear-gradient(180deg, rgba(5,150,105,.045), #ffffff);
-  border: 1px solid rgba(5,150,105,.15);
-}
-.migration-guide-card h3 {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-bottom: 7px;
-  color: #047857;
-}
-.migration-guide-card h3::before {
-  content: "";
-  width: 8px;
-  height: 8px;
-  border-radius: 999px;
-  background: #059669;
-}
-.migration-list li {
-  color: #1f2937;
-  font-weight: 500;
-  display: block;
-  -webkit-line-clamp: unset;
-  overflow: visible;
-}
-.migration-list li::before {
-  background: #059669;
-}
-
-.paper-info-card {
-  display: grid;
-  gap: 8px;
-  align-content: start;
-}
-.paper-card-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-}
-.paper-card-head h3 { margin: 0; }
-.paper-info-card h4 {
-  margin: 0;
-  font-size: 1.02rem;
-  line-height: 1.42;
-  color: #0f172a;
-  font-weight: 950;
-  letter-spacing: -.01em;
-}
-.paper-author-box {
-  margin-top: -3px;
-  padding: 0;
-  border: none;
-  background: transparent;
-  display: flex;
-  gap: 6px;
-  align-items: baseline;
-  flex-wrap: wrap;
-}
-.paper-meta-label {
-  font-family: var(--mono);
-  font-size: .58rem;
-  font-weight: 800;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  color: #94a3b8;
-}
-.paper-author-list {
-  display: inline;
-  color: #64748b;
-  font-size: .72rem;
-  line-height: 1.45;
-  font-weight: 600;
-}
-.paper-author-list span {
-  display: inline;
-  padding: 0;
-  border: none;
-  background: transparent;
-  color: inherit;
-  font-size: inherit;
-  line-height: inherit;
-  font-weight: inherit;
-}
-.paper-author-list span + span::before {
-  content: " · ";
-  color: #94a3b8;
-}
-.paper-info-card p#paperSummary {
-  margin: 2px 0 0;
-  font-size: .8rem;
-  line-height: 1.56;
-  color: #475569;
-}
-.paper-authors::before { content: none !important; }
-@media (max-width: 760px) { .overview-grid { grid-template-columns: 1fr; } }
-
-  /* Upward transition arrows between arch layer cards */
-  .system-panel .arch-layer-card:not([data-layer="network"])::after {
-    content: "";
-    position: absolute;
-    top: calc(100% + 6px);
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0;
-    height: 0;
-    border-left: 7px solid transparent;
-    border-right: 7px solid transparent;
-    border-bottom: 8px solid rgba(79,109,245,.38);
-    z-index: 10;
-    pointer-events: none;
-  }
-
-  /* ===== DARK THEME ===== */
-  body {
-    background:
-      radial-gradient(circle at top right, rgba(96,165,250,.06), transparent 28%),
-      radial-gradient(circle at bottom left, rgba(52,211,153,.04), transparent 24%),
-      linear-gradient(180deg, #0a0e17 0%, #0d1220 100%);
-  }
-  body:before {
-    background-image:
-      linear-gradient(rgba(96,165,250,.025) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(96,165,250,.025) 1px, transparent 1px);
-  }
-  .topbar {
-    background: rgba(10,14,23,.92);
-    border-bottom-color: var(--line);
-    box-shadow: 0 6px 18px rgba(0,0,0,.3);
-  }
-  .hero {
-    background: rgba(20,28,43,.65);
-    border-color: var(--line);
-    box-shadow: 0 14px 36px rgba(0,0,0,.22);
-  }
-  .hero h1 { color: var(--txt); }
-  .hero h1 span {
-    background: linear-gradient(135deg, var(--blue) 0%, var(--violet) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  .metric-card {
-    background: rgba(20,28,43,.9);
-    border-left-color: var(--blue);
-  }
-  .metric-card:before { border-color: rgba(96,165,250,.14); }
-  .panel {
-    background: var(--card);
-    border-color: var(--line);
-    box-shadow: 0 10px 24px rgba(0,0,0,.3);
-  }
-  .panel-index {
-    color: var(--blue2);
-    background: rgba(96,165,250,.1);
-    border-color: rgba(96,165,250,.16);
-  }
-  .arch-layer-card {
-    background: linear-gradient(180deg, #1a2338, #141c2b);
-    border-color: rgba(99,179,237,.14);
-  }
-  .arch-layer-card:hover { border-color: rgba(96,165,250,.35); }
-  .arch-layer-card.active {
-    background: linear-gradient(180deg, rgba(96,165,250,.1), #141c2b);
-    border-color: rgba(96,165,250,.45);
-    box-shadow: 0 14px 28px rgba(96,165,250,.1);
-  }
-  .arch-layer-title span { color: var(--txt); }
-  .arch-components button {
-    background: rgba(26,35,56,.88);
-    border-color: rgba(96,165,250,.18);
-    color: var(--txt2);
-  }
-  .arch-components button:hover, .arch-components button.active {
-    color: var(--blue2);
-    background: rgba(96,165,250,.12);
-    border-color: rgba(96,165,250,.38);
-  }
-  .challenge-focus {
-    background: linear-gradient(180deg, rgba(167,139,250,.1), rgba(20,28,43,.95));
-    border-color: rgba(167,139,250,.18);
-  }
-  .challenge-tag { color: var(--violet); background: rgba(167,139,250,.1); border-color: rgba(167,139,250,.14); }
-  .challenge-item { background: rgba(26,35,56,.88); border-color: var(--line); }
-  .challenge-item strong { color: var(--txt); }
-  .challenge-item span { color: var(--txt3); }
-  .selection-note {
-    background: linear-gradient(180deg, rgba(96,165,250,.07), rgba(20,28,43,.92));
-    border-color: rgba(96,165,250,.15);
-  }
-  .selection-note strong { color: var(--blue2); }
-  .selection-note span { color: var(--txt); }
-  .selection-note p { color: var(--txt2) !important; }
-  .challenge-summary {
-    background: linear-gradient(180deg, rgba(167,139,250,.07), rgba(20,28,43,.94));
-    border-color: rgba(167,139,250,.15);
-  }
-  .challenge-summary strong { color: var(--violet); }
-  .challenge-summary span { color: var(--txt2); }
-  .system-panel {
-    background: var(--card);
-    border-color: var(--line);
-    box-shadow: 0 16px 36px rgba(0,0,0,.3);
-  }
-  .system-panel .arch-layer-card {
-    background: linear-gradient(180deg, #1a2338, #141c2b);
-    border-color: rgba(99,179,237,.14);
-    box-shadow: 0 3px 10px rgba(0,0,0,.3);
-  }
-  .system-panel .arch-layer-card.active {
-    background: linear-gradient(180deg, rgba(96,165,250,.1), #141c2b);
-    border-color: rgba(96,165,250,.42);
-    box-shadow: 0 0 0 1px rgba(96,165,250,.18), 0 8px 18px rgba(0,0,0,.25);
-  }
-  .system-panel .arch-layer-title span { color: var(--txt); }
-  .system-panel .arch-layer-title small { color: var(--txt3); }
-  .system-panel .arch-components button {
-    background: rgba(26,35,56,.9);
-    border-color: rgba(96,165,250,.16);
-    color: var(--txt2);
-    box-shadow: 0 2px 5px rgba(0,0,0,.2);
-  }
-  .system-panel .arch-components button:hover,
-  .system-panel .arch-components button.active {
-    color: var(--blue2);
-    background: rgba(96,165,250,.12);
-    border-color: rgba(96,165,250,.38);
-  }
-  .blue-heading {
-    background: linear-gradient(135deg, rgba(96,165,250,.14), rgba(167,139,250,.1));
-    color: var(--blue2);
-    border-color: rgba(96,165,250,.2);
-    box-shadow: none;
-  }
-  .threat-block {
-    background: linear-gradient(180deg, #1a2338, #141c2b);
-    color: var(--txt);
-    border: 1px solid rgba(99,179,237,.12);
-    border-left: 3px solid rgba(96,165,250,.28);
-    box-shadow: 0 10px 24px rgba(0,0,0,.25);
-    opacity: 1;
-  }
-  .threat-block.active {
-    border-color: rgba(167,139,250,.36);
-    border-left-color: var(--violet);
-    box-shadow: 0 14px 28px rgba(167,139,250,.15);
-    background: linear-gradient(180deg, rgba(167,139,250,.1), #141c2b);
-  }
-  .threat-block strong { color: var(--txt); }
-  .threat-block span { color: var(--txt2); }
-  .threat-block em { color: var(--violet); }
-  .system-explain {
-    border-color: rgba(96,165,250,.15) !important;
-    background: linear-gradient(180deg, rgba(20,28,43,.96), #141c2b) !important;
-    box-shadow: inset 0 0 0 1px rgba(255,255,255,.04), 0 10px 24px rgba(0,0,0,.2) !important;
-  }
-  .explain-title { color: var(--txt) !important; }
-  .explain-main {
-    background: linear-gradient(180deg, rgba(96,165,250,.08), rgba(20,28,43,.95));
-    border-color: rgba(96,165,250,.18);
-    box-shadow: 0 10px 24px rgba(0,0,0,.15);
-  }
-  .explain-main strong { color: var(--blue2); }
-  .explain-main h4 { color: var(--txt); }
-  .explain-main p { color: var(--txt2) !important; }
-  .explain-tags span {
-    color: var(--blue2);
-    background: rgba(26,35,56,.9);
-    border-color: rgba(96,165,250,.18);
-  }
-  .explain-subcard {
-    background: #1a2338;
-    border-color: rgba(99,179,237,.1);
-  }
-  .explain-subcard.threat {
-    border-color: rgba(167,139,250,.18);
-    background: linear-gradient(180deg, rgba(167,139,250,.07), #1a2338);
-  }
-  .explain-subcard.migration {
-    border-color: rgba(52,211,153,.16);
-    background: linear-gradient(180deg, rgba(52,211,153,.05), #1a2338);
-  }
-  .explain-subcard.threat strong { color: var(--violet); }
-  .explain-subcard.migration strong { color: var(--green); }
-  .explain-subcard p { color: var(--txt2) !important; }
-  .tab-btn {
-    border-color: rgba(96,165,250,.2);
-    color: var(--txt2);
-    background: rgba(26,35,56,.8);
-  }
-  .tab-btn:hover { color: var(--blue2); border-color: rgba(96,165,250,.4); }
-  .tab-btn.active {
-    color: #fff;
-    background: linear-gradient(135deg, var(--blue), #3b5bdb);
-    border-color: rgba(96,165,250,.3);
-    box-shadow: 0 10px 20px rgba(96,165,250,.2);
-  }
-  .view-tabs .tab-btn { background: rgba(26,35,56,.8); }
-  .view-tabs .tab-btn.active {
-    background: rgba(96,165,250,.12);
-    color: var(--blue2);
-    box-shadow: none;
-  }
-  .library-display {
-    background: linear-gradient(180deg, #0f1729, #141c2b);
-    border-color: rgba(96,165,250,.12);
-  }
-  .primitive-node {
-    background: rgba(20,28,43,.96);
-    border-color: rgba(99,179,237,.12);
-    box-shadow: 0 12px 24px rgba(0,0,0,.25);
-  }
-  .primitive-node small { color: var(--txt2); }
-  .primitive-node strong { color: var(--txt); }
-  .primitive-node span { color: var(--txt2); }
-  .primitive-class {
-    background: rgba(96,165,250,.12);
-    border-color: rgba(96,165,250,.2);
-  }
-  .primitive-class small { color: var(--blue2); }
-  .primitive-class strong { color: var(--txt); }
-  .flow-stage {
-    background:
-      linear-gradient(rgba(96,165,250,.025) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(96,165,250,.025) 1px, transparent 1px),
-      #0f1729;
-    background-size: 38px 38px;
-    border-color: rgba(96,165,250,.12);
-  }
-  .flow-stage.protocol-pipeline {
-    background:
-      linear-gradient(rgba(96,165,250,.025) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(96,165,250,.025) 1px, transparent 1px),
-      #0f1729;
-    background-size: 36px 36px;
-    border-color: rgba(96,165,250,.12);
-  }
-  .flow-controls button {
-    border-color: rgba(96,165,250,.2);
-    background: rgba(26,35,56,.9);
-    color: var(--blue2);
-  }
-  .flow-note {
-    background: rgba(20,28,43,.6);
-    border-color: rgba(99,179,237,.1);
-    color: var(--txt2);
-  }
-  .process-node {
-    background: #1a2338;
-    border-color: rgba(99,179,237,.1);
-    color: var(--txt);
-  }
-  .process-node.active {
-    background: rgba(96,165,250,.12);
-    border-color: rgba(96,165,250,.3);
-  }
-  .process-module {
-    background: #1a2338;
-    border-color: rgba(99,179,237,.1);
-  }
-  .process-module strong { color: var(--txt); }
-  .process-module span { color: var(--txt3); }
-  .process-module.active {
-    background: #1e2d4a;
-    border-color: rgba(96,165,250,.3);
-    box-shadow: 0 14px 28px rgba(0,0,0,.2);
-  }
-  .flow-p {
-    color: var(--blue2);
-    background: rgba(96,165,250,.1);
-    border-color: rgba(96,165,250,.24);
-  }
-  .flow-step {
-    background: #1a2338;
-    border-color: rgba(99,179,237,.1);
-  }
-  .flow-step.primitive {
-    color: var(--green);
-    background: linear-gradient(180deg, rgba(52,211,153,.1), #1a2338);
-    border-color: rgba(52,211,153,.22);
-  }
-  .flow-step.primitive strong { color: var(--green); }
-  .flow-step.logic {
-    color: var(--blue2);
-    background: linear-gradient(180deg, rgba(96,165,250,.09), #1a2338);
-    border-color: rgba(96,165,250,.2);
-  }
-  .flow-step.logic strong { color: var(--blue2); }
-  .flow-step.output {
-    color: var(--txt2);
-    background: linear-gradient(180deg, rgba(148,163,184,.06), #1a2338);
-    border-color: rgba(148,163,184,.12);
-  }
-  .flow-step.active { box-shadow: 0 14px 28px rgba(0,0,0,.3); }
-  .flow-actor {
-    color: var(--blue2);
-    background: rgba(96,165,250,.1);
-    border-color: rgba(96,165,250,.25);
-  }
-  .flow-msg {
-    background: #1a2338;
-    border-color: rgba(99,179,237,.12);
-    color: var(--txt2);
-  }
-  .flow-module {
-    background: #1a2338;
-    border-color: rgba(99,179,237,.1);
-    box-shadow: 0 10px 22px rgba(0,0,0,.2);
-  }
-  .flow-module strong { color: var(--txt); }
-  .flow-module span { color: var(--txt3); }
-  .flow-module.primitive {
-    background: linear-gradient(180deg, rgba(52,211,153,.1), #1a2338);
-    border-color: rgba(52,211,153,.22);
-  }
-  .flow-module.primitive strong { color: var(--green); }
-  .flow-module.stage {
-    background: linear-gradient(180deg, rgba(96,165,250,.09), #1a2338);
-    border-color: rgba(96,165,250,.18);
-  }
-  .flow-module.stage strong { color: var(--blue2); }
-  .flow-output {
-    background: rgba(52,211,153,.1);
-    border-color: rgba(52,211,153,.24);
-    color: var(--green);
-  }
-  .flow-output span { color: var(--green); }
-  .flow-output.active {
-    box-shadow: 0 16px 32px rgba(52,211,153,.15);
-    border-color: rgba(52,211,153,.38);
-  }
-  .flow-group {
-    border-color: rgba(167,139,250,.35);
-    background: rgba(167,139,250,.04);
-  }
-  .flow-group.active {
-    border-color: rgba(167,139,250,.6);
-    background: rgba(167,139,250,.08);
-    box-shadow: 0 14px 28px rgba(167,139,250,.12);
-  }
-  .flow-group-label {
-    background: #141c2b !important;
-    border-color: rgba(167,139,250,.24) !important;
-    color: var(--blue2) !important;
-  }
-  .flow-complex-label {
-    background: rgba(20,28,43,.95) !important;
-    border-color: rgba(52,211,153,.22) !important;
-    color: var(--green) !important;
-  }
-  .flow-mini {
-    background: rgba(20,28,43,.8);
-    border-color: rgba(52,211,153,.18);
-    color: var(--green);
-  }
-  .flow-mini small { color: var(--txt3); }
-  .flow-small-label { color: var(--txt2) !important; }
-  .pcbw-wrap {
-    border-color: rgba(52,211,153,.32);
-    background: rgba(52,211,153,.04);
-  }
-  .pcbw-title { color: var(--green); background: rgba(20,28,43,.92); }
-  .pcbw-caption { color: var(--green); }
-  .protocol-overview {
-    background: linear-gradient(180deg, rgba(96,165,250,.05), #141c2b);
-    border-color: rgba(96,165,250,.14);
-  }
-  .overview-title-row span { color: var(--txt); }
-  .overview-title-row strong {
-    color: var(--blue2);
-    background: rgba(96,165,250,.1);
-    border-color: rgba(96,165,250,.16);
-  }
-  .overview-card {
-    background: rgba(20,28,43,.9);
-    border-color: var(--line);
-  }
-  .overview-card h3 { color: var(--txt); }
-  .overview-card h4 { color: var(--txt); }
-  .overview-feature-list li { color: var(--txt2); }
-  .migration-guide-card {
-    background: linear-gradient(180deg, rgba(52,211,153,.06), #1a2338);
-    border-color: rgba(52,211,153,.16);
-  }
-  .migration-guide-card h3 { color: var(--green); }
-  .migration-guide-card h3::before { background: var(--green); }
-  .migration-list li { color: var(--txt2); }
-  .paper-tags span {
-    color: var(--blue2);
-    background: rgba(26,35,56,.9);
-    border-color: rgba(96,165,250,.14);
-  }
-  .paper-venue {
-    color: var(--blue2);
-    background: rgba(96,165,250,.1);
-    border-color: rgba(96,165,250,.16);
-  }
-  .paper-info-card h4 { color: var(--txt); }
-  .paper-meta-label { color: var(--txt3); }
-  .paper-author-list { color: var(--txt3); }
-  #paperSummary { color: var(--txt2) !important; }
-  .library-foot { color: var(--txt3); }
-  .library-foot strong { color: var(--txt2); }
-  .paper-card {
-    background: var(--card);
-    border-color: rgba(96,165,250,.12);
-    box-shadow: inset 0 0 0 1px rgba(255,255,255,.04);
-  }
-  .paper-card h3 { color: var(--txt); }
-  .paper-card p { color: var(--txt2); }
-  .system-panel .arch-layer-card:not([data-layer="network"])::after {
-    border-bottom-color: rgba(96,165,250,.35);
-  }
-
-  
-
-/* === Responsive compact layout fix: avoid large blank area when main two columns collapse === */
-@media (max-width: 1180px) {
-  .page {
-    padding-left: 24px;
-    padding-right: 24px;
-  }
-
-  .board {
-    grid-template-columns: 1fr !important;
-    align-items: start !important;
-    gap: 18px !important;
-  }
-
-  .board > .panel,
-  .system-panel,
-  .library-panel {
-    align-self: start !important;
-    height: auto !important;
-    min-height: 0 !important;
-  }
-
-  .system-panel {
-    overflow: visible !important;
-  }
-
-  .system-risk-grid {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
-    grid-template-areas:
-      "archTitle threatTitle"
-      "app appThreat"
-      "consensus consensusThreat"
-      "network networkThreat" !important;
-    gap: 12px 16px !important;
-    align-items: start !important;
-    grid-auto-rows: auto !important;
-  }
-
-  .system-risk-grid > .blue-heading:nth-child(1) { grid-area: archTitle; }
-  .system-risk-grid > .blue-heading:nth-child(2) { grid-area: threatTitle; }
-  .system-risk-grid > .arch-layer-card[data-layer="application"] { grid-area: app; }
-  .system-risk-grid > .threat-block[data-threat-layer="application"] { grid-area: appThreat; }
-  .system-risk-grid > .arch-layer-card[data-layer="consensus"] { grid-area: consensus; }
-  .system-risk-grid > .threat-block[data-threat-layer="consensus"] { grid-area: consensusThreat; }
-  .system-risk-grid > .arch-layer-card[data-layer="network"] { grid-area: network; }
-  .system-risk-grid > .threat-block[data-threat-layer="network"] { grid-area: networkThreat; }
-
-  .system-risk-grid > * {
-    align-self: start !important;
-  }
-
-  .system-panel .arch-layer-card,
-  .threat-block,
-  .threat-block:nth-child(2),
-  .threat-block:nth-child(3) {
-    min-height: 0 !important;
-  }
-
-  .system-panel .arch-layer-card {
-    padding-top: 14px !important;
-    padding-bottom: 14px !important;
-  }
-
-  .threat-block {
-    padding-top: 14px !important;
-    padding-bottom: 14px !important;
-  }
-
-  .system-explain {
-    margin-top: 0 !important;
-  }
-}
-
-@media (max-width: 820px) {
-  .page {
-    padding-left: 16px;
-    padding-right: 16px;
-  }
-
-  .system-risk-grid {
-    grid-template-columns: 1fr !important;
-    grid-template-areas:
-      "archTitle"
-      "app"
-      "consensus"
-      "network"
-      "threatTitle"
-      "appThreat"
-      "consensusThreat"
-      "networkThreat" !important;
-    gap: 12px !important;
-  }
-
-  .blue-heading {
-    justify-self: stretch !important;
-  }
-
-  .system-panel .arch-components {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  }
-}
-
-
-/* === Final responsive structure fix ===
-   When the main board collapses to one column, keep "区块链分层技术架构" and
-   "量子计算机威胁" in the same row; place the explanation box below them,
-   followed by the protocol library panel. */
-@media (max-width: 1180px) {
-  .page {
-    padding-left: 24px !important;
-    padding-right: 24px !important;
-  }
-
-  .board {
-    grid-template-columns: 1fr !important;
-    align-items: start !important;
-    gap: 18px !important;
-  }
-
-  .board > .panel,
-  .system-panel,
-  .library-panel {
-    align-self: start !important;
-    height: auto !important;
-    min-height: 0 !important;
-  }
-
-  .system-panel {
-    display: grid !important;
-    grid-template-rows: auto auto !important;
-    gap: 14px !important;
-    overflow: visible !important;
-  }
-
-  .system-risk-grid {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
-    grid-template-areas: "arch threat" !important;
-    gap: 16px !important;
-    align-items: start !important;
-    grid-auto-rows: auto !important;
-  }
-
-  .system-col.arch-col { grid-area: arch !important; }
-  .system-col.threat-col { grid-area: threat !important; }
-
-  .system-col {
-    align-self: start !important;
-    height: auto !important;
-    min-height: 0 !important;
-  }
-
-  .system-panel .arch-layer-card,
-  .threat-block,
-  .threat-block:nth-child(2),
-  .threat-block:nth-child(3) {
-    min-height: 0 !important;
-  }
-
-  .system-panel .arch-layer-card {
-    padding-top: 14px !important;
-    padding-bottom: 14px !important;
-  }
-
-  .threat-block {
-    padding-top: 14px !important;
-    padding-bottom: 14px !important;
-  }
-
-  .system-explain {
-    margin-top: 0 !important;
-    grid-row: 2 !important;
-  }
-}
-
-@media (max-width: 820px) and (min-width: 721px) {
-  .system-risk-grid {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
-    grid-template-areas: "arch threat" !important;
-  }
-}
-
-@media (max-width: 720px) {
-  .system-risk-grid {
-    grid-template-columns: 1fr !important;
-    grid-template-areas:
-      "arch"
-      "threat" !important;
-  }
-}
-
-
-
-/* === Pair-row responsive repair: keep flat grid pairs, avoid overlap === */
-@media (max-width: 1180px) {
-  .board {
-    grid-template-columns: 1fr !important;
-    align-items: start !important;
-    gap: 18px !important;
-  }
-
-  .board > .panel,
-  .system-panel,
-  .library-panel {
-    align-self: start !important;
-    height: auto !important;
-    min-height: 0 !important;
-  }
-
-  .system-panel {
-    display: grid !important;
-    grid-template-rows: auto auto !important;
-    gap: 16px !important;
-    overflow: visible !important;
-  }
-
-  .system-risk-grid {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
-    grid-template-areas:
-      "archTitle threatTitle"
-      "app appThreat"
-      "consensus consensusThreat"
-      "network networkThreat" !important;
-    gap: 12px 16px !important;
-    align-items: stretch !important;
-    grid-auto-rows: auto !important;
-  }
-
-  .system-risk-grid > .blue-heading:nth-child(1) { grid-area: archTitle !important; }
-  .system-risk-grid > .blue-heading:nth-child(2) { grid-area: threatTitle !important; }
-  .system-risk-grid > .arch-layer-card[data-layer="application"] { grid-area: app !important; }
-  .system-risk-grid > .threat-block[data-threat-layer="application"] { grid-area: appThreat !important; }
-  .system-risk-grid > .arch-layer-card[data-layer="consensus"] { grid-area: consensus !important; }
-  .system-risk-grid > .threat-block[data-threat-layer="consensus"] { grid-area: consensusThreat !important; }
-  .system-risk-grid > .arch-layer-card[data-layer="network"] { grid-area: network !important; }
-  .system-risk-grid > .threat-block[data-threat-layer="network"] { grid-area: networkThreat !important; }
-
-  .system-risk-grid > * {
-    position: relative !important;
-    inset: auto !important;
-    transform: none !important;
-    width: auto !important;
-    max-width: none !important;
-    min-width: 0 !important;
-    justify-self: stretch !important;
-    align-self: stretch !important;
-  }
-
-  .system-panel .arch-layer-card,
-  .threat-block,
-  .threat-block:nth-child(2),
-  .threat-block:nth-child(3) {
-    min-height: 0 !important;
-    margin: 0 !important;
-  }
-
-  .system-panel .arch-layer-card {
-    padding: 14px 16px !important;
-  }
-
-  .threat-block {
-    padding: 14px 16px !important;
-  }
-
-  .system-panel .arch-layer-card::after,
-  .system-panel .arch-layer-card:not([data-layer="network"])::after {
-    display: none !important;
-    content: none !important;
-  }
-
-  .system-explain {
-    grid-row: auto !important;
-    margin-top: 0 !important;
-  }
-}
-
-@media (max-width: 720px) {
-  .system-risk-grid {
-    grid-template-columns: 1fr !important;
-    grid-template-areas:
-      "archTitle"
-      "app"
-      "consensus"
-      "network"
-      "threatTitle"
-      "appThreat"
-      "consensusThreat"
-      "networkThreat" !important;
-  }
-}
-
 </style>
 </head>
 <body>
- 
-  <main class="page">
-    <section class="hero"><div class="hero-inner">
-    
-    <h1>后量子 <span class="hl">数字资产安全</span></h1>
-    
-    <p class="hero-sub">面向量子计算机对数字资产基础设施的潜在冲击，从区块链系统三层架构出发，梳理<strong style="color:#e2e8f0;font-weight:900;">应用层</strong>、<strong style="color:#e2e8f0;font-weight:900;">共识层</strong>与<strong style="color:#e2e8f0;font-weight:900;">网络层</strong>中的密码依赖和安全挑战，展示实验室<strong style="color:#e2e8f0;font-weight:900;">后量子迁移协议算法库</strong>方面的技术储备，保护数字资产免受未来量子计算机攻击。</p><div class="hero-metrics"><div class="metric-card"><div class="metric-num">10+</div><div class="metric-title">核心分布式原语储备</div><div class="metric-desc">覆盖共识类、协商类、广播类分布式原语</div></div><div class="metric-card"><div class="metric-num">3</div><div class="metric-title">代表性迁移协议</div><div class="metric-desc">WaterBear · FIN · SQ</div></div></div></div></section>
-    <section class="board" aria-label="后量子数字资产安全交互展示">
-      <section class="panel system-panel" aria-label="区块链分层技术架构与量子计算机威胁">
-        <div class="system-risk-grid">
-          <div class="blue-heading">区块链分层技术架构</div>
-          <div class="blue-heading">量子计算机威胁</div>
-          <div class="arch-layer-card active" data-layer="application">
-            <button class="arch-layer-title" data-layer="application"><span>应用层</span><small>Application Layer</small></button>
-            <div class="arch-components"><button class="active" data-target="wallet">加密钱包</button><button data-target="dapp">DApp 应用</button><button data-target="bridge">跨链桥</button><button data-target="application">……</button></div>
-          </div>
-          <div class="threat-block active" data-threat-layer="application"><strong>应用层</strong><span>数字钱包、DApp 授权与跨链桥应用层大量依赖传统数字签名、身份认证和密钥管理机制。</span><em>威胁：私钥恢复 / 授权滥用 / 隐私泄露</em></div>
-          <div class="arch-layer-card" data-layer="consensus">
-            <button class="arch-layer-title" data-layer="consensus"><span>共识层</span><small>Consensus Layer</small></button>
-            <div class="arch-components"><button data-target="incentive">激励机制</button><button data-target="protocol">共识协议</button><button data-target="ordering">区块排序</button><button data-target="consensus">……</button></div>
-          </div>
-          <div class="threat-block" data-threat-layer="consensus"><strong>共识层</strong><span>共识投票、证书聚合、随机数与区块排序依赖数字签名或聚合/门限签名。</span><em>威胁：活性丧失 / 双花攻击 / 破坏最终性</em></div>
-          <div class="arch-layer-card" data-layer="network">
-            <button class="arch-layer-title" data-layer="network"><span>网络层</span><small>Network Layer</small></button>
-            <div class="arch-components"><button data-target="p2p">P2P 网络</button><button data-target="propagation">交易传播</button><button data-target="node">基础节点</button><button data-target="network">……</button></div>
-          </div>
-          <div class="threat-block" data-threat-layer="network"><strong>网络层</strong><span>节点身份、握手协议、传输加密或消息认证依赖传统公钥密码。</span><em>威胁：节点伪装 / 消息篡改 / 传播劫持</em></div>
+<section class="board">
+  <div class="board-bg"></div>
+  <div class="page">
+    <div class="topbar">
+      <a class="lab" href="https://skl-crypto.sdu.edu.cn/index.htm" target="_blank" rel="noopener noreferrer">密码与数字经济安全全国重点实验室</a>
+      <div class="theme">面向国家数字经济基础设施安全</div>
+    </div>
+
+    <div class="title">
+      <h1>区块链及数字金融安全测评平台</h1>
+      <p>面向数字金融安全与区块链可信运行，构建风险分析、攻击验证与安全治理能力</p>
+    </div>
+
+    <main class="main">
+      <section class="panel green">
+        <div class="panel-head">
+          <div class="tag">区块链可信运行</div>
         </div>
-
-        <div class="system-explain">
-          <div class="explain-title">对应层级 / 模块及威胁说明</div>
-
-          <div class="explain-main" id="architectureNote">
-            <strong>当前选择</strong>
-            <h4>加密钱包</h4>
-            <p>加密钱包是用户控制数字资产的核心入口，负责生成和保存私钥、发起交易签名，并向 DApp 或链上合约表达用户授权。</p>
-            <div class="explain-tags" id="challengeCrypto">
-              <span>ECDSA</span><span>SM2</span><span>密钥派生</span>
-            </div>
-          </div>
-
-          <div class="explain-subgrid">
-            <div class="explain-subcard threat" id="challengeSummary">
-              <strong>对应量子计算机威胁</strong>
-              <p>量子攻击可能威胁私钥的长期安全，进一步伪造交易或转移资产。</p>
-            </div>
-            <div class="explain-subcard migration">
-              <strong>迁移需求</strong>
-              <p id="challengeMigration">后量子签名地址、密钥迁移、多重/门限签名控制机制。</p>
-            </div>
-          </div>
-
-          <div class="sr-only" aria-live="polite">
-            <span id="challengeTag">Digital Wallet</span>
-            <span id="challengeTitle">加密钱包：私钥控制权与交易签名</span>
-            <span id="challengeText">加密钱包是用户控制数字资产的核心入口，负责生成和保存私钥、发起交易签名，并向 DApp 或链上合约表达用户授权。</span>
-            <span id="challengeThreat">量子攻击可能威胁私钥的长期安全，进一步伪造交易或转移资产。</span>
-          </div>
+        <div class="panel-title">
+          <div class="mark"></div>
+          <a href="./main.html"><h2>区块链安全<br>分析平台</h2></a>
+        </div>
+        <p class="desc">面向主流区块链平台，开展安全风险分析、攻击验证与协议安全评估。</p>
+        <div class="items">
+          <div class="item">链上风险分析</div>
+          <div class="item">攻击行为验证</div>
+          <div class="item">协议安全评估</div>
         </div>
       </section>
-      <section class="panel library-panel"><div class="library-top"><div class="library-title no-index"><div><h2>后量子迁移算法库</h2><p>默认显示协议原语；切换视图可查看协议流程动态演示，下方同步显示协议概述。</p></div></div><div class="protocol-tabs" aria-label="协议选择"><button class="tab-btn active" data-protocol="waterbear">WaterBear</button><button class="tab-btn" data-protocol="fin">FIN</button><button class="tab-btn" data-protocol="sq">SQ</button></div></div><div class="view-tabs" aria-label="视图选择"><button class="tab-btn active" data-view="primitives">协议原语</button><button class="tab-btn" data-view="flow">协议流程及特征</button></div><div class="library-display"><div class="view primitive-view active" id="view-primitives"><svg class="primitive-svg" viewBox="0 0 1000 520" preserveAspectRatio="none" aria-hidden="true"><defs><marker id="arrowConsensus" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#ef4444"></path></marker><marker id="arrowAgreement" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#4f6df5"></path></marker><marker id="arrowBroadcast" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#7c3aed"></path></marker></defs><path class="primitive-line consensus" data-primitive="BFT" marker-end="url(#arrowConsensus)" d="M161 153 L210 223"></path><path class="primitive-line consensus" data-primitive="ABC" marker-end="url(#arrowConsensus)" d="M173 367 L199 338"></path><path class="primitive-line agreement" data-primitive="MVBA" marker-end="url(#arrowAgreement)" d="M363 153 L438 223"></path><path class="primitive-line agreement" data-primitive="MBA" marker-end="url(#arrowAgreement)" d="M486 153 L494 223"></path><path class="primitive-line agreement" data-primitive="ACS" marker-end="url(#arrowAgreement)" d="M381 367 L421 338"></path><path class="primitive-line agreement" data-primitive="ABA" marker-end="url(#arrowAgreement)" d="M488 367 L492 338"></path><path class="primitive-line agreement" data-primitive="RABA" marker-end="url(#arrowAgreement)" d="M595 367 L563 338"></path><path class="primitive-line broadcast" data-primitive="RBC" marker-end="url(#arrowBroadcast)" d="M688 153 L722 223"></path><path class="primitive-line broadcast" data-primitive="CBC/CBW" marker-end="url(#arrowBroadcast)" d="M812 153 L778 223"></path><path class="primitive-line broadcast" data-primitive="BEB" marker-end="url(#arrowBroadcast)" d="M803 367 L785 338"></path><path d="M341 282 L409 282" stroke="rgba(15,23,42,.44)" stroke-width="2.4" stroke-linecap="round"></path><path d="M591 282 L659 282" stroke="rgba(15,23,42,.44)" stroke-width="2.4" stroke-linecap="round"></path></svg><div class="primitive-node consensus" data-primitive="BFT" style="left:12%;top:18%;"><small>共识类</small><strong>BFT</strong><span>拜占庭容错</span></div><div class="primitive-node agreement" data-primitive="MVBA" style="left:30%;top:18%;"><small>协商类</small><strong>MVBA</strong><span>多元可验证拜占庭协商</span></div><div class="primitive-node agreement" data-primitive="MBA" style="left:48%;top:18%;"><small>协商类</small><strong>MBA</strong><span>多元拜占庭协商</span></div><div class="primitive-node broadcast" data-primitive="RBC" style="left:66%;top:18%;"><small>广播类</small><strong>RBC</strong><span>可靠广播</span></div><div class="primitive-node broadcast" data-primitive="CBC/CBW" style="left:84%;top:18%;"><small>广播类</small><strong>CBC/CBW</strong><span>链式/证书广播</span></div><div class="primitive-class" style="left:25%;top:54%;"><small>Class I</small><strong>共识类</strong></div><div class="primitive-class" style="left:50%;top:54%;"><small>Class II</small><strong>协商类</strong></div><div class="primitive-class" style="left:75%;top:54%;"><small>Class III</small><strong>广播类</strong></div><div class="primitive-node consensus" data-primitive="ABC" style="left:12%;top:82%;"><small>共识类</small><strong>ABC</strong><span>原子广播</span></div><div class="primitive-node agreement" data-primitive="ACS" style="left:30%;top:82%;"><small>协商类</small><strong>ACS</strong><span>异步公共子集</span></div><div class="primitive-node agreement" data-primitive="ABA" style="left:48%;top:82%;"><small>协商类</small><strong>ABA</strong><span>异步二元协商</span></div><div class="primitive-node agreement" data-primitive="RABA" style="left:66%;top:82%;"><small>协商类</small><strong>RABA</strong><span>可再投票 ABA</span></div><div class="primitive-node broadcast" data-primitive="BEB" style="left:84%;top:82%;"><small>广播类</small><strong>BEB</strong><span>拜占庭广播</span></div><div class="primitive-legend"><span class="legend-item"><span class="legend-dot consensus"></span>共识类</span><span class="legend-item"><span class="legend-dot agreement"></span>协商类</span><span class="legend-item"><span class="legend-dot broadcast"></span>广播类</span></div></div><div class="view flow-view" id="view-flow">
-  <div class="flow-controls">
-    <button id="playFlow">▶ 播放流程</button>
-    <button id="resetFlow">↺ 重置</button>
+
+      <section class="panel blue">
+        <div class="panel-head">
+          <div class="tag">数字资产安全治理</div>
+        </div>
+        <div class="panel-title">
+          <div class="mark"></div>
+          <a href="./main.html"><h2>数字资产安全<br>分析平台</h2></a>
+        </div>
+        <p class="desc">面向数字资产全生命周期安全需求，开展风险识别、可信流转分析与安全防护评估。</p>
+        <div class="items">
+          <div class="item">资产风险识别</div>
+          <div class="item">可信流转分析</div>
+          <div class="item">安全防护评估</div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      聚焦<span>区块链可信运行</span>与<span>数字资产安全治理</span>，支撑数字经济关键基础设施安全治理
+    </footer>
   </div>
-  <div class="flow-stage protocol-pipeline" id="flowCanvas"></div>
-  <div class="flow-note" id="flowNote">点击“播放流程”，以 4 个节点为例展示当前协议从节点输入到协议模块输出的过程。</div>
-</div></div></div><section class="protocol-overview" aria-label="协议概述">
-  <div class="overview-title-row"><span>协议概述</span><strong id="overviewProtocolName">WaterBear</strong></div>
-  <div class="overview-grid">
-    <article class="overview-card feature-card">
-      <h3>协议特征</h3>
-      <ul class="overview-feature-list" id="overviewFeatures"></ul>
-      <div class="paper-tags overview-primitives" id="overviewPrimitives"></div>
-      <div class="migration-guide-card">
-        <h3>迁移指南</h3>
-        <ul class="overview-feature-list migration-list" id="overviewMigration"></ul>
-      </div>
-    </article>
-    <article class="overview-card paper-info-card">
-      <div class="paper-card-head">
-        <h3>论文信息</h3>
-        <div class="paper-venue" id="paperVenue">USENIX Security 2023</div>
-      </div>
-      <h4 id="paperTitle">WaterBear</h4>
-      <div class="paper-author-box">
-        <span class="paper-meta-label">Authors</span>
-        <div class="paper-author-list" id="paperAuthors"></div>
-      </div>
-      <p id="paperSummary"></p>
-    </article>
-  </div>
-</section><div class="library-foot"><span>当前协议：<strong id="currentProtocolName">WaterBear</strong></span><span>协议概述随 WaterBear / FIN / SQ 自动切换</span></div></section>
-    </section>
-  </main>
-  <script>
-    const challengeData={application:{tag:"Application Layer",title:"应用层挑战：钱包签名与链上授权",text:"用户私钥、地址生成、交易签名和跨链授权依赖传统公钥密码体制。量子计算能力可能削弱签名不可伪造性，进而影响资产控制权。",crypto:"ECDSA / SM2 / Schnorr / 地址生成机制",threat:"私钥恢复、交易伪造、身份绑定、跨链授权滥用",migration:"后量子签名、密钥轮换、地址迁移和多重认证机制"},wallet:{tag:"Digital Wallet",title:"加密钱包：私钥控制权与交易签名",text:"加密钱包是用户控制数字资产的核心入口，负责生成和保存私钥、发起交易签名，并向 DApp 或链上合约表达用户授权。",crypto:"ECDSA / EdDSA / SM2 / 助记词与密钥派生",threat:"量子攻击可能恢复公钥对应私钥，进一步伪造交易或转移资产",migration:"后量子签名地址、分阶段密钥迁移、硬件钱包与多签策略"},dapp:{tag:"DApp Application",title:"DApp 应用：身份认证与合约授权",text:"DApp 依赖钱包签名完成登录、授权和交易确认，签名机制失效会扩大应用层权限风险。",crypto:"消息签名 / Permit 授权 / Session Key / 访问控制",threat:"身份冒用、授权重放、恶意交易确认和资产授权滥用",migration:"后量子认证、短期授权、权限最小化和可撤销授权"},bridge:{tag:"Cross-chain Bridge",title:"跨链桥：多链证明与跨域资产映射",text:"跨链桥通常依赖多重签名、门限签名或轻量级客户端证明连接不同链，量子攻击可能破坏跨链证明可信性。",crypto:"多重签名 / 门限签名 / 轻量级客户端证明",threat:"跨链证明伪造、锁定资产被盗、资产超发",migration:"后量子门限签名、证明系统替换和跨链验证机制升级"},consensus:{tag:"Consensus Layer",title:"共识层挑战：投票证书与最终性证明",text:"共识层依赖投票签名、聚合证书、随机数和排序规则建立最终性。量子攻击可能破坏节点身份和证书不可伪造性。",crypto:"数字签名 / 聚合签名 / 阈值签名 / VRF / 随机数",threat:"伪造投票、伪造 QC、制造双花、破坏最终性",migration:"后量子认证、签名无关共识、可组合共识原语和协议级迁移"},incentive:{tag:"Incentive Mechanism",title:"激励机制：质押身份与惩罚证据",text:"公链PoS 等共识的激励机制依赖验证者身份、签名证据和惩罚规则，量子攻击会影响责任归属与惩罚有效性。",crypto:"数字签名 / Slashing 证据 / 质押账户认证",threat:"身份冒用、惩罚证据伪造、质押账户控制权丢失",migration:"后量子签名算法、恶意行为证明和安全退出机制"},protocol:{tag:"Consensus Protocol",title:"共识协议：节点投票与协议状态协商",text:"协议执行过程中，提案、投票、证书和视图切换均可能依赖签名认证或阈值证明。",crypto:"投票签名 / QC / TC / 阈值证书 / 随机信标",threat:"伪造证书、扰乱视图切换、制造分叉和双花",migration:"后量子 BFT、异步签名无关协议和模块化原语替换"},ordering:{tag:"Block Ordering",title:"区块排序：公平性与最终日志",text:"区块排序决定交易进入链上状态的顺序，依赖共识协议对交易批次形成一致日志。",crypto:"提案认证 / 排序证书 / 确定性排序",threat:"排序操纵、最终性证明伪造、交易重排",migration:"后量子安全原子广播、公平排序和可验证批次承诺"},network:{tag:"Network Layer",title:"网络层挑战：节点身份与消息传播",text:"网络层依赖节点身份、P2P 握手和消息完整性保障交易与区块传播。量子攻击可能放大节点伪装与传播劫持风险。",crypto:"节点身份认证 / P2P 握手 / 消息完整性 / 传输加密",threat:"节点伪装、消息篡改、传播劫持、网络级欺骗",migration:"后量子握手协议、节点身份轮换和传播路径冗余"},p2p:{tag:"P2P Network",title:"P2P 网络：节点发现与身份认证",text:"P2P 网络负责节点发现、邻居维护和节点间连接建立，是交易和共识消息传播的基础通道，身份认证被破坏会影响网络拓扑可信性。",crypto:"节点身份证明 / 握手协议",threat:"Sybil 攻击、节点伪装、邻居表污染",migration:"后量子公钥交换、抗 Sybil 认证和节点密钥升级"},propagation:{tag:"Transaction Propagation",title:"交易传播：消息完整性与可达性",text:"交易和区块传播依赖消息完整性、传输认证和网络可达性，攻击者可通过伪造或篡改消息扰乱传播。",crypto:"消息认证 / 传输层加密 / 审查恢复",threat:"消息篡改、传播延迟、交易重发",migration:"后量子消息认证、新鲜性证明、抗审查传播机制"},node:{tag:"Infrastructure Node",title:"基础节点：密钥、存储与服务可信性",text:"全节点、验证节点和 RPC 节点提供链上数据和交易入口，其身份和服务可信性影响应用与共识安全。",crypto:"TLS / 数据完整性校验 / 历史记录证明",threat:"节点冒充、数据欺骗、RPC 污染和状态伪造",migration:"后量子 TLS、数据可验证查询和多节点交叉验证"}};
-    const protocolData={
-      waterbear:{
-        name:"WaterBear",
-        venue:"USENIX Security 2023",
-        authors:"Haibin Zhang, Sisi Duan, Boxin Zhao, Liehuang Zhu",
-        title:"WaterBear: Practical Asynchronous BFT Matching Security Guarantees of Partially Synchronous BFT",
-        primitives:["BFT","RABA","BEB"],
-        features:[
-          "异步 BFT 达到接近半同步协议的强安全保证。",
-          "支持量子安全与无可信设置。",
-          "16 副本实验中延迟约为 BEAT 的 1/8，吞吐达 1.23×。"
-        ],
-        migration:[
-          "适用于许可链/联盟链共识层迁移，替换依赖公钥签名、可信设置或弱随机信标的 BFT 认证与 RABA/广播组件。"
-        ],
-        summary:"WaterBear 设计并实现了一族高效异步 BFT 协议，通过更高效的 local-coin ABA/RABA 构造，使量子安全、无可信设置、自适应安全与实际性能能够同时兼顾。",
-        flow:[
-          {name:"RBC",desc:"可靠广播提案",type:"primitive"},
-          {name:"Delivered Set",desc:"形成候选集合",type:"logic"},
-          {name:"RABA",desc:"0/1 协商",type:"primitive"},
-          {name:"Decide",desc:"BFT 输出",type:"output"}
-        ]
-      },
-      fin:{
-        name:"FIN",
-        venue:"ACM CCS 2023",
-        authors:"Sisi Duan, Xin Wang, Haibin Zhang",
-        title:"FIN: Practical Signature-Free Asynchronous Common Subset in Constant Time",
-        primitives:["ACS","RBC","RABA","MVBA","ABA"],
-        features:[
-          "首个 O(1) 时间、O(n³) 消息的无签名 ACS。",
-          "信息论安全、O(1) 时间、O(n³) 消息的 MVBA。",
-          "121 节点实验中吞吐最高为 PACE 的 3.41×。"
-        ],
-        migration:[
-          "适用于依赖 ACS/MVBA 的模块迁移，包括异步 BFT、MPC、DKG 与主动秘密共享中的公共子集原语替换。"
-        ],
-        summary:"FIN 解决了 ACS 中长期开放的问题，给出了首个在信息论安全/签名无关设定下同时达到 O(1) 时间和 O(n³) 消息的实用 ACS 协议。论文还构造了 O(1) 时间的 MVBA 原语，并显著降低异步 BFT 实现中 ABA 阶段的性能瓶颈。",
-        flow:[
-          {name:"RBC",desc:"并行可靠广播",type:"primitive"},
-          {name:"Echo&Rep",desc:"收集 n-f 回复",type:"logic"},
-          {name:"Election",desc:"选择候选",type:"logic"},
-          {name:"RABA",desc:"快速协商",type:"primitive"},
-          {name:"Decide",desc:"ACS 输出",type:"output"}
-        ]
-      },
-      sq:{
-        name:"SQ",
-        venue:"IEEE S&P 2025",
-        authors:"Xiao Sui, Xin Wang, Sisi Duan",
-        title:"Signature-Free Atomic Broadcast with Optimal O(n²) Messages and O(1) Expected Time",
-        primitives:["BFT","CBC/CBW","MBA"],
-        features:[
-          "首个 O(n²) 消息、O(1) 期望时间的无签名 ABC。",
-          "将 ABC 创新归约到 PCBW 与 MBA，避免传统 ACS 路线开销。",
-          "后量子安全的 SQh 实现与当前最优、基于数字签名的ABC相近的性能。"
-        ],
-        migration:[
-          "适用于区块链排序层迁移，替换 ABC、共同日志、状态机复制和区块排序中的签名依赖路径。"
-        ],
-        summary:"SQ 解决了签名无关异步原子广播能否同时达到最优 O(n²) 消息和 O(1) 期望时间的开放问题。协议将 ABC 归约到 PCBW 与 MBA，通过更紧凑的候选传播、选举和交换机制，在不依赖传统签名的设计下实现高效交易排序。",
-        flow:[
-          {name:"PCBW",desc:"并行 CBW 优化",type:"primitive",special:"pcbw"},
-          {name:"Election",desc:"随机选择 leader",type:"logic"},
-          {name:"Exchange",desc:"补齐输入",type:"logic"},
-          {name:"MBA",desc:"多元协商",type:"primitive"},
-          {name:"Decide",desc:"ABC log",type:"output"}
-        ]
-      }
-    };
-    let currentProtocol="waterbear",currentView="primitives",flowTimers=[];const archLayerCards=[...document.querySelectorAll(".arch-layer-card")],archLayerTitles=[...document.querySelectorAll(".arch-layer-title")],archButtons=[...document.querySelectorAll(".arch-components button")];const challengeTag=document.getElementById("challengeTag"),challengeTitle=document.getElementById("challengeTitle"),challengeText=document.getElementById("challengeText"),challengeCrypto=document.getElementById("challengeCrypto"),challengeThreat=document.getElementById("challengeThreat"),challengeMigration=document.getElementById("challengeMigration"),architectureNote=document.getElementById("architectureNote"),challengeSummary=document.getElementById("challengeSummary");function renderChallenge(key){
-      const d=challengeData[key]||challengeData.application;
-      const tagEl=document.getElementById("challengeTag");
-      const titleEl=document.getElementById("challengeTitle");
-      const textEl=document.getElementById("challengeText");
-      const threatEl=document.getElementById("challengeThreat");
-      const migrationEl=document.getElementById("challengeMigration");
-      const noteEl=document.getElementById("architectureNote");
-      const summaryEl=document.getElementById("challengeSummary");
-      if(tagEl) tagEl.textContent=d.tag;
-      if(titleEl) titleEl.textContent=d.title;
-      if(textEl) textEl.textContent=d.text;
-      if(threatEl) threatEl.textContent=d.threat;
-      if(migrationEl) migrationEl.textContent=d.migration;
-      const shortTitle=d.title.split("：")[0];
-      const tags=(d.crypto||"").split(/\s*\/\s*|、|，|,/).map(x=>x.trim()).filter(Boolean);
-      if(noteEl){
-        noteEl.innerHTML=`<strong>当前选择</strong><h4>${shortTitle}</h4><p>${d.text}</p><div class="explain-tags" id="challengeCrypto">${tags.map(t=>`<span>${t}</span>`).join("")}</div>`;
-      }
-      if(summaryEl){
-        summaryEl.innerHTML=`<strong>对应量子计算机威胁</strong><p>${d.threat}</p>`;
-      }
-      const layerMap={wallet:"application",dapp:"application",bridge:"application",application:"application",incentive:"consensus",protocol:"consensus",ordering:"consensus",consensus:"consensus",p2p:"network",propagation:"network",node:"network",network:"network"};
-      const activeLayer=layerMap[key]||"application";
-      document.querySelectorAll(".threat-block").forEach(b=>b.classList.toggle("active",b.dataset.threatLayer===activeLayer));
-    }
-function activateArchitecture(layer,target){archLayerCards.forEach(c=>c.classList.toggle("active",c.dataset.layer===layer));archButtons.forEach(b=>b.classList.toggle("active",b.dataset.target===target));renderChallenge(target||layer)}archLayerTitles.forEach(btn=>{btn.addEventListener("click",()=>{const layer=btn.dataset.layer;const first=document.querySelector(`.arch-layer-card[data-layer="${layer}"] .arch-components button`);activateArchitecture(layer,first?first.dataset.target:layer)})});archButtons.forEach(btn=>{btn.addEventListener("click",()=>{const layer=btn.closest(".arch-layer-card").dataset.layer;activateArchitecture(layer,btn.dataset.target)})});const protocolTabs=[...document.querySelectorAll(".protocol-tabs .tab-btn")],viewTabs=[...document.querySelectorAll(".view-tabs .tab-btn")],views={primitives:document.getElementById("view-primitives"),flow:document.getElementById("view-flow")},currentProtocolName=document.getElementById("currentProtocolName"),primitiveNodes=[...document.querySelectorAll(".primitive-node[data-primitive]")],primitiveLines=[...document.querySelectorAll(".primitive-line[data-primitive]")];function updatePrimitiveHighlight(){const ps=protocolData[currentProtocol].primitives;primitiveNodes.forEach(n=>{const a=ps.includes(n.dataset.primitive);n.classList.toggle("faded",!a);n.classList.toggle("active",a)});primitiveLines.forEach(l=>l.classList.toggle("faded",!ps.includes(l.dataset.primitive)))}function renderPaper(){
-      const d=protocolData[currentProtocol];
-      document.getElementById("overviewProtocolName").textContent=d.name;
-      document.getElementById("paperVenue").textContent=d.venue;
-      document.getElementById("paperTitle").textContent=d.title;
-      const authorsEl=document.getElementById("paperAuthors");
-      if(authorsEl){
-        authorsEl.innerHTML="";
-        (d.authors||"").split(/,\s*/).filter(Boolean).forEach(a=>{
-          const sp=document.createElement("span");
-          sp.textContent=a;
-          authorsEl.appendChild(sp);
-        });
-      }
-      document.getElementById("paperSummary").textContent=d.summary;
-
-      const features=document.getElementById("overviewFeatures");
-      features.innerHTML="";
-      (d.features||[]).forEach(i=>{
-        const li=document.createElement("li");
-        li.textContent=i;
-        features.appendChild(li);
-      });
-
-      const tags=document.getElementById("overviewPrimitives");
-      tags.innerHTML="";
-      d.primitives.forEach(i=>{
-        const sp=document.createElement("span");
-        sp.textContent=i;
-        tags.appendChild(sp);
-      });
-
-      const migration=document.getElementById("overviewMigration");
-      if(migration){
-        migration.innerHTML="";
-        (d.migration||[]).forEach(i=>{
-          const li=document.createElement("li");
-          li.textContent=i;
-          migration.appendChild(li);
-        });
-      }
-    }
-
-    function clearFlowTimers(){flowTimers.forEach(t=>clearTimeout(t)); flowTimers=[];}
-
-    const flowNotes={
-      waterbear:[
-        "P1–P4 各自输入交易或提案，作为异步 BFT 的候选值。",
-        "每个节点分别启动 RBC，可靠广播自己的提案，保证正确节点对已交付提案形成一致认知。",
-        "节点汇总已交付提案，形成候选提案集合。",
-        "对候选提案并行运行 RABA，决定每个候选是否进入输出集合。",
-        "根据 RABA 决策结果形成 BFT 输出日志。"
-      ],
-      fin:[
-        "P1–P4 并发输入提案，进入异步公共子集构造。",
-        "每个节点启动 RBC，可靠广播本地输入。",
-        "Echo&Rep 阶段收集 n−f 个回复，为后续候选选择提供依据。",
-        "Election 从候选中选择代表性输入，避免传统 ACS 中大量实例逐个等待。",
-        "RABA 快速协商候选是否进入公共集合。",
-        "所有正确节点输出同一个 ACS 结果。"
-      ],
-      sq:[
-        "P1–P4 输入待排序消息 m₁–m₄。",
-        "PCBW 将四个 CBW 并行压缩为紧凑路径，保证存在 weak agreed set，并保持 O(n²) 消息路径。",
-        "Election 选出候选 leader。",
-        "Exchange 帮助尚未收到 leader 消息的节点补齐输入。",
-        "MBA 对候选消息达成多元拜占庭协商。",
-        "输出 ABC 顺序日志，完成交易排序。"
-      ]
-    };
-
-    const arrowDefs = `<defs><marker id="flowArrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#5b6df4"></path></marker></defs>`;
-    function item(cls, step, left, top, html){return `<div class="flow-item ${cls}" data-step="${step}" style="left:${left}%;top:${top}%">${html}</div>`}
-    function groupBox(step,left,top,width,height,html){return `<div class="flow-group" data-step="${step}" style="left:${left}%;top:${top}%;width:${width}%;height:${height}%">${html}</div>`}
-    function path(cls, step, d){return `<path class="${cls}" data-step="${step}" marker-end="url(#flowArrow)" d="${d}"></path>`}
-    function nodeStack(step, left, tops=[20,38,56,74]){return tops.map((t,i)=>item('flow-actor',step,left,t,`P${i+1}`)).join('');}
-
-    function waterbearFlow(){
-      const ys=[72,137,202,267],cY=169;
-      return `<svg class="flow-svg-abs" viewBox="0 0 1000 360">${arrowDefs}
-        ${ys.map(y=>path('flow-line-input',2,`M114 ${y} L153 ${y}`)).join('')}
-        ${ys.map(y=>path('flow-line-stage',3,`M327 ${y} L372 ${cY}`)).join('')}
-        ${ys.map(y=>path('flow-line-stage',4,`M608 ${cY} L632 ${y}`)).join('')}
-        ${ys.map(y=>path('flow-line-stage',5,`M807 ${y} L859 ${cY}`)).join('')}
-      </svg>
-      ${nodeStack(1,7,[20,38,56,74])}
-      ${item('flow-small-label',1,14,20,'tx₁')}${item('flow-small-label',1,14,38,'tx₂')}${item('flow-small-label',1,14,56,'tx₃')}${item('flow-small-label',1,14,74,'tx₄')}
-      ${item('flow-module primitive',2,24,20,'<strong>RBC₁</strong><span>可靠广播</span>')}${item('flow-module primitive',2,24,38,'<strong>RBC₂</strong><span>可靠广播</span>')}${item('flow-module primitive',2,24,56,'<strong>RBC₃</strong><span>可靠广播</span>')}${item('flow-module primitive',2,24,74,'<strong>RBC₄</strong><span>可靠广播</span>')}
-      ${item('flow-module stage wide',3,49,47,'<strong>Delivered Set</strong><span>候选提案集合</span>')}
-      ${item('flow-module primitive',4,72,20,'<strong>RABA₁</strong><span>0/1</span>')}${item('flow-module primitive',4,72,38,'<strong>RABA₂</strong><span>0/1</span>')}${item('flow-module primitive',4,72,56,'<strong>RABA₃</strong><span>0/1</span>')}${item('flow-module primitive',4,72,74,'<strong>RABA₄</strong><span>0/1</span>')}
-      ${item('flow-output',5,93,47,'Decide<br><span>BFT</span>')}`;
-    }
-
-    function finFlow(){
-      return `<svg class="flow-svg-abs" viewBox="0 0 1000 360">${arrowDefs}
-        ${[72,137,202,267].map(y=>path('flow-line-input',2,`M105 ${y} L175 ${y}`)).join('')}
-        ${[72,137,202,267].map(y=>path('flow-line-stage',3,`M285 ${y} L365 ${y}`)).join('')}
-        ${[72,137,202,267].map(y=>path('flow-line-stage',4,`M480 ${y} C510 ${y} 510 168 548 168`)).join('')}
-        ${path('flow-line-stage',5,'M655 168 L715 168')}
-        ${path('flow-line-stage',6,'M825 168 L905 168')}
-      </svg>
-      ${nodeStack(1,7,[20,38,56,74])}
-      ${item('flow-small-label',1,13,20,'tx₁')}${item('flow-small-label',1,13,38,'tx₂')}${item('flow-small-label',1,13,56,'tx₃')}${item('flow-small-label',1,13,74,'tx₄')}
-      ${item('flow-module primitive',2,23,20,'<strong>RBC₁</strong><span>可靠广播</span>')}${item('flow-module primitive',2,23,38,'<strong>RBC₂</strong><span>可靠广播</span>')}${item('flow-module primitive',2,23,56,'<strong>RBC₃</strong><span>可靠广播</span>')}${item('flow-module primitive',2,23,74,'<strong>RBC₄</strong><span>可靠广播</span>')}
-      ${item('flow-module stage',3,43,20,'<strong>Echo&Rep₁</strong><span>n−f replies</span>')}${item('flow-module stage',3,43,38,'<strong>Echo&Rep₂</strong><span>n−f replies</span>')}${item('flow-module stage',3,43,56,'<strong>Echo&Rep₃</strong><span>n−f replies</span>')}${item('flow-module stage',3,43,74,'<strong>Echo&Rep₄</strong><span>n−f replies</span>')}
-      ${item('flow-module stage',4,60,47,'<strong>Election</strong><span>候选选择</span>')}
-      ${item('flow-module primitive',5,77,47,'<strong>RABA</strong><span>可再投票ABA</span>')}
-      ${item('flow-output',6,94,47,'Decide<br><span>ACS</span>')}`;
-    }
-
-    function sqFlow(){
-      return `<svg class="flow-svg-abs" viewBox="0 0 1000 360">${arrowDefs}
-        ${[90,148,205,263].map(y=>path('flow-line-input',2,`M105 ${y} L180 ${y}`)).join('')}
-        ${path('flow-line-stage',3,'M325 168 L355 168')}
-        ${path('flow-line-stage',4,'M465 168 L545 168')}
-        ${path('flow-line-stage',5,'M655 168 L725 168')}
-        ${path('flow-line-stage',6,'M835 168 L948 168')}
-      </svg>
-      ${nodeStack(1,7,[20,38,56,74])}
-      ${item('flow-small-label',1,14,20,'m₁')}${item('flow-small-label',1,14,38,'m₂')}${item('flow-small-label',1,14,56,'m₃')}${item('flow-small-label',1,14,74,'m₄')}
-      ${groupBox(2,23,51,18,66,'')}
-      ${item('flow-small-label flow-group-label',2,23,13,'PCBW：4 个 CBW 并行压缩')}
-      ${item('flow-module primitive cbw',2,23,25,'<strong>CBW₁</strong><span>m₁</span>')}${item('flow-module primitive cbw',2,23,41,'<strong>CBW₂</strong><span>m₂</span>')}${item('flow-module primitive cbw',2,23,57,'<strong>CBW₃</strong><span>m₃</span>')}${item('flow-module primitive cbw',2,23,73,'<strong>CBW₄</strong><span>m₄</span>')}
-      ${item('flow-small-label flow-complex-label',2,23,88,'O(n²) message path · weak agreed set')}
-      ${item('flow-module stage',3,41,47,'<strong>Election</strong><span>选出领导人节点</span>')}${item('flow-star',3,45.5,36,'★')}
-      ${item('flow-module stage',4,60,47,'<strong>Exchange</strong><span>补齐输入</span>')}
-      ${item('flow-module primitive',5,78,47,'<strong>MBA</strong><span>多元协商</span>')}
-      ${item('flow-output',6,96,47,'Decide<br><span>ABC</span>')}`;
-    }
-
-    function renderFlow(){
-      clearFlowTimers();
-      const canvas=document.getElementById("flowCanvas");
-      if(!canvas) return;
-      if(currentProtocol==="waterbear") canvas.innerHTML=waterbearFlow();
-      if(currentProtocol==="fin") canvas.innerHTML=finFlow();
-      if(currentProtocol==="sq") canvas.innerHTML=sqFlow();
-      const note=document.getElementById("flowNote");
-      if(note) note.textContent="点击“播放流程”，按论文中的主路径展示当前协议从节点输入到输出的横向流程。";
-    }
-    function setFlowStep(step){
-      document.querySelectorAll("#flowCanvas [data-step]").forEach(el=>{
-        const s=parseInt(el.dataset.step,10);
-        el.classList.toggle("active",s<=step);
-      });
-      const notes=flowNotes[currentProtocol]||[];
-      const note=document.getElementById("flowNote");
-      if(note) note.innerHTML=`<strong>${protocolData[currentProtocol].name}</strong> · ${notes[Math.min(step-1,notes.length-1)]||""}`;
-    }
-    function playFlow(){
-      renderFlow();
-      const steps=(flowNotes[currentProtocol]||[]).length;
-      for(let i=1;i<=steps;i++) flowTimers.push(setTimeout(()=>setFlowStep(i), 180+(i-1)*760));
-    }
-
-    document.getElementById("playFlow").addEventListener("click",playFlow);
-    document.getElementById("resetFlow").addEventListener("click",renderFlow);
-    function renderAll(){const d=protocolData[currentProtocol];currentProtocolName.textContent=d.name;updatePrimitiveHighlight();renderPaper();renderFlow()}
-    function syncPanelBoxes(){
-      const explain=document.querySelector('.system-explain');
-      const overview=document.querySelector('.protocol-overview');
-      if(!explain||!overview)return;
-      explain.style.marginTop='';
-      // Only align the explanation box with the protocol overview on wide, two-column layouts.
-      // When the board collapses to one column, this alignment would create a large blank area.
-      if(currentView!=='primitives' || window.innerWidth<=1180)return;
-      const diff=overview.getBoundingClientRect().top-explain.getBoundingClientRect().top;
-      if(diff>0)explain.style.marginTop=diff+'px';
-    }
-    protocolTabs.forEach(btn=>btn.addEventListener("click",()=>{currentProtocol=btn.dataset.protocol;protocolTabs.forEach(i=>i.classList.toggle("active",i===btn));renderAll();syncPanelBoxes();}));viewTabs.forEach(btn=>btn.addEventListener("click",()=>{currentView=btn.dataset.view;viewTabs.forEach(i=>i.classList.toggle("active",i===btn));Object.entries(views).forEach(([k,v])=>v.classList.toggle("active",k===currentView));if(currentView==="flow")renderFlow();else syncPanelBoxes();}));renderAll();
-    syncPanelBoxes();
-    document.fonts.ready.then(syncPanelBoxes);
-    window.addEventListener('resize',syncPanelBoxes);
-  </script>
+</section>
 </body>
 </html>
